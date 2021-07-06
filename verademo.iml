@@ -71,7 +71,6 @@
     <orderEntry type="library" name="Maven: org.apache.maven:maven-artifact-manager:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-repository-metadata:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven.wagon:wagon-provider-api:1.0-alpha-5" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:1.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-container-default:1.0-alpha-8" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.13" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:2.2" level="project" />
@@ -88,5 +87,6 @@
     <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0.8" level="project" />
   </component>
 </module>
