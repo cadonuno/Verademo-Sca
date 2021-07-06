@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.sling:org.apache.sling.commons.json:2.0.4-incubator">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/sling/org.apache.sling.commons.json/2.0.4-incubator/org.apache.sling.commons.json-2.0.4-incubator.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/sling/org.apache.sling.commons.json/2.0.4-incubator/org.apache.sling.commons.json-2.0.4-incubator-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/sling/org.apache.sling.commons.json/2.0.4-incubator/org.apache.sling.commons.json-2.0.4-incubator-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
