@@ -40,7 +40,6 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
       - name: Build with Maven
-        working-directory: app
         run: mvn -B package --file pom.xml
       - name: Download the Pipeline Scanner
         uses: wei/curl@master
