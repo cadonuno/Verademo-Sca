@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.util.HtmlUtils;
 
 /**
  * @author johnadmin
@@ -258,7 +259,7 @@ public class UserController {
                         password,
                         String.format("%0" + (password.length() - 2) + "d", 0).replace("0", "*"));
             } else {
-                return "No password found for " + username;
+                return HtmlUtils.htmlEscape("No password found for " + username);
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

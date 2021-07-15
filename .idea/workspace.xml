@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="">
+    <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="Adding cleanser to UserController to remove 1 issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/veracode/verademo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/veracode/verademo/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/veracode/verademo/controller/UserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veracode/verademo/controller/UserController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/veracode/verademo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veracode/verademo/controller/UserController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/verademo.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/verademo.war" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/verademo.war.original" beforeDir="false" afterPath="$PROJECT_DIR$/target/verademo.war.original" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/verademo/WEB-INF/classes/com/veracode/verademo/controller/UserController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/verademo/WEB-INF/classes/com/veracode/verademo/controller/UserController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/verademo/WEB-INF/classes/com/veracode/verademo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/verademo/WEB-INF/classes/com/veracode/verademo/controller/UserController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/verademo/WEB-INF/lib/plexus-utils-1.0.4.jar" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -108,6 +110,14 @@
       <option name="presentableId" value="Default" />
       <updated>1624947162080</updated>
     </task>
+    <task id="LOCAL-00001" summary="Adding cleanser to UserController to remove 1 issue">
+      <created>1626253269771</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1626253269771</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -120,6 +130,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Adding cleanser to UserController to remove 1 issue" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding cleanser to UserController to remove 1 issue" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
