@@ -28,5 +28,5 @@ steps:
     veracodeAppProfile: 'Verademo Azure'
     version: 'AzureScan$(build.buildNumber)'
     filepath: '$(build.artifactstagingdirectory)'
-    sandboxName: 'Azure-Pre-Merge'
+    sandboxName: 'Azure-Test'
     maximumWaitTime: '360'
