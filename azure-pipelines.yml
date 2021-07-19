@@ -31,13 +31,3 @@ steps:
     filepath: '$(build.artifactstagingdirectory)'
     sandboxName: 'Azure-Test'
     maximumWaitTime: '360'
-
-- task: Veracode@3
-  inputs:
-    ConnectionDetailsSelection: 'Endpoint'
-    AnalysisService: 'Veracode API Account'
-    veracodeAppProfile: 'Verademo Azure'
-    version: 'AzureScan$(build.buildNumber)'
-    filepath: '$(build.artifactstagingdirectory)'
-    sandboxName: 'Azure-Test'
-    maximumWaitTime: '360'
