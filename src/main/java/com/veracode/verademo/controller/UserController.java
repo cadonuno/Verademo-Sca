@@ -818,7 +818,8 @@ public class UserController {
                 String path = context.getRealPath("/resources/images") + File.separator;
 
                 File oldName = new File(path + oldImage);
-                File newName = new File(cleansePath(path + newUsername + extension));
+                String cleansedPath = cleansePath(path + newUsername + extension);
+                File newName = new File(cleansedPath);
                 oldName.renameTo(newName);
             }
 
@@ -850,7 +851,7 @@ public class UserController {
         return false;
     }
 
-    @FilePathCleanser
+    @FilePathCleanser(userComment = "This cleanses the data")
     public static String cleansePath(String aPath) {
         Pattern blacklist = Pattern.compile("\\.\\.|\\|/");  // matches .. or \ or /
 
