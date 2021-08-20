@@ -30,24 +30,3 @@ jobs:
         env:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: curl -sSL https://download.sourceclear.com/ci.sh | sh
-        
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-          settings-path: ${{ github.workspace }} # location for the settings.xml file
-
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Download the Pipeline Scanner
-        uses: wei/curl@master
-        with:
-          args: -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-
-      - name: Unzip the Pipeline Scanner
-        run: 7z e pipeline-scan-LATEST.zip -aoa
-
-      - name: Run Pipeline Scanner
-        run: java -jar pipeline-scan.jar --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_VALUE}}" --file "target/verademo.war" --fail_on_severity="Very High, High" --verbose true
