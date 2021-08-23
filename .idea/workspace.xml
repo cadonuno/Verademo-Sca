@@ -7,7 +7,6 @@
     <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="Adding cleanser to UserController to remove 1 issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/veracode/verademo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/veracode/verademo/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/veracode/verademo/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veracode/verademo/Application.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/veracode/verademo/VulnerableMethodCaller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veracode/verademo/VulnerableMethodCaller.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/veracode/verademo/commands/BlabberCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/veracode/verademo/commands/BlabberCommand.class" afterDir="false" />
@@ -63,6 +62,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -80,7 +80,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test-app" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -151,7 +151,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626253269771</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Adding cleanser to UserController to remove 1 issue">
+      <created>1626951351789</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1626951351789</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

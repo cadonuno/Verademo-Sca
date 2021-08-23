@@ -1,0 +1,5 @@
+target/*
+results.json
+filtered_results.json
+pipeline-scan.jar
+src/main/resources/result.json
