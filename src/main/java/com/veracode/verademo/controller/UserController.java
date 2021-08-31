@@ -851,7 +851,7 @@ public class UserController {
         return false;
     }
 
-    @FilePathCleanser(userComment = "This cleanses the data")
+    /*@FilePathCleanser(userComment = "This cleanses the data")*/
     public static String cleansePath(String aPath) {
         Pattern blacklist = Pattern.compile("\\.\\.|\\|/");  // matches .. or \ or /
 
