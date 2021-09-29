@@ -4,13 +4,13 @@
       "href": "/"
     },
     "self": {
-      "href": "/scans/b9d2cf16-090b-4359-83bc-1e271eef7ba5/findings"
+      "href": "/scans/2cfc6447-6721-4402-bccd-32788de2997b/findings"
     },
     "help": {
       "href": "https://help.veracode.com/reader/tS9CaFwL4_lbIEWWomsJoA/ovfZGgu96UINQxIuTqRDwg"
     }
   },
-  "scan_id": "b9d2cf16-090b-4359-83bc-1e271eef7ba5",
+  "scan_id": "2cfc6447-6721-4402-bccd-32788de2997b",
   "scan_status": "SUCCESS",
   "message": "Scan successful. Results size: 401006 bytes",
   "modules": [
@@ -19,6 +19,105 @@
   ],
   "modules_count": 2,
   "findings": [
+    {
+      "title": "jQueryResult.attr",
+      "issue_id": 1000,
+      "gob": "B",
+      "severity": 3,
+      "issue_type_id": "taint",
+      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
+      "cwe_id": "80",
+      "display_text": "\u003cspan\u003eThis call to jQueryResult.attr() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "WEB-INF/views/profile.jsp",
+          "line": 247,
+          "function_name": "lambda_3",
+          "qualified_function_name": "lambda_3",
+          "function_prototype": "lambda_3(: any,  : any,  : any, ...) : any",
+          "scope": "UNKNOWN"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "460510356",
+        "prototype_hash": "3760276193",
+        "flaw_hash": "3224440831",
+        "flaw_hash_count": 1,
+        "flaw_hash_ordinal": 1,
+        "cause_hash": "2948331053",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "80696732",
+        "cause_hash2_ordinal": "1"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
+    },
+    {
+      "title": "jQueryResult.append",
+      "issue_id": 1002,
+      "gob": "B",
+      "severity": 3,
+      "issue_type_id": "taint",
+      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
+      "cwe_id": "80",
+      "display_text": "\u003cspan\u003eThis call to jQueryResult.append() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "WEB-INF/views/profile.jsp",
+          "line": 252,
+          "function_name": "lambda_2",
+          "qualified_function_name": "lambda_2",
+          "function_prototype": "lambda_2(: any,  : any, ...) : any",
+          "scope": "UNKNOWN"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "967856201",
+        "prototype_hash": "2659999086",
+        "flaw_hash": "3103718343",
+        "flaw_hash_count": 1,
+        "flaw_hash_ordinal": 1,
+        "cause_hash": "2323626286",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "438364638",
+        "cause_hash2_ordinal": "1"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
+    },
+    {
+      "title": "jQueryResult.append",
+      "issue_id": 1001,
+      "gob": "B",
+      "severity": 3,
+      "issue_type_id": "taint",
+      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
+      "cwe_id": "80",
+      "display_text": "\u003cspan\u003eThis call to jQueryResult.append() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "WEB-INF/views/feed.jsp",
+          "line": 174,
+          "function_name": "lambda_1",
+          "qualified_function_name": "lambda_1",
+          "function_prototype": "lambda_1(: any,  : any, ...) : any",
+          "scope": "UNKNOWN"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "1567239955",
+        "prototype_hash": "1826537584",
+        "flaw_hash": "3132762339",
+        "flaw_hash_count": 1,
+        "flaw_hash_ordinal": 1,
+        "cause_hash": "1176028798",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "1522093433",
+        "cause_hash2_ordinal": "3"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
+    },
     {
       "title": "java.lang.Runtime.exec",
       "issue_id": 1284,
@@ -4542,39 +4641,6 @@
     },
     {
       "title": "processFeed",
-      "issue_id": 1005,
-      "gob": "B",
-      "severity": 2,
-      "issue_type_id": "taint",
-      "issue_type": "Information Exposure Through Sent Data",
-      "cwe_id": "201",
-      "display_text": "\u003cspan\u003e The application calls the processFeed() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "com/veracode/verademo/controller/BlabController.java",
-          "line": 258,
-          "function_name": "processFeed",
-          "qualified_function_name": "com.veracode.verademo.controller.BlabController.processFeed",
-          "function_prototype": "java.lang.String processFeed(java.lang.String, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
-          "scope": "com.veracode.verademo.controller.BlabController"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "3972094063",
-        "prototype_hash": "3979548286",
-        "flaw_hash": "2083412287",
-        "flaw_hash_count": 4,
-        "flaw_hash_ordinal": 3,
-        "cause_hash": "1522093433",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "1522093433",
-        "cause_hash2_ordinal": "1"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
-    },
-    {
-      "title": "processFeed",
       "issue_id": 1003,
       "gob": "B",
       "severity": 2,
@@ -4598,6 +4664,39 @@
         "flaw_hash": "2083412287",
         "flaw_hash_count": 4,
         "flaw_hash_ordinal": 1,
+        "cause_hash": "1522093433",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "1522093433",
+        "cause_hash2_ordinal": "1"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
+    },
+    {
+      "title": "processFeed",
+      "issue_id": 1005,
+      "gob": "B",
+      "severity": 2,
+      "issue_type_id": "taint",
+      "issue_type": "Information Exposure Through Sent Data",
+      "cwe_id": "201",
+      "display_text": "\u003cspan\u003e The application calls the processFeed() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "com/veracode/verademo/controller/BlabController.java",
+          "line": 258,
+          "function_name": "processFeed",
+          "qualified_function_name": "com.veracode.verademo.controller.BlabController.processFeed",
+          "function_prototype": "java.lang.String processFeed(java.lang.String, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
+          "scope": "com.veracode.verademo.controller.BlabController"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "3972094063",
+        "prototype_hash": "3979548286",
+        "flaw_hash": "2083412287",
+        "flaw_hash_count": 4,
+        "flaw_hash_ordinal": 3,
         "cause_hash": "1522093433",
         "cause_hash_count": 1,
         "cause_hash_ordinal": 1,
@@ -4674,39 +4773,6 @@
     },
     {
       "title": "showBlab",
-      "issue_id": 1009,
-      "gob": "B",
-      "severity": 2,
-      "issue_type_id": "taint",
-      "issue_type": "Information Exposure Through Sent Data",
-      "cwe_id": "201",
-      "display_text": "\u003cspan\u003e The application calls the showBlab() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "com/veracode/verademo/controller/BlabController.java",
-          "line": 351,
-          "function_name": "showBlab",
-          "qualified_function_name": "com.veracode.verademo.controller.BlabController.showBlab",
-          "function_prototype": "java.lang.String showBlab(java.lang.Integer, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
-          "scope": "com.veracode.verademo.controller.BlabController"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "2523591506",
-        "prototype_hash": "3184465425",
-        "flaw_hash": "2083412287",
-        "flaw_hash_count": 4,
-        "flaw_hash_ordinal": 2,
-        "cause_hash": "1522093433",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "1522093433",
-        "cause_hash2_ordinal": "1"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
-    },
-    {
-      "title": "showBlab",
       "issue_id": 1011,
       "gob": "B",
       "severity": 2,
@@ -4740,7 +4806,7 @@
     },
     {
       "title": "showBlab",
-      "issue_id": 1010,
+      "issue_id": 1009,
       "gob": "B",
       "severity": 2,
       "issue_type_id": "taint",
@@ -4750,7 +4816,7 @@
       "files": {
         "source_file": {
           "file": "com/veracode/verademo/controller/BlabController.java",
-          "line": 352,
+          "line": 351,
           "function_name": "showBlab",
           "qualified_function_name": "com.veracode.verademo.controller.BlabController.showBlab",
           "function_prototype": "java.lang.String showBlab(java.lang.Integer, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
@@ -4762,7 +4828,7 @@
         "prototype_hash": "3184465425",
         "flaw_hash": "2083412287",
         "flaw_hash_count": 4,
-        "flaw_hash_ordinal": 3,
+        "flaw_hash_ordinal": 2,
         "cause_hash": "1522093433",
         "cause_hash_count": 1,
         "cause_hash_ordinal": 1,
@@ -4796,6 +4862,39 @@
         "flaw_hash": "2083412287",
         "flaw_hash_count": 4,
         "flaw_hash_ordinal": 1,
+        "cause_hash": "1522093433",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "1522093433",
+        "cause_hash2_ordinal": "1"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
+    },
+    {
+      "title": "showBlab",
+      "issue_id": 1010,
+      "gob": "B",
+      "severity": 2,
+      "issue_type_id": "taint",
+      "issue_type": "Information Exposure Through Sent Data",
+      "cwe_id": "201",
+      "display_text": "\u003cspan\u003e The application calls the showBlab() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "com/veracode/verademo/controller/BlabController.java",
+          "line": 352,
+          "function_name": "showBlab",
+          "qualified_function_name": "com.veracode.verademo.controller.BlabController.showBlab",
+          "function_prototype": "java.lang.String showBlab(java.lang.Integer, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
+          "scope": "com.veracode.verademo.controller.BlabController"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "2523591506",
+        "prototype_hash": "3184465425",
+        "flaw_hash": "2083412287",
+        "flaw_hash_count": 4,
+        "flaw_hash_ordinal": 3,
         "cause_hash": "1522093433",
         "cause_hash_count": 1,
         "cause_hash_ordinal": 1,
@@ -5301,39 +5400,6 @@
     },
     {
       "title": "processBlabbers",
-      "issue_id": 1022,
-      "gob": "B",
-      "severity": 2,
-      "issue_type_id": "taint",
-      "issue_type": "Information Exposure Through Sent Data",
-      "cwe_id": "201",
-      "display_text": "\u003cspan\u003e The application calls the processBlabbers() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "com/veracode/verademo/controller/BlabController.java",
-          "line": 569,
-          "function_name": "processBlabbers",
-          "qualified_function_name": "com.veracode.verademo.controller.BlabController.processBlabbers",
-          "function_prototype": "java.lang.String processBlabbers(java.lang.String, java.lang.String, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
-          "scope": "com.veracode.verademo.controller.BlabController"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "619625678",
-        "prototype_hash": "3908588966",
-        "flaw_hash": "2083412287",
-        "flaw_hash_count": 5,
-        "flaw_hash_ordinal": 2,
-        "cause_hash": "1522093433",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "1522093433",
-        "cause_hash2_ordinal": "1"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
-    },
-    {
-      "title": "processBlabbers",
       "issue_id": 1024,
       "gob": "B",
       "severity": 2,
@@ -5357,6 +5423,39 @@
         "flaw_hash": "2083412287",
         "flaw_hash_count": 5,
         "flaw_hash_ordinal": 4,
+        "cause_hash": "1522093433",
+        "cause_hash_count": 1,
+        "cause_hash_ordinal": 1,
+        "cause_hash2": "1522093433",
+        "cause_hash2_ordinal": "1"
+      },
+      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/201.html"
+    },
+    {
+      "title": "processBlabbers",
+      "issue_id": 1022,
+      "gob": "B",
+      "severity": 2,
+      "issue_type_id": "taint",
+      "issue_type": "Information Exposure Through Sent Data",
+      "cwe_id": "201",
+      "display_text": "\u003cspan\u003e The application calls the processBlabbers() function, which will result in data being transferred out of the application (via the network or another medium).  This data contains sensitive information.  The potentially sensitive data originated from an earlier call to java.lang.System.getenv.\u003c/span\u003e \u003cspan\u003eEnsure that the transfer of the sensitive data is intended and that it does not violate application security policy.  This flaw is categorized as low severity because it only impacts confidentiality, not integrity or availability.  However, in the context of a mobile application, the significance of an information leak may be much greater, especially if misaligned with user expectations or data privacy policies.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/201.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Information-Leakage\"\u003eWASC\u003c/a\u003e\u003c/span\u003e",
+      "files": {
+        "source_file": {
+          "file": "com/veracode/verademo/controller/BlabController.java",
+          "line": 569,
+          "function_name": "processBlabbers",
+          "qualified_function_name": "com.veracode.verademo.controller.BlabController.processBlabbers",
+          "function_prototype": "java.lang.String processBlabbers(java.lang.String, java.lang.String, org.springframework.ui.Model, javax.servlet.http.HttpServletRequest)",
+          "scope": "com.veracode.verademo.controller.BlabController"
+        }
+      },
+      "flaw_match": {
+        "procedure_hash": "619625678",
+        "prototype_hash": "3908588966",
+        "flaw_hash": "2083412287",
+        "flaw_hash_count": 5,
+        "flaw_hash_ordinal": 2,
         "cause_hash": "1522093433",
         "cause_hash_count": 1,
         "cause_hash_ordinal": 1,
@@ -5925,105 +6024,6 @@
         "cause_hash2_ordinal": "0"
       },
       "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/404.html"
-    },
-    {
-      "title": "jQueryResult.attr",
-      "issue_id": 1000,
-      "gob": "B",
-      "severity": 3,
-      "issue_type_id": "taint",
-      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
-      "cwe_id": "80",
-      "display_text": "\u003cspan\u003eThis call to jQueryResult.attr() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "WEB-INF/views/profile.jsp",
-          "line": 247,
-          "function_name": "lambda_3",
-          "qualified_function_name": "lambda_3",
-          "function_prototype": "lambda_3(: any,  : any,  : any, ...) : any",
-          "scope": "UNKNOWN"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "460510356",
-        "prototype_hash": "3760276193",
-        "flaw_hash": "3224440831",
-        "flaw_hash_count": 1,
-        "flaw_hash_ordinal": 1,
-        "cause_hash": "2948331053",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "80696732",
-        "cause_hash2_ordinal": "1"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
-    },
-    {
-      "title": "jQueryResult.append",
-      "issue_id": 1002,
-      "gob": "B",
-      "severity": 3,
-      "issue_type_id": "taint",
-      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
-      "cwe_id": "80",
-      "display_text": "\u003cspan\u003eThis call to jQueryResult.append() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "WEB-INF/views/profile.jsp",
-          "line": 252,
-          "function_name": "lambda_2",
-          "qualified_function_name": "lambda_2",
-          "function_prototype": "lambda_2(: any,  : any, ...) : any",
-          "scope": "UNKNOWN"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "967856201",
-        "prototype_hash": "2659999086",
-        "flaw_hash": "3103718343",
-        "flaw_hash_count": 1,
-        "flaw_hash_ordinal": 1,
-        "cause_hash": "2323626286",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "438364638",
-        "cause_hash2_ordinal": "1"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
-    },
-    {
-      "title": "jQueryResult.append",
-      "issue_id": 1001,
-      "gob": "B",
-      "severity": 3,
-      "issue_type_id": "taint",
-      "issue_type": "Improper Neutralization of Script-Related HTML Tags in a Web Page (Basic XSS)",
-      "cwe_id": "80",
-      "display_text": "\u003cspan\u003eThis call to jQueryResult.append() contains a cross-site scripting (XSS) flaw.  The application populates the HTTP response with untrusted input, allowing an attacker to embed malicious content, such as Javascript code, which will be executed in the context of the victim\u0027s browser.  XSS vulnerabilities are commonly exploited to steal or manipulate cookies, modify presentation of content, and compromise confidential information, with new attack vectors being discovered on a regular basis. \u003c/span\u003e \u003cspan\u003eUse contextual escaping on all untrusted data before using it to construct any portion of an HTTP response.  The escaping method should be chosen based on the specific use case of the untrusted data, otherwise it may not protect fully against the attack. For example, if the data is being written to the body of an HTML page, use HTML entity escaping; if the data is being written to an attribute, use attribute escaping; etc.  Both the OWASP Java Encoder library and the Microsoft AntiXSS library provide contextual escaping methods. For more details on contextual escaping, see https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.md. In addition, as a best practice, always validate untrusted input to ensure that it conforms to the expected format, using centralized data validation routines when possible.\u003c/span\u003e \u003cspan\u003eReferences: \u003ca href\u003d\"https://cwe.mitre.org/data/definitions/79.html\"\u003eCWE\u003c/a\u003e \u003ca href\u003d\"https://www.owasp.org/index.php/XSS\"\u003eOWASP\u003c/a\u003e \u003ca href\u003d\"https://webappsec.pbworks.com/Cross-Site-Scripting\"\u003eWASC\u003c/a\u003e \u003ca href\u003d\"https://help.veracode.com/reader/4EKhlLSMHm5jC8P8j3XccQ/IiF_rOE79ANbwnZwreSPGA\"\u003eSupported Cleansers\u003c/a\u003e\u003c/span\u003e",
-      "files": {
-        "source_file": {
-          "file": "WEB-INF/views/feed.jsp",
-          "line": 174,
-          "function_name": "lambda_1",
-          "qualified_function_name": "lambda_1",
-          "function_prototype": "lambda_1(: any,  : any, ...) : any",
-          "scope": "UNKNOWN"
-        }
-      },
-      "flaw_match": {
-        "procedure_hash": "1567239955",
-        "prototype_hash": "1826537584",
-        "flaw_hash": "3132762339",
-        "flaw_hash_count": 1,
-        "flaw_hash_ordinal": 1,
-        "cause_hash": "1176028798",
-        "cause_hash_count": 1,
-        "cause_hash_ordinal": 1,
-        "cause_hash2": "1522093433",
-        "cause_hash2_ordinal": "3"
-      },
-      "flaw_details_link": "https://downloads.veracode.com/securityscan/cwe/v4/java/80.html"
     }
   ],
   "pipeline_scan": "21.9.0-0",
