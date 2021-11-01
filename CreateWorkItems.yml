@@ -1,0 +1,9 @@
+parameters:
+  detectedIssues : []
+  
+steps:
+- ${{ each detectedIssue in parameters.detectedIssues }}:
+  - template : CreateWorkItem.yml
+    parameters:
+      library: ${{ detectedIssue.library }}
+      version: ${{ detectedIssue.version }}
