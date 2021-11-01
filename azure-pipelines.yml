@@ -10,7 +10,6 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  sca_output: ''
   sca_vulnerabilities: []
 
 steps:
