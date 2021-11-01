@@ -30,3 +30,8 @@ steps:
 - powershell: Write-Host '##vso[task.setvariable variable=vulnerabilities,isOutput=true]$TEMP_OUTPUT'
 - script: echo $(vulnerabilities)
 
+- task: CmdLine@2
+  name: EchoVulnerabilities
+  inputs:
+    script: echo $(vulnerabilities)
+
