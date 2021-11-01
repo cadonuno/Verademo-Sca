@@ -8,9 +8,6 @@ trigger:
 
 pool:
   vmImage: ubuntu-latest
-variables:
-  - name: SRCCLR_API_TOKEN
-    value: $(SCA_TOKEN)
 
 steps:
 - task: Maven@3
@@ -24,5 +21,7 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 - task: CmdLine@2
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh'
