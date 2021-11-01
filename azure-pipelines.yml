@@ -11,6 +11,7 @@ pool:
 variables:
   - name: SRCCLR_API_TOKEN
     value: $(SRCCLR_API_TOKEN)
+
 steps:
 - task: Maven@3
   inputs:
@@ -22,12 +23,6 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-
-- task: CmdLine@2  
-  inputs:    
-    script: |
-      curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh
-    filepath: '$(build.artifactstagingdirectory)'
-    sandboxName: 'Azure-Test'
-    maximumWaitTime: '360'
-
+- task: CmdLine@2
+  inputs:
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh'
