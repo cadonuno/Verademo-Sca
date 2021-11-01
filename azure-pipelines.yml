@@ -26,5 +26,6 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- publish: sca_output.json
-  artifact: Sca_Output
+- template : CreateWorkItems.yml
+  parameters:
+    json_file: sca_output.json
