@@ -24,8 +24,8 @@ steps:
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
+    script: 'sca_output=$(curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh)'
 
 - template : CreateWorkItems.yml
   parameters:
-    json_file: sca_output.json
+    json_file: ${{sca_output}}
