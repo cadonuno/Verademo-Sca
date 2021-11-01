@@ -9,6 +9,6 @@ steps:
   inputs:
     workItemType: 'Issue'
     title: 'Veracode SCA - ${{ parameters.title }}'
-    fieldMappings: 'Overview: ${{ parameters.overview }} - CVE: ${{ parameters.cve }}VulnerabilityTypes: ${{ parameters.vulnerabilityTypes }} - Link: ${{ parameters.link }}'
+    fieldMappings: 'Overview: ${{ parameters.overview }} - CVE: ${{ parameters.cve }}VulnerabilityTypes: ${{join(', ',parameters.vulnerabilityTypes)}}- Link: ${{ parameters.link }}'
     associate: true
     associationType: 'foundInBuild'
