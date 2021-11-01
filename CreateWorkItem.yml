@@ -1,0 +1,11 @@
+parameters:
+  library: ''
+  version: ''
+
+- task: CreateWorkItem@1
+  inputs:
+    workItemType: 'Issue'
+    title: 'Veracode SCA - ${{ parameters.library }}-${{ parameters.version }}'
+    fieldMappings: 'Description=An issue was detected during an SCA run:\nLibrary: ${{ parameters.library }}\nVersion: ${{ parameters.version }}'
+    associate: true
+    associationType: 'foundInBuild'
