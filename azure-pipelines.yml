@@ -29,12 +29,12 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- task: JsonVarsV2@0
-  name: jsonOutput
+- task: CmdLine@2
   inputs:
-    jsonFilePath: 'sca_output.json'
-    envPathSeparator: '.'
-    isOutput: true
+    script: |
+      sca_vulnerabilities=($(jq '.records[0].vulnerabilities' sca_output.json))
+      echo $(sca_vulnerabilities)
+
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities: ($(jq '.records[0].vulnerabilities' sca_output.json))
+    vulnerabilities: $(sca_vulnerabilities)
