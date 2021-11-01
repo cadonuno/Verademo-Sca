@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  sca_vulnerabilities: [ json ]
+  sca_vulnerabilities: json
 
 steps:
 - task: Maven@3
