@@ -9,9 +9,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  sca_vulnerabilities: json
-
 steps:
 - task: Maven@3
   inputs:
@@ -34,6 +31,5 @@ steps:
   name: ParseSCAresults
   inputs:
     script: |
-      sca_vulnerabilities=($(jq '.records[0].vulnerabilities[]' sca_output.json))
-      echo $(sca_vulnerabilities)
+      echo ($(jq '.records[0].vulnerabilities[]' sca_output.json))
 
