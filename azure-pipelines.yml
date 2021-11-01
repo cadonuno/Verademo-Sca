@@ -9,6 +9,9 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  vulnerabilities: object
+
 steps:
 - task: Maven@3
   inputs:
@@ -25,9 +28,8 @@ steps:
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
-            
-
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'    
+- script: vulnerabilities=`jq '.records[0].vulnerabilities' sca_output.json`
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities: $(jq '.records[0].vulnerabilities' sca_output.json`)
+    vulnerabilities: $(vulnerabilities)
