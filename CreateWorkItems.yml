@@ -1,5 +1,7 @@
+parameters:
+  vulnerabilities: []
 steps:
-- $[ each vulnerability in (`jq '.records[0].vulnerabilities' sca_output.json`) ]:
+- $[ each vulnerability in parameter.vulnerabilities ]:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
