@@ -11,6 +11,7 @@ pool:
 
 variables:
   sca_output: ''
+  sca_vulnerabilities: []
 
 steps:
 - task: Maven@3
@@ -24,12 +25,14 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 - task: CmdLine@2
+  name: SCAScan
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
 - task: CmdLine@2
+  name: ParseSCAresults
   inputs:
     script: |
       sca_vulnerabilities=($(jq '.records[0].vulnerabilities' sca_output.json))
