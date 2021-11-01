@@ -1,9 +1,17 @@
 parameters:
-  detectedIssues : []
+  json_file : ""
   
 steps:
+- task: oneLuckiDevJson2Variable@1
+  inputs:
+    jsonFile: '${{ parameters.json_file }}'
+    shouldPrefixVariables: true
+    
 - ${{ each detectedIssue in parameters.detectedIssues }}:
-  - template : CreateWorkItem.yml
-    parameters:
-      library: ${{ detectedIssue.library }}
-      version: ${{ detectedIssue.version }}
+  - task: CreateWorkItem@1
+  inputs:
+    workItemType: 'Issue'
+    title: 'Veracode SCA - ${{ detectedIssue.library }}-${{ detectedIssue.version }}'
+    fieldMappings: 'Description=An issue was detected during an SCA run:\nLibrary: ${{ detectedIssue.library }}\nVersion: ${{ detectedIssue.version }}'
+    associate: true
+    associationType: 'foundInBuild'
