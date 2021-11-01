@@ -28,4 +28,4 @@ steps:
 
 - template : CreateWorkItems.yml
   parameters:
-    json_file: ${{sca_output}}
+    json_file: $(sca_output)
