@@ -34,6 +34,6 @@ steps:
   name: ParseSCAresults
   inputs:
     script: |
-      sca_vulnerabilities=($(jq '.records[0].vulnerabilities' sca_output.json))
+      sca_vulnerabilities=($(jq '.records[0].vulnerabilities[]' sca_output.json))
       echo $(sca_vulnerabilities)
 
