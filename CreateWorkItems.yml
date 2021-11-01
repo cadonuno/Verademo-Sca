@@ -3,10 +3,6 @@ parameters:
   vulnerabilities: []
 
 steps:
-variables:
-  - name: vulnerabilities
-    value: []
-- script: $(vulnerabilities)=`jq '.records[0].vulnerabilities' sca_output.json`
 - ${{ each vulnerability in vulnerabilities }}:
   - task: CreateWorkItem@1
   inputs:
