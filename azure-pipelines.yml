@@ -35,6 +35,3 @@ steps:
       sca_vulnerabilities=($(jq '.records[0].vulnerabilities' sca_output.json))
       echo $(sca_vulnerabilities)
 
-- template : CreateWorkItems.yml
-  parameters:
-    vulnerabilities: $(sca_vulnerabilities)
