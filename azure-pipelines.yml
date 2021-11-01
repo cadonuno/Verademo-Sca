@@ -21,13 +21,11 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-- task: Veracode@3
+- task: CmdLine@2
   inputs:
-    ConnectionDetailsSelection: 'Credentials'
-    apiId: 'bd240a7cad76b5e79cfe951a95e273e6'
-    apiKey: 'a5ed2096373fdcd7417efd1d934bfd237147c61ac77896124a8337d73255a06b2e97d4e72d20ecb8b3cfc2f82bb58a3f69186e4cce8cf6f2524d3e2dd894fef6'
-    veracodeAppProfile: 'Verademo Azure'
-    version: '$(build.buildNumber)'
+    script: |
+      curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh
     filepath: '$(build.artifactstagingdirectory)'
     sandboxName: 'Azure-Test'
     maximumWaitTime: '360'
+
