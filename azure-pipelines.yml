@@ -35,8 +35,6 @@ steps:
     jsonFilePath: 'sca_output.json'
     envPathSeparator: '.'
     isOutput: true
-
 - template : CreateWorkItems.yml
-  dependsOn: json_output
   parameters:
-    vulnerabilities: $[ dependencies.json_output.outputs['jsonOutput.records.vulnerabilities'] ]
+    vulnerabilities: $records.vulnerabilities
