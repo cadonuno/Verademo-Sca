@@ -2,7 +2,7 @@ parameters:
   data : ''
 
 steps:
-- ${{ each vulnerability in data.records.vulnerabilities }}:
+- ${{ each vulnerability in parameters.data.records.vulnerabilities }}:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
