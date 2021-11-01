@@ -1,6 +1,10 @@
 parameters:
   sca_output: ''
   vulnerabilities: []
+  
+variables:
+  - name: vulnerabilities
+    value: []
 
 steps:
 - script: $(vulnerabilities)=`jq '.records[0].vulnerabilities' sca_output.json`
@@ -8,7 +12,7 @@ steps:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
-    title: 'Veracode SCA - ${{ vulnerability.title }}'
-    fieldMappings: '<ul><li>Description=An issue was detected during an SCA run</li><li>Overview: ${{ vulnerability.overview}}</li><li>VulnerabilityTypes: ${{vulnerability.vulnerabilityTypes}}</li></ul>'
+    title: 'Veracode SCA - $(vulnerability.title)'
+    fieldMappings: '<ul><li>Description=An issue was detected during an SCA run</li><li>Overview: $(vulnerability.overview)</li><li>VulnerabilityTypes: $(vulnerability.vulnerabilityTypes)</li></ul>'
     associate: true
     associationType: 'foundInBuild'
