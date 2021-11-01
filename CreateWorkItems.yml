@@ -1,12 +1,15 @@
 parameters:
-  json_content : ''
+  json_file : ''
   
 steps:
-- job: read_json
-      variables: 
-        - name: vulnerabilities
-          value: $[ json_content['jsonOutput.records.vulnerabilities'] ]
-- ${{ each vulnerability in vulnerabilities }}:
+- task: JsonVarsV2@0
+  name: jsonOutput
+  inputs:
+    jsonFilePath: '$(json_file)'
+    envPathSeparator: '.'
+    isOutput: true
+    
+- ${{ each vulnerability in [json_content['jsonOutput.records.vulnerabilities']] }}:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
