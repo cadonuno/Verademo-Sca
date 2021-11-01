@@ -14,6 +14,6 @@ steps:
   inputs:
     workItemType: 'Issue'
     title: 'Veracode SCA - ${{ vulnerability.title }}'
-    fieldMappings: 'Description=An issue was detected during an SCA run:\nOverview: ${{ vulnerability.overview}\nOverview: ${{ vulnerability.overview}\nVulnerabilityTypes: ${{vulnerability.vulnerabilityTypes}}'
+    fieldMappings: 'Description=An issue was detected during an SCA run:\nOverview: ${{ vulnerability.overview}}\nVulnerabilityTypes: ${{vulnerability.vulnerabilityTypes}}'
     associate: true
     associationType: 'foundInBuild'
