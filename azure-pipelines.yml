@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 variables:
   - name: SRCCLR_API_TOKEN
-    value: $(SRCCLR_API_TOKEN)
+    value: $(SCA_TOKEN)
 
 steps:
 - task: Maven@3
