@@ -1,5 +1,5 @@
 parameters:
-  vulnerabilities: $[`jq '.records[0].vulnerabilities' sca_output.json`]
+  vulnerabilities: $[(`jq '.records[0].vulnerabilities' sca_output.json`)]
 
 steps:
 - ${{ each vulnerability in parameters.vulnerabilities }}:
