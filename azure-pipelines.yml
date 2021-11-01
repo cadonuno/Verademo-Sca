@@ -37,4 +37,4 @@ steps:
     isOutput: true
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities: $(records.vulnerabilities)
+    vulnerabilities: [$(records.vulnerabilities)]
