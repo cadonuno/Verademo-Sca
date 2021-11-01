@@ -1,5 +1,5 @@
 parameters:
-
+  vulnerabilities: []
 steps:
 - ${{ each vulnerability in parameters.vulnerabilities }}:
   - template : CreateWorkItem.yml
