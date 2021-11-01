@@ -1,5 +1,5 @@
 parameters:
-  vulnerabilities : ''
+  vulnerabilities : []
 
 - ${{ each vulnerability in vulnerabilities }}:
   - task: CreateWorkItem@1
