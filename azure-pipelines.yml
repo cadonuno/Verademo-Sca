@@ -27,3 +27,10 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'    
 - template : CreateWorkItems.yml
+  parameters:
+    vulnerabilities: [
+      { 
+        "title": "some", 
+        "overview": "overview!", 
+        "vulnerabilityTypes": ["a Type", "another Type"]
+      }]
