@@ -1,5 +1,5 @@
 parameters:
-  json_file : ""
+  json_file : ''
   
 steps:
 - task: oneLuckiDevJson2Variable@1
