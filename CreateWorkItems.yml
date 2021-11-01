@@ -1,13 +1,7 @@
 parameters:
-  json_file : ''
+  vulnerabilities : ''
 
-- task: JsonVarsV2@0
-  name: jsonOutput
-  inputs:
-    jsonFilePath: '$(json_file)'
-    envPathSeparator: '.'
-    isOutput: true
-- ${{ each vulnerability in records.vulnerabilities }}:
+- ${{ each vulnerability in vulnerabilities }}:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
