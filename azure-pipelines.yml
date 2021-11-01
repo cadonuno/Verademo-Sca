@@ -30,4 +30,4 @@ steps:
 
 - template : CreateWorkItems.yml
   parameters:
-    sca_output: sca_output.json
+    vulnerabilities: jq '.records[0].vulnerabilities' sca_output.json
