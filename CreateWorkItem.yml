@@ -1,7 +1,7 @@
 parameters:
   library: ''
   version: ''
-
+steps:
 - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
