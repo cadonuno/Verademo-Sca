@@ -1,9 +1,16 @@
 parameters:
-  json_file : ''
+  json_content : ''
   
 steps:
-- task: oneLuckiDevJson2Variable@1
+- job: read_json
+      variables: 
+        - name: vulnerabilities
+          value: $[ json_content['jsonOutput.records.vulnerabilities'] ]
+- ${{ each vulnerability in vulnerabilities }}:
+  - task: CreateWorkItem@1
   inputs:
-    jsonFile: '${{ parameters.json_file }}'
-    shouldPrefixVariables: true
-    
+    workItemType: 'Issue'
+    title: 'Veracode SCA - ${{ vulnerability.title }}'
+    fieldMappings: 'Description=An issue was detected during an SCA run:\nOverview: ${{ vulnerability.overview}\nOverview: ${{ vulnerability.overview}\nVulnerabilityTypes: ${{vulnerability.vulnerabilityTypes}}'
+    associate: true
+    associationType: 'foundInBuild'
