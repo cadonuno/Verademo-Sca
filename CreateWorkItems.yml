@@ -3,10 +3,6 @@ parameters:
   
 steps:
 - ${{ each vulnerability in parameters.vulnerabilities }}:
-  
-    
-steps:
-- ${{ each vulnerability in parameters.vulnerabilities }}:
   - task: CreateWorkItem@1
     inputs:
       workItemType: 'Issue'
