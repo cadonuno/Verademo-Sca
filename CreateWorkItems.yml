@@ -1,7 +1,7 @@
 parameters:
   vulnerabilities : []
 
-- ${{ each vulnerability in vulnerabilities }}:
+- ${{ each vulnerability in parameters.vulnerabilities }}:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
