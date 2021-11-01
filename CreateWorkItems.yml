@@ -7,11 +7,3 @@ steps:
     jsonFile: '${{ parameters.json_file }}'
     shouldPrefixVariables: true
     
-- ${{ each detectedIssue in parameters.detectedIssues }}:
-  - task: CreateWorkItem@1
-  inputs:
-    workItemType: 'Issue'
-    title: 'Veracode SCA - ${{ detectedIssue.library }}-${{ detectedIssue.version }}'
-    fieldMappings: 'Description=An issue was detected during an SCA run:\nLibrary: ${{ detectedIssue.library }}\nVersion: ${{ detectedIssue.version }}'
-    associate: true
-    associationType: 'foundInBuild'
