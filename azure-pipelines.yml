@@ -27,9 +27,6 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- task: CmdLine@2
-  name: ParseSCAresults
-  inputs:
-    script: |
-      echo `jq '.records[0].vulnerabilities' sca_output.json`
-
+- template : CreateWorkItems.yml
+  parameters:
+    vulnerabilities: (`jq '.records[0].vulnerabilities' sca_output.json`)
