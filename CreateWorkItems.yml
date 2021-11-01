@@ -4,9 +4,10 @@ parameters:
 steps:
 - ${{ each vulnerability in parameters.vulnerabilities }}:
   - task: CreateWorkItem@1
+    name: CreateWorkItems
     inputs:
       workItemType: 'Issue'
-      title: 'Veracode SCA - $(vulnerability.title)'
-      fieldMappings: '<ul><li>Description=An issue was detected during an SCA run</li><li>Overview: $(vulnerability.overview)</li><li>VulnerabilityTypes: $(vulnerability.vulnerabilityTypes)</li></ul>'
+      title: 'Veracode SCA - ${{vulnerability.title}}'
+      fieldMappings: 'Description=An issue was detected during an SCA run - Overview: ${{vulnerability.overview}} - VulnerabilityTypes: ${{vulnerability.vulnerabilityTypes}}'
       associate: true
       associationType: 'foundInBuild'
