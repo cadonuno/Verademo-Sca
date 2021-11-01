@@ -1,5 +1,5 @@
 steps:
-- ${{ each vulnerability in $[(`jq '.records[0].vulnerabilities' sca_output.json`)] }}:
+- $[each vulnerability in `jq '.records[0].vulnerabilities' sca_output.json`]:
   - task: CreateWorkItem@1
   inputs:
     workItemType: 'Issue'
