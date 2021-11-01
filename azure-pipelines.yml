@@ -1,8 +1,3 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - master
 
@@ -26,11 +21,10 @@ steps:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'    
-- template : CreateWorkItems.yml
-  parameters:
-    vulnerabilities: [
-      { 
-        "title": "some", 
-        "overview": "overview!", 
-        "vulnerabilityTypes": ["a Type", "another Type"]
-      }]
+
+
+- task: CmdLine@2
+  name: ParseJson
+  inputs:
+    script: Write-Host '##vso[task.setvariable variable=vulnerabilities,isOutput=true]`jq .records[0].vulnerabilities sca_output.json`'
+- script: echo $(ParseJson.vulnerabilities)
