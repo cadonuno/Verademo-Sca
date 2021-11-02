@@ -15,6 +15,7 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+
 - task: CmdLine@2
   name: SCAScan
   env:
@@ -23,9 +24,9 @@ steps:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
 - powershell: |
-    $TEMP_OUTPUT=Get-Content sca_output.json | ConvertFrom-Json
-    Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
+    $TEMP_OUTPUT = Get-Content 'sca_output.json' | ConvertFrom-Json
+    Write-Host '##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT'
     echo TEMP: $TEMP_OUTPUT
     echo Vulnerabilities: $(vulnerabilities)
-  
+
 - script: echo $(vulnerabilities)
