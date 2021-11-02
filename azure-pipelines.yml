@@ -1,3 +1,4 @@
+
 trigger:
 - master
 
@@ -33,6 +34,10 @@ steps:
           $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
           $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
           Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
+
+- template : CreateWorkItems.yml
+  parameters:
+    vulnerabilities: $(SaveToVulnerabilities.Vulnerabilities)
 
 - task: CmdLine@2
   name: EchoVulnerabilities
