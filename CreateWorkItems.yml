@@ -14,7 +14,7 @@ steps:
           $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
           Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
 
-- ${{ each vulnerability in ReadJsonOutput.Vulnerabilities }}:
+- $[ each vulnerability in ReadJsonOutput.Vulnerabilities ]:
   - template : CreateWorkItem.yml
     parameters:
       title: ${{ vulnerability.title }}
