@@ -1,7 +1,8 @@
 parameters:
-  sca_output: ''
+- name: sca_output
+  type: object
   
 steps:
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities: ${{ parameters.sca_output }}
+    vulnerabilities: "${{ parameters.sca_output }}"
