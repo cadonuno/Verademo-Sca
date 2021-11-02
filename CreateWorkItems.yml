@@ -1,7 +1,19 @@
 parameters:
-  vulnerabilities: []
+  sca_output: ''
+  
+- task: PowerShell@2
+  name: ReadJsonOutput
+  inputs:
+    targetType: 'inline'
+    script: | 
+          $SCA_JSON = Get-Content '$(sca_output)'
+          $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
+          $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
+          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
+          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
+
 steps:
-- ${{ each vulnerability in parameters.vulnerabilities }}:
+- ${{ each vulnerability in ReadJsonOutput.Vulnerabilities }}:
   - template : CreateWorkItem.yml
     parameters:
       title: ${{ vulnerability.title }}
