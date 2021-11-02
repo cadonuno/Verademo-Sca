@@ -27,4 +27,4 @@ steps:
 
 - template : CreateWorkItems.yml
   parameters:
-    sca_output: $(ReadJsonOutput.Vulnerabilities)
+    sca_output: "$[ReadJsonOutput.Vulnerabilities]"
