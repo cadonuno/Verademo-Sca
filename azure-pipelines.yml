@@ -36,5 +36,6 @@ steps:
           Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
 
 - task: CmdLine@2
+  name: EchoVulnerabilities
   inputs:
-    script: 'echo Vulnerabilties outside: $[Vulnerabilities]'
+    script: 'echo Vulnerabilties outside: $(SaveToVulnerabilities.Vulnerabilities)'
