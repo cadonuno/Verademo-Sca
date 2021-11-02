@@ -30,6 +30,6 @@ steps:
     $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json
     Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
     echo Vulnerabilities on temp: $TEMP_OUTPUT
-    echo Vulnerabilities: $(vulnerabilities)
 
-- script: echo $(vulnerabilities)
+- script: |
+    echo Vulnerabilties outside: $TEMP_OUTPUT
