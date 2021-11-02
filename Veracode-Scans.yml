@@ -35,7 +35,7 @@ steps:
     VKEY: $(VERACODE_KEY)
   inputs:
     script: |
-      curl https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2-dist.zip -o api-wrapper.zip
+      curl https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2-dist.zip --output api-wrapper.zip
       unzip api-wrapper.zip
       java -jar api-wrapper.jar -vid $(VID) -vkey $(VKEY) -action UploadAndScan -appname "Verademo ADO" -version $(Build.BuildId) -filepath ./target/verademo.war -createprofile false
 
