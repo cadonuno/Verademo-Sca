@@ -31,15 +31,15 @@ steps:
 - task: Veracode@3
   inputs:
     ConnectionDetailsSelection: 'Credentials'
-    apiId: '$(VERACODE_ID)'
-    apiKey: '$(VERACODE_KEY)'
+    apiId: '$(VID)'
+    apiKey: '$(VKEY)'
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
     maximumWaitTime: '360'
   env:
-    VID: $(VERACODE_KEY)
-    VKEY: $(VERACODE_ID)
+    VID: $(VERACODE_ID)
+    VKEY: $(VERACODE_KEY)
 - task: CmdLine@2
   name: PipelineScan
   env:
