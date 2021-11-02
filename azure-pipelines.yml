@@ -33,7 +33,7 @@ steps:
           $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
           $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10
           echo Vulnerabilities on temp: $TEMP_OUTPUT
-          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
+          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]'$TEMP_OUTPUT'"
 
 - task: CmdLine@2
   name: EchoVulnerabilities
