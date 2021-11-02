@@ -3,7 +3,7 @@ parameters:
   
 steps:
 - task: PowerShell@2
-  name: ReadJsonOutput
+  name: EchoJsonOutput
   inputs:
     targetType: 'inline'
     script: echo ${{ parameters.sca_output }}
