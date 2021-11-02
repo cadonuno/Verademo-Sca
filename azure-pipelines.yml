@@ -22,18 +22,8 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- powershell: echo `jq .records[0].vulnerabilities sca_output.json`
-- task: CmdLine@2
-  name: ParseJson
-  inputs:
-    script: | 
-      TEMP_OUTPUT=`jq .records[0].vulnerabilities sca_output.json`
-      echo $TEMP_OUTPUT
-      Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
-      echo $(vulnerabilities)
-    
-
-- task: CmdLine@2
-  name: EchoVulnerabilities
-  inputs:
-    script: echo $(vulnerabilities)
+- powershell: |
+    $TEMP_OUTPUT=sca_output.json | ConvertFrom-Json
+    Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
+  
+- script: echo $(vulnerabilities)
