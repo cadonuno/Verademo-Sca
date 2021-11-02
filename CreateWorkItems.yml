@@ -18,14 +18,14 @@ steps:
   displayName: 'Fetching ValueFiles'
   inputs:
     targetType: 'inline'
-    script: >
+    script: |
       foreach ($vulnerability in $(ReadJsonOutput.Vulnerabilities))
       {
         Write-Host "- task: CreateWorkItem@1
-  inputs:
-    workItemType: 'Issue'
-    title: 'Veracode SCA - ${{ parameters.title }}'
-    fieldMappings: 'Description=<ul><li>Overview: $(vulnerability.overview)</li><li>CVE: $(vulnerability.cve)</li><li>Link: $(vulnerability.link)</li></ul>'
-    associate: true
-    associationType: 'foundInBuild'"
+      inputs:
+      workItemType: 'Issue'
+      title: 'Veracode SCA - ${{ parameters.title }}'
+      fieldMappings: 'Description=<ul><li>Overview: $(vulnerability.overview)</li><li>CVE: $(vulnerability.cve)</li><li>Link: $(vulnerability.link)</li></ul>'
+      associate: true
+      associationType: 'foundInBuild'"
       }
