@@ -25,6 +25,6 @@ steps:
           $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
           Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
 
-- template : CreateWorkItems.yml
+- template : ConvertToArrayAndCreateItems.yml
   parameters:
-    sca_output: "$[ReadJsonOutput.Vulnerabilities]"
+    sca_output: "$(ReadJsonOutput.Vulnerabilities)"
