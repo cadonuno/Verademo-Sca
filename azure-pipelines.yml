@@ -26,12 +26,12 @@ steps:
   name: ParseJson
   inputs:
     script: 'TEMP_OUTPUT=`jq .records[0].vulnerabilities sca_output.json`'
-    
-- powershell: Write-Host '##vso[task.setvariable variable=vulnerabilities,isOutput=true]$TEMP_OUTPUT'
-- script: echo $(vulnerabilities)
+
+- script: echo $TEMP_OUTPUT 
+
+- script: echo "##vso[task.setvariable variable=vulnerabilities;isOutput=true]$TEMP_OUTPUT"
 
 - task: CmdLine@2
   name: EchoVulnerabilities
   inputs:
     script: echo $(vulnerabilities)
-
