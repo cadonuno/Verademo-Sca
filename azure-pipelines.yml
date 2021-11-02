@@ -23,7 +23,7 @@ steps:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
 - powershell: |
-    $TEMP_OUTPUT=sca_output.json | ConvertFrom-Json
+    $TEMP_OUTPUT=Get-Content sca_output.json | ConvertFrom-Json
     Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
   
 - script: echo $(vulnerabilities)
