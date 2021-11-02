@@ -2,30 +2,8 @@ parameters:
   sca_output: ''
   
 steps:
-
 - task: PowerShell@2
   name: ReadJsonOutput
   inputs:
     targetType: 'inline'
-    script: | 
-          $SCA_JSON = Get-Content '${{parameters.sca_output}}'
-          $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
-          $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
-          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
-          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
-
-- task: PowerShell@2
-  displayName: 'Fetching ValueFiles'
-  inputs:
-    targetType: 'inline'
-    script: |
-      foreach ($vulnerability in $(ReadJsonOutput.Vulnerabilities))
-      {
-        Write-Host "- task: CreateWorkItem@1
-      inputs:
-      workItemType: 'Issue'
-      title: 'Veracode SCA - ${{ parameters.title }}'
-      fieldMappings: 'Description=<ul><li>Overview: $(vulnerability.overview)</li><li>CVE: $(vulnerability.cve)</li><li>Link: $(vulnerability.link)</li></ul>'
-      associate: true
-      associationType: 'foundInBuild'"
-      }
+    script: echo ${{ parameters.sca_output }}
