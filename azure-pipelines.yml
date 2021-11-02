@@ -24,6 +24,17 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
+- task: PowerShell@2
+  name: ReadJsonOutput
+  inputs:
+    targetType: 'inline'
+    script: | 
+          $SCA_JSON = Get-Content '${{parameters.sca_output}}'
+          $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
+          $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
+          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
+          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
+
 - template : CreateWorkItems.yml
   parameters:
-    sca_output: scan_output.json
+    sca_output: ReadJsonOutput.Vulnerabilities
