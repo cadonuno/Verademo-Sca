@@ -8,7 +8,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: | 
-          $SCA_JSON = Get-Content '$(sca_output)'
+          $SCA_JSON = Get-Content '${{sca_output}}'
           $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
           $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
           $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
