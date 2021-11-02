@@ -7,16 +7,6 @@ pool:
 
 
 steps:
-- task: VeracodeCommunityScaAdoExtension@1
-  inputs:
-    scanType: 'directory'
-    scanTarget: './'
-    appName: 'Verademo'
-    minCVSS: '0'
-  env:
-    SRCCLR_API_TOKEN: $(SCA_TOKEN)
-
-
 - task: CmdLine@2
   name: SCAScan
   env:
@@ -37,4 +27,4 @@ steps:
 
 - template : CreateWorkItems.yml
   parameters:
-    sca_output: ReadJsonOutput.Vulnerabilities
+    sca_output: $(ReadJsonOutput.Vulnerabilities)
