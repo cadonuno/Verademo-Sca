@@ -26,11 +26,11 @@ steps:
 - powershell: |
     $SCA_JSON = Get-Content 'sca_output.json'
     echo $SCA_JSON
-    $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json -AsHashtable
+    $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
     echo TEMP: $TEMP_OUTPUT
-    $TEMP_OUTPUT = $TEMP_OUTPUT['records']
+    $TEMP_OUTPUT = $TEMP_OUTPUT.records
     echo Records: $TEMP_OUTPUT
-    $TEMP_OUTPUT = $TEMP_OUTPUT['vulnerabilities']
+    $TEMP_OUTPUT = $TEMP_OUTPUT.vulnerabilities
     Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
     echo Vulnerabilities on temp: $TEMP_OUTPUT
     echo Vulnerabilities: $(vulnerabilities)
