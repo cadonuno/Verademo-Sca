@@ -37,6 +37,9 @@ steps:
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
     maximumWaitTime: '360'
+  env:
+    VID: $(VERACODE_ID)
+    VKEY: $(VERACODE_KEY)
 - task: CmdLine@2
   name: PipelineScan
   env:
