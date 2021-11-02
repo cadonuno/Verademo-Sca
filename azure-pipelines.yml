@@ -31,12 +31,11 @@ steps:
           $SCA_JSON = Get-Content 'sca_output.json'
           $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
           $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
-          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10
-          echo Vulnerabilities on temp: $TEMP_OUTPUT
-          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]'$TEMP_OUTPUT'"
+          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10 -Compress
+          Write-Host "##vso[task.setvariable variable=Vulnerabilities;isOutput=true]$TEMP_OUTPUT"
 
 - task: CmdLine@2
   name: EchoVulnerabilities
   inputs:
     script: | 
-      echo Vulnerabilties outside: "$(SaveToVulnerabilities.Vulnerabilities)"
+      echo Vulnerabilties outside: $(SaveToVulnerabilities.Vulnerabilities)
