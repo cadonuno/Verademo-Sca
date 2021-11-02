@@ -4,9 +4,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables: 
-  Vulnerabilities: ''
-
 steps:
 - task: Maven@3
   inputs:
@@ -26,14 +23,18 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- powershell: |
-    $SCA_JSON = Get-Content 'sca_output.json'
-    $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
-    $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
-    $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10
-    Write-Host "##vso[task.setvariable variable=vulnerabilities]$TEMP_OUTPUT"
-    echo Vulnerabilities on temp: $TEMP_OUTPUT
-    echo "##vso[task.setvariable variable=Vulnerabilities]$TEMP_OUTPUT"  
+- task: PowerShell@2
+  name: SaveToVulnerabilities
+  inputs:
+    targetType: 'inline'
+    script: | 
+          $SCA_JSON = Get-Content 'sca_output.json'
+          $TEMP_OUTPUT = $SCA_JSON | ConvertFrom-Json
+          $TEMP_OUTPUT = $TEMP_OUTPUT.records.vulnerabilities
+          $TEMP_OUTPUT = $TEMP_OUTPUT | ConvertTo-Json -Depth 10
+          echo Vulnerabilities on temp: $TEMP_OUTPUT
+          Write-Host "##vso[task.setvariable variable=Vulnerabilities]$TEMP_OUTPUT"
 
-- script: |
-    echo Vulnerabilties outside: $(Vulnerabilities)
+- task: CmdLine@2
+  inputs:
+    script: 'echo Vulnerabilties outside: $(Vulnerabilities)'
