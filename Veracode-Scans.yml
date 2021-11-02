@@ -28,17 +28,15 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
 
-- task: CmdLine@2
-  name: PolicyScan
-  env:
-    VID: $(VERACODE_ID)
-    VKEY: $(VERACODE_KEY)
+- task: Veracode@3
   inputs:
-    script: |
-      curl https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2-dist.zip --output api-wrapper.zip
-      unzip api-wrapper.zip
-      java -jar api-wrapper.jar -vid $(VID) -vkey $(VKEY) -action UploadAndScan -appname "Verademo ADO" -version $(Build.BuildId) -filepath ./target/verademo.war -createprofile false
-
+    ConnectionDetailsSelection: 'Credentials'
+    apiId: '$(VERACODE_ID)'
+    apiKey: '$(VERACODE_KEY)'
+    veracodeAppProfile: 'Verademo ADO'
+    version: '$(build.buildNumber)'
+    filepath: './target/verademo.war'
+    maximumWaitTime: '360'
 - task: CmdLine@2
   name: PipelineScan
   env:
