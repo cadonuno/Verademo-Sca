@@ -5,17 +5,17 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+
 steps:
-- task: Maven@3
+- task: gattjoe.VeracodeScaAdoExtension.custom-build-release-task.VeracodeCommunityScaAdoExtension@1
+  displayName: 'Veracode SCA Agent Scan - dotnet'
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    scanType: url
+    scanTarget: 'https://github.com/srcclr/example-dotnet'
+    appName: dotnet
+    minCVSS: 0
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
 
 - task: CmdLine@2
   name: SCAScan
