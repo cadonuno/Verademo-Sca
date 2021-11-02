@@ -37,4 +37,4 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    script: 'echo Vulnerabilties outside: $(Vulnerabilities)'
+    script: 'echo Vulnerabilties outside: $Vulnerabilities'
