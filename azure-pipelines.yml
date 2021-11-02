@@ -38,4 +38,5 @@ steps:
 - task: CmdLine@2
   name: EchoVulnerabilities
   inputs:
-    script: 'echo Vulnerabilties outside: $(SaveToVulnerabilities.Vulnerabilities)'
+    script: | 
+      echo Vulnerabilties outside: $(SaveToVulnerabilities.Vulnerabilities)
