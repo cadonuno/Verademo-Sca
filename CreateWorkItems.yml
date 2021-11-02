@@ -1,9 +1,12 @@
 parameters:
-  sca_output: ''
+  vulnerabilities: []
   
 steps:
-- task: PowerShell@2
-  name: EchoJsonOutput
-  inputs:
-    targetType: 'inline'
-    script: echo ${{ parameters.sca_output }}
+${{ each vulnerability in parameters.vulnerabilities }}:
+  - template : CreateWorkItem.yml
+    parameters:
+      title: ${{ vulnerability.title }}
+      overview: ${{ vulnerability.overview }}
+      cve: ${{ vulnerability.cve }}
+      link: ${{ vulnerability.link }}
+      vulnerabilityTypes: ${{ vulnerability.vulnerabilityTypes }}
