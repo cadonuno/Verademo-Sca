@@ -38,8 +38,8 @@ steps:
     filepath: './target/verademo.war'
     maximumWaitTime: '360'
   env:
-    VID: $(VERACODE_ID)
-    VKEY: $(VERACODE_KEY)
+    VID: $(VERACODE_KEY)
+    VKEY: $(VERACODE_ID)
 - task: CmdLine@2
   name: PipelineScan
   env:
