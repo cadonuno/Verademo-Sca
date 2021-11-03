@@ -5,8 +5,11 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
+      echo "I am Inside"
       sca_json="${{ parameters.sca_content }}"
+      echo sca_json: $sca_json
       vulnerabilities=$( jq -r  '.records[0].vulnerabilities[]' <<< "${sca_json}" ) 
+      echo vulnerabilities: $vulnerabilities
       for vulnerability in $vulnerabilities; do
       	echo $vulnerability
       done
