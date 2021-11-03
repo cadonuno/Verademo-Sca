@@ -7,6 +7,8 @@ steps:
     script: |
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       vulnerabilities=($( jq -c  '.' <<< ${sca_json} ))
+      vulnerabilities=()
+      while IFS='' read -r line || ! result=$line; do vulnerabilities+=("$line"); done < <(jq -r "." "$sca_json"; echo -n $?)
       echo "${vulnerabilities[@]}"
       echo "${vulnerabilities[0]}"
       echo "${vulnerabilities[1]}"
