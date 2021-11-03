@@ -1,5 +1,5 @@
 parameters:
-  sca_content: ''
+  vulnerabilities_as_json: ''
   
 steps:
 - task: CmdLine@2
@@ -8,7 +8,7 @@ steps:
       echo "I am Inside"
       sca_json="${{ parameters.sca_content }}"
       echo sca_json: $sca_json
-      vulnerabilities=$( jq -r  '.records[0].vulnerabilities[]' <<< "${sca_json}" ) 
+      vulnerabilities=$( jq -r  '.[]' <<< "${sca_json}" ) 
       echo vulnerabilities: $vulnerabilities
       for vulnerability in $vulnerabilities; do
       	echo $vulnerability
