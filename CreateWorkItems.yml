@@ -1,12 +1,11 @@
 parameters:
-  vulnerabilities: []
+  sca_content: ''
   
 steps:
-${{ each vulnerability in parameters.vulnerabilities }}:
-  - template : CreateWorkItem.yml
-    parameters:
-      title: ${{ vulnerability.title }}
-      overview: ${{ vulnerability.overview }}
-      cve: ${{ vulnerability.cve }}
-      link: ${{ vulnerability.link }}
-      vulnerabilityTypes: ${{ vulnerability.vulnerabilityTypes }}
+- task: CmdLine@2
+  name: SCAScan
+  inputs:
+    script: | 
+      "{{ parameters.sca_content }}" | jq -c '.records[0].vulnerabilities[]' | while read vulnerability; do
+          echo $vulnerability
+      done
