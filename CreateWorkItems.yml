@@ -7,8 +7,19 @@ steps:
     script: |
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
-        vulnerability=$(echo "$encodedVulnerability" | base64 --decode)
-        echo $vulnerability
+        vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
+        title=$(echo jq -r '.title <<< $vulnerabilityAsJson)
+        overview=$(echo jq -r '.overview <<< $vulnerabilityAsJson)
+        cve=$(echo jq -r '.cve <<< $vulnerabilityAsJson)
+        link=$(echo jq -r '._links[0].html <<< $vulnerabilityAsJson)
+        ticketTitle="Veracode SCA - $title"
+        fieldMappings="Description=<ul><li>Overview: $overview</li><li>CVE: $cve</li><li>Link: $link</li></ul>"
+        echo $title
+        echo $overview
+        echo $cve
+        echo $link
+        echo $ticketTitle
+        echo $fieldMappings
         echo --------------------------
         echo ""
       done
