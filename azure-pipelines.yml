@@ -25,7 +25,6 @@ steps:
       $SCA_JSON = $SCA_JSON | ConvertTo-Json -Depth 10
       echo Vulnerabilities on temp: $SCA_JSON
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_JSON"
-      $SCA_JSON=""
 
 - template : CreateWorkItems.yml
   parameters:
