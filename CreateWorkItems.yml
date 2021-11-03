@@ -4,8 +4,9 @@ parameters:
 steps:
 - task: CmdLine@2
   name: CreateWorkItems
+  env: sca_content
   inputs:
     script: | 
-      "{{ parameters.sca_content }}" | jq -c '.records[0].vulnerabilities[]' | while read vulnerability; do
+      "${{ parameters.sca_content }}" | jq -c '.records[0].vulnerabilities[]' | while read vulnerability; do
           echo $vulnerability
       done
