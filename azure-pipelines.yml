@@ -23,7 +23,8 @@ steps:
       $SCA_JSON = $SCA_JSON | ConvertFrom-Json
       $SCA_JSON = $SCA_JSON.records.vulnerabilities
       $SCA_JSON = $SCA_JSON | ConvertTo-Json -Depth 10 -Compress
-      echo "$SCA_JSON" | tr '"'"' ''
+      echo $SCA_JSON
+      $SCA_JSON = $SCA_JSON.Replace("'", "")
       echo $SCA_JSON
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_JSON"
 
