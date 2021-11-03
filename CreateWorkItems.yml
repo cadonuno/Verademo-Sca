@@ -3,11 +3,10 @@ parameters:
   
 steps:
 - task: CmdLine@2
-  name: CreateWorkItems
   inputs:
-    script: | 
+    script: |
       sca_json="${{ parameters.sca_content }}"
       vulnerabilities=$( jq -r  '.records[0].vulnerabilities[]' <<< "${sca_json}" ) 
       for vulnerability in $vulnerabilities; do
-          echo $vulnerability
+      	echo $vulnerability
       done
