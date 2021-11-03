@@ -29,7 +29,6 @@ steps:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
 
 - task: Veracode@3
-  condition: false
   inputs:
     ConnectionDetailsSelection: 'Credentials'
     apiId: '$VID'
