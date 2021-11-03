@@ -7,6 +7,8 @@ steps:
     script: |
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
-        vulnerability=$(echo "$encodedVulnerability" | openssl enc -d -base64)
+        vulnerability=$(echo "$encodedVulnerability" | base64 --decode)
         echo $vulnerability
+        echo --------------------------
+        echo ""
       done
