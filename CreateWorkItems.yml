@@ -5,7 +5,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      sca_json='${{ replace(parameters.vulnerabilities_as_json, "'", "") }}'
+      sca_json='${{ parameters.vulnerabilities_as_json }}'
       echo sca_json:
       echo $sca_json
       vulnerabilities=($( jq -r  '.[]' <<< "${sca_json}" ))
