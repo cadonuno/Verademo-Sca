@@ -29,10 +29,11 @@ steps:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
 
 - task: Veracode@3
+  condition: false
   inputs:
     ConnectionDetailsSelection: 'Credentials'
-    apiId: '$(VKEY)'
-    apiKey: '$(VID)'
+    apiId: '$(VID)'
+    apiKey: '$(VKEY)'
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
