@@ -14,6 +14,13 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $SCA_OUTPUT=Get-Content 'sca_output.json'
+      Write-Host ##vso[task.setvariable variable=SCA_OUTPUT]$SCA_OUTPUT
+
 - template : CreateWorkItems.yml
   parameters:
-    sca_content: Get-Content 'sca_output.json'
+    sca_content: $(SCAScan.SCA_OUTPUT)
