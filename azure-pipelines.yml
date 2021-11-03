@@ -23,8 +23,10 @@ steps:
       $SCA_JSON = $SCA_JSON | ConvertFrom-Json
       $SCA_JSON = $SCA_JSON.records.vulnerabilities
       $SCA_JSON = $SCA_JSON | ConvertTo-Json -Depth 10 -Compress
+      $SCA_JSON = ${$SCA_JSON//"'"/$''}
+      echo $SCA_JSON
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_JSON"
 
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities_as_json: ${{ replace(Variables['ReadJsonFile.VULNERABILITIES_AS_JSON'], "'", "") }}
+    vulnerabilities_as_json: $(ReadJsonFile.VULNERABILITIES_AS_JSON)
