@@ -15,7 +15,7 @@ steps:
         link=$( jq -c  '._links[0].html' <<< "${vulnerabilityAsJson}" ) 
         
         ticketTitle="Veracode SCA - $title"
-        fieldMappings="Description=<ul><li>Overview: $overview</li><li>CVE: $cve</li><li>Link: $link</li></ul>"
+        fieldMappings="Description=<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"
         echo $title
         echo $overview
         echo $cve
