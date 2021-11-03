@@ -27,4 +27,4 @@ steps:
 
 - template : CreateWorkItems.yml
   parameters:
-    vulnerabilities_as_json: ${{ replace(Variables['ReadJsonFile.VULNERABILITIES_AS_JSON'], "'", '"'"') }}
+    vulnerabilities_as_json: ${{ replace(Variables['ReadJsonFile.VULNERABILITIES_AS_JSON'], "'", "") }}
