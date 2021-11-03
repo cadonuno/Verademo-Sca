@@ -20,8 +20,12 @@ steps:
     targetType: 'inline'
     script: |
       $SCA_OUTPUT=Get-Content 'sca_output.json'
-      Write-Host "##vso[task.setvariable variable=SCA_CONTENT;isOutput=true]$SCA_OUTPUT"
+      $SCA_OUTPUT=ConvertTo-Json $SCA_OUTPUT
+      $SCA_OUTPUT=$SCA_OUTPUT.records.vulnerabilities
+      $SCA_OUTPUT=ConvertFrom-Json $SCA_OUTPUT
+      Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_OUTPUT"
+      $SCA_OUTPUT=""
 
 - template : CreateWorkItems.yml
   parameters:
-    sca_content: "$(ReadJsonFile.SCA_CONTENT)"
+    vulnerabilities_as_json: "$(ReadJsonFile.VULNERABILITIES_AS_JSON)"
