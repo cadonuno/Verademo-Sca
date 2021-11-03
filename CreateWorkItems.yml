@@ -6,6 +6,8 @@ steps:
   name: CreateWorkItems
   inputs:
     script: | 
-      "${{ parameters.sca_content }}" | jq -c '.records[0].vulnerabilities[]' | while read vulnerability; do
+      sca_json="${{ parameters.sca_content }}"
+      vulnerabilities=$( jq -r  '.records[0].vulnerabilities[]' <<< "${sca_json}" ) 
+      for vulnerability in $vulnerabilities; do
           echo $vulnerability
       done
