@@ -29,7 +29,8 @@ steps:
   name: OutputJson
   inputs:
     targetType: 'inline'
-    script: 'echo $(ReadJsonFile.VULNERABILITIES_AS_JSON)'
+    script: |
+      echo Vulnerabilties outside: $(ReadJsonFile.VULNERABILITIES_AS_JSON)
 
 - template : CreateWorkItems.yml
   parameters:
