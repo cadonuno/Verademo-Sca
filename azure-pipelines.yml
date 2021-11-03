@@ -30,7 +30,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      echo Vulnerabilties outside: $(ReadJsonFile.VULNERABILITIES_AS_JSON)
+      echo Vulnerabilties outside: "$(ReadJsonFile.VULNERABILITIES_AS_JSON)"
 
 - template : CreateWorkItems.yml
   parameters:
