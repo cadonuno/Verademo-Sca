@@ -3,7 +3,7 @@ parameters:
   
 steps:
 - task: CmdLine@2
-  name: SCAScan
+  name: CreateWorkItems
   inputs:
     script: | 
       "{{ parameters.sca_content }}" | jq -c '.records[0].vulnerabilities[]' | while read vulnerability; do
