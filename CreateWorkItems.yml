@@ -12,7 +12,7 @@ steps:
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
-        link=$( jq -c  '._links[0].html' <<< "${vulnerabilityAsJson}" ) 
+        link=$( jq -c  '._links' <<< "${vulnerabilityAsJson}" ) 
         
         ticketTitle="Veracode SCA - $title"
         fieldMappings="Description=<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"
