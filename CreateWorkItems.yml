@@ -23,17 +23,25 @@ steps:
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
         vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
-        cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
-        cveLink='\"'"$cveLink"'\"'
-        echo $cve_link
+        
+        if [ -z "$cve" ]; then 
+          cveContent="none"
+        else
+          cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
+          cveLink='\"'"$cveLink"'\"'
+          cveContent="<a href=$cveLink>$cveWithoutQuotes</a>"
+        fi
+        
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
-        vulnerabilityLink=$( tr -d '"' <<< "$link")
+        
+        vulnerabilityLink=$( tr -d '"' <<< "$vulnerabilityTypes")
         vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
         vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityLink[*]}" )
         
+        
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>$vulnerabilityTypesAsString</li><li>CVE: <a href=$cveLink>$cveWithoutQuotes</a></li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
         echo $description
                         
         Body='[{
