@@ -40,7 +40,7 @@ steps:
           "value": "$description"
         }]'
         echo $AUTH
-        curl -X POST -H -u $Authentication "Content-Type: application/json' -d '$Body' $ApiUrl
+        curl -X POST -H -u $Authentication 'Content-Type: application/json-patch+json' -d '$Body' $ApiUrl
         echo Ticket created with:
         echo Title: $title
         echo Description: $description
