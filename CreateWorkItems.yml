@@ -1,5 +1,9 @@
 parameters:
   vulnerabilities_as_json: ''
+  issue_type: ''
+  project_name: ''
+  organization: ''
+  authentication_token: ''
   
 steps:
 - task: CmdLine@2
@@ -15,13 +19,25 @@ steps:
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" ) 
         
         ticketTitle="Veracode SCA - $title"
-        fieldMappings="Description=<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"
-        echo $title
-        echo $overview
-        echo $cve
-        echo $link
-        echo $ticketTitle
-        echo $fieldMappings
+        description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"
+        
+        $authentication = ConvertTo-SecureString -String "$authentication_token" -AsPlainText -Force
+        $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
+        
+        $Url = "https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
+        $Body = @[{
+          "op": "add",
+          "path": "/fields/System.Title",
+          "from": null,
+          "value": "$ticketTitle"
+        },
+        {
+          "op": "add",
+          "path": "/fields/System.Description",
+          "from": null,
+          "value": "$description"
+        }]
+        Invoke-RestMethod -Method 'Post' -Uri $url -Credential $Credential -Body $body
         echo --------------------------
         echo ""
       done
