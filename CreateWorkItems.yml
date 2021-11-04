@@ -38,7 +38,13 @@ steps:
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
+        versionRange=$( tr -r '"' <<< $versionRange )
         updateToVersion=$( jq -c  '.libraries[0].details[0].updateToVersion' <<< "${vulnerabilityAsJson}" )
+        updateToVersion=$( tr -r '"' <<< $updateToVersion )
+        
+        if [[ $updateToVersion == "" ]]; then 
+          updateToVersion="none"
+        fi
         
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
         
