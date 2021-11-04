@@ -26,7 +26,7 @@ steps:
         ticketTitle="Veracode SCA - $title"
         description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"       
                         
-        Body="[{
+        Body='[{
           "op": "add",
           "path": "/fields/System.Title",
           "from": null,
@@ -37,10 +37,10 @@ steps:
           "path": "/fields/System.Description",
           "from": null,
           "value": "$description"
-        }]"
-        command="curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic $AUTH' --request POST --data '$Body' $ApiUrl"
-        echo $command
-        `$command`
+        }]'
+        echo $AUTH
+        echo $Body
+        curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic $AUTH' --request POST --data '$Body' $ApiUrl
         echo Ticket created with:
         echo Title: $title
         echo Description: $description
