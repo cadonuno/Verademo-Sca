@@ -22,7 +22,7 @@ steps:
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
-        cveWithoutQuotes=$( tr '"' '\"' <<< "$cve")
+        cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         cve_link="<a href="'"'"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"'"'">$cveWithoutQuotes</a>"
         echo $cve_link
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" ) 
