@@ -5,14 +5,12 @@ parameters:
   organization: ''
   
 steps:
-- task: PowerShell@2
+- task: CmdLine@2
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
-    targetType: 'inline'
-    script: |
-      $authentication=ConvertTo-SecureString -String "$API_CREDENTIALS" -AsPlainText -Force
-      $Credential=New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
+    script: |      
+      $ApiUrl = "https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
       
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
@@ -25,8 +23,7 @@ steps:
         
         ticketTitle="Veracode SCA - $title"
         description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"       
-        
-        $Url = "https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
+                        
         $Body = @[{
           "op": "add",
           "path": "/fields/System.Title",
@@ -39,7 +36,15 @@ steps:
           "from": null,
           "value": "$description"
         }]
-        Invoke-RestMethod -Method 'Post' -Uri $url -Credential $Credential -Body $body
+        
+        curl \
+          -u something:$API_CREDENTIALS  \
+          -X POST -i -H "Content-Type: application/json-patch+json" \
+          -H "Authorization: Basic YXBpdXNlcjphcGlwd2Q=" \
+          --data $Body \
+          $ApiUrl
+          
+        
         echo --------------------------
         echo ""
       done
