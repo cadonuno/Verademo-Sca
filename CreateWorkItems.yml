@@ -35,6 +35,7 @@ steps:
         vulnerabilityTypes='\"'"$vulnerabilityTypes"'\"'
         
         vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityTypes[*]}" )
+        vulnerabilityTypesAsString=$( tr -r '"' <<< $vulnerabilityTypesAsString ) 
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
@@ -47,9 +48,12 @@ steps:
         fi
         
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
+        vulnerabilityLink='\"'"$link"'\"'
+        
+        cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
         
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>Version Range: $versionRange</li><li>Recommended to Update to Version: $updateToVersion</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>Version Range: $versionRange</li><li>Recommended Version: $updateToVersion</li><li>CVSS Score: $cvssScore</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
         echo $description
                         
         Body='[{
