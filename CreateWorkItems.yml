@@ -39,15 +39,15 @@ steps:
           "from": null,
           "value": "$description"
         }]"
-        
-        curl \
+        command="curl \
           --header "Content-Type: application/json-patch+json" \
           --header "Authorization: Basic $AUTH" \
           --request POST \
           --data $Body \
-          $ApiUrl
-          
-        
+          $ApiUrl"
+        echo $command
+        `$command`
+
         echo --------------------------
         echo ""
       done
