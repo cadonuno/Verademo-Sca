@@ -11,7 +11,7 @@ steps:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
     script: |      
-      ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
+      ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       Authentication="anything:$API_CREDENTIALS"
       AUTH=$(echo -ne "anything:$API_CREDENTIALS" | base64 --wrap 0)
       
