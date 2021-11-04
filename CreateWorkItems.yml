@@ -6,6 +6,7 @@ parameters:
   
 steps:
 - task: CmdLine@2
+  name: CreateTickets
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
@@ -37,7 +38,7 @@ steps:
           "from": null,
           "value": "$description"
         }]"
-        command="curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic '$AUTH' --request POST --data '$Body' $ApiUrl"
+        command="curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic $AUTH' --request POST --data '$Body' $ApiUrl"
         echo $command
         `$command`
         echo Ticket created with:
