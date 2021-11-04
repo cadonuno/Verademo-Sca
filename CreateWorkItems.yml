@@ -27,7 +27,15 @@ steps:
         ticketTitle="Veracode SCA - $title"
         description="<ul><li>Overview: $overview</li><li>CVE: "'"$cve"'"</li><li><a href="'"$link"'">Veracode Database Link</a></li></ul>"       
                         
-        Body='[{"op": "add","path": "/fields/System.Title","value": "'"$ticketTitle"'"},{"op": "add","path": "/fields/System.Description","value": "'"$description"'"}]'
+        Body='[{
+          "op": "add",
+          "path": "/fields/System.Title",
+          "value": "'"$ticketTitle"'"},
+        {
+          "op": "add",
+          "path": "/fields/System.Description",
+          "value": "'"$description"'"
+        }]'
         set -x
         curl -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
         set +x
