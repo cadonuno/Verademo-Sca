@@ -72,7 +72,7 @@ steps:
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
         
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
         echo $description
                         
         Body='[{
