@@ -3,12 +3,16 @@ parameters:
   issue_type: ''
   project_name: ''
   organization: ''
-  authentication_token: ''
   
 steps:
 - task: CmdLine@2
+  env:
+    API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
     script: |
+      $authentication = ConvertTo-SecureString -String "$API_CREDENTIALS" -AsPlainText -Force
+      $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
+      
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
@@ -19,10 +23,7 @@ steps:
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" ) 
         
         ticketTitle="Veracode SCA - $title"
-        description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"
-        
-        $authentication = ConvertTo-SecureString -String "$authentication_token" -AsPlainText -Force
-        $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
+        description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"       
         
         $Url = "https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
         $Body = @[{
