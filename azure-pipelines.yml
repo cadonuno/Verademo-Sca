@@ -30,5 +30,5 @@ steps:
   parameters:
     vulnerabilities_as_json: $(ReadJsonFile.VULNERABILITIES_AS_JSON)
     issue_type: 'Issue'
-    project_name: 'rpereira0294'
-    organization: 'Test%20Project'
+    organization: 'rpereira0294'
+    project_name: 'Test%20Project'
