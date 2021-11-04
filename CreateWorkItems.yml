@@ -9,6 +9,7 @@ steps:
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
+    targetType: 'inline'
     script: |
       $authentication=ConvertTo-SecureString -String "$API_CREDENTIALS" -AsPlainText -Force
       $Credential=New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
