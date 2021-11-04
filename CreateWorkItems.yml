@@ -11,6 +11,7 @@ steps:
   inputs:
     script: |      
       ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
+      AUTH=$(echo -ne "anything:$API_CREDENTIALS" | base64 --wrap 0)
       
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
@@ -38,9 +39,9 @@ steps:
         }]"
         
         curl \
-          -u something:$API_CREDENTIALS  \
-          -X POST -i -H "Content-Type: application/json-patch+json" \
-          -H "Authorization: Basic YXBpdXNlcjphcGlwd2Q=" \
+          --header "Content-Type: application/json-patch+json" \
+          --header "Authorization: Basic $AUTH" \
+          --request POST \
           --data $Body \
           $ApiUrl
           
