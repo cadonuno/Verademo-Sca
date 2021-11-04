@@ -22,11 +22,14 @@ steps:
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
+        $cve=$( tr '"' '\"' <<< "$cve")
+        cve_link='<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-'"$cve"'"'">$cve</a>"
+        echo $cve_link
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" ) 
         
-        ticketTitle="Veracode SCA - $title"
-        description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"       
-        description=$(tr '"' '\"' <<<"$description")
+        ticketTitle="Veracode SCA - $title"     
+        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>CVE: $cve_link</li><li><a href=$link>Veracode Database Link</a></li></ul>" )
+        echo $description
                         
         Body='[{
           "op": "add",
