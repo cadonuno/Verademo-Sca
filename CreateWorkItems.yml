@@ -37,10 +37,12 @@ steps:
           "from": null,
           "value": "$description"
         }]"
-        command='curl --header "Content-Type: application/json-patch+json" --header "Authorization: Basic $AUTH" --request POST --data $Body $ApiUrl'
+        command="curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic '$AUTH' --request POST --data $Body $ApiUrl"
         echo $command
         `$command`
-        echo "Ticket created with:\nTitle: $title\nDescription: $description"
+        echo Ticket created with:
+        echo Title: $title
+        echo Description: $description
         echo --------------------------
         echo ""
       done
