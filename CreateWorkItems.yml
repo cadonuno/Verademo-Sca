@@ -35,7 +35,7 @@ steps:
         vulnerabilityTypes=$( tr -d '"' <<< $vulnerabilityTypes ) 
         
         printf -v vulnerabilityTypesAsString ', %s' "${ids[@]}"
-        vulnerabilityTypesAsString=${ids_d:2}   
+        vulnerabilityTypesAsString=${vulnerabilityTypesAsString:2}   
         
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
