@@ -32,9 +32,10 @@ steps:
         fi
         
         vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
+        vulnerabilityTypes=$( tr -d '"' <<< $vulnerabilityTypes ) 
         
-        vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityTypes[*]}" )
-        vulnerabilityTypesAsString=$( tr -d '"' <<< $vulnerabilityTypesAsString ) 
+        vulnerabilityTypesAsString=$( IFS=$','; echo "${vulnerabilityTypes[*]}" )
+        
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
@@ -43,6 +44,9 @@ steps:
         updateToVersion=$( tr -d '"' <<< $updateToVersion )
         
         if [[ $updateToVersion == "" ]]; then 
+          updateToVersion="none"
+        fi
+        if [[ $updateToVersion == "null" ]]; then 
           updateToVersion="none"
         fi
         
