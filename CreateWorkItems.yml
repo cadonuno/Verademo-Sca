@@ -13,6 +13,7 @@ steps:
     script: |      
       ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       Authentication="anything:$API_CREDENTIALS"
+      echo $Authentication
       
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
