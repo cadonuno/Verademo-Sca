@@ -10,8 +10,8 @@ steps:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
   inputs:
     script: |
-      $authentication = ConvertTo-SecureString -String "$API_CREDENTIALS" -AsPlainText -Force
-      $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
+      authentication=ConvertTo-SecureString -String "$API_CREDENTIALS" -AsPlainText -Force
+      Credential=New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList "anything", $authentication
       
       sca_json='${{ parameters.vulnerabilities_as_json }}'
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
