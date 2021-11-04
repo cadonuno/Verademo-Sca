@@ -1,8 +1,8 @@
 parameters:
   vulnerabilities_as_json: ''
   issue_type: ''
-  project_name: ''
   organization: ''
+  project_name: ''
   
 steps:
 - task: CmdLine@2
