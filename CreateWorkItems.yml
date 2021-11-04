@@ -26,11 +26,13 @@ steps:
         
         ticketTitle="Veracode SCA - $title"
         description="<ul><li>Overview: $overview</li><li>CVE: $cve</li><li><a href=$link>Veracode Database Link</a></li></ul>"       
+        description=$(tr '"' '' <<<"$string")
                         
         Body='[{
           "op": "add",
           "path": "/fields/System.Title",
-          "value": "'"$ticketTitle"'"},
+          "value": "'"$ticketTitle"'"
+        },
         {
           "op": "add",
           "path": "/fields/System.Description",
