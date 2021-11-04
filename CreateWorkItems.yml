@@ -30,15 +30,14 @@ steps:
           "op": "add",
           "path": "/fields/System.Title",
           "from": null,
-          "value": "$ticketTitle"
+          "value": "'"$ticketTitle"'"
         },
         {
           "op": "add",
           "path": "/fields/System.Description",
           "from": null,
-          "value": "$description"
+          "value": "'"$description"'"
         }]'
-        echo Calling url: $ApiUrl
         set -x
         curl -X POST -H -u $Authentication 'Content-Type: application/json-patch+json' -d "$Body" "$ApiUrl"
         set +x
