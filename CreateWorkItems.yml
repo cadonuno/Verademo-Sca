@@ -20,11 +20,9 @@ steps:
         
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
-        cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
-        vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
-        cveWithoutQuotes=$( tr -d '"' <<< "$cve")
+        cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
         
-        if [ -z "$cve" ]; then 
+        if [[ $cve == "null" ]]; then 
           cveContent="none"
         else
           cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
@@ -32,16 +30,20 @@ steps:
           cveContent="<a href=$cveLink>$cveWithoutQuotes</a>"
         fi
         
+        vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
+        vulnerabilityTypes=$( tr -d '"' <<< "$vulnerabilityTypes")
+        vulnerabilityTypes='\"'"$vulnerabilityTypes"'\"'
+        
+        vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityTypes[*]}" )
+        
+        cveWithoutQuotes=$( tr -d '"' <<< "$cve")
+        versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
+        updateToVersion=$( jq -c  '.libraries[0].details[0].updateToVersion' <<< "${vulnerabilityAsJson}" )
+        
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
         
-        vulnerabilityLink=$( tr -d '"' <<< "$vulnerabilityTypes")
-        vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
-        
-        vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityLink[*]}" )
-        
-        
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>Version Range: $versionRange</li><li>Recommended to Update to Version: $updateToVersion</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
         echo $description
                         
         Body='[{
