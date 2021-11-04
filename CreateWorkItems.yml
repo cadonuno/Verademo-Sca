@@ -12,6 +12,7 @@ steps:
   inputs:
     script: |      
       ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/$${{ parameters.issue_type }}?api-version=6.0"
+      Authentication="anything:$API_CREDENTIALS"
       AUTH=$(echo -ne "anything:$API_CREDENTIALS" | base64 --wrap 0)
       
       sca_json='${{ parameters.vulnerabilities_as_json }}'
@@ -39,8 +40,7 @@ steps:
           "value": "$description"
         }]'
         echo $AUTH
-        echo $Body
-        curl --header 'Content-Type: application/json-patch+json' --header 'Authorization: Basic $AUTH' --request POST --data '$Body' $ApiUrl
+        curl -X POST -H -u $Authentication "Content-Type: application/json' -d '$Body' $ApiUrl
         echo Ticket created with:
         echo Title: $title
         echo Description: $description
