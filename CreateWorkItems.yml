@@ -33,9 +33,15 @@ steps:
         
         vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
         vulnerabilityTypes=$( tr -d '"' <<< $vulnerabilityTypes ) 
+        if [[ $vulnerabilityTypes == "" ]]; then 
+          vulnerabilityTypesAsString=""
+        else
+          for vulnerabilityType in $vulnerabilityTypes; do
+            vulnerabilityTypesAsString="$vulnerabilityTypesAsString, $vulnerabilityType"
+          done
+          vulnerabilityTypesAsString=${vulnerabilityTypesAsString:2}   
+        fi
         
-        printf -v vulnerabilityTypesAsString ', %s' "${vulnerabilityTypes[@]}"
-        vulnerabilityTypesAsString=${vulnerabilityTypesAsString:2}   
         
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
@@ -71,10 +77,8 @@ steps:
           "path": "/fields/System.Description",
           "value": "'"$description"'"
         }]'
-        
-        set -x
+
         curl -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
-        set +x
         
         echo Ticket created.
         echo Title: $title
