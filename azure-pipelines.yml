@@ -26,6 +26,9 @@ steps:
       $SCA_JSON = $SCA_JSON.Replace("'", "")
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_JSON"
 
-- template : CreateWorkItems.yml
+- template : CreateWorkItems.yml  
   parameters:
     vulnerabilities_as_json: $(ReadJsonFile.VULNERABILITIES_AS_JSON)
+    issue_type: 'Issue'
+    project_name: 'rpereira0294'
+    organization: 'Test%20Project'
