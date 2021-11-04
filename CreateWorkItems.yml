@@ -3,6 +3,13 @@ parameters:
   issue_type: ''
   organization: ''
   project_name: ''
+  Overview_Name: 'Overview'
+  Vulnerability_Types_Name: 'Vulnerability Types'
+  Version_Range_Name: 'Version Range'
+  Recommended_Version_Name: 'Recommended Version'
+  CVSS_Score_Name: 'CVSS Score'
+  CVE_Name: 'CVE'
+  Veracode_Database_Link_Name: 'Veracode Database Link'
   
 steps:
 - task: CmdLine@2
@@ -65,7 +72,7 @@ steps:
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
         
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>Vulnerability Types: $vulnerabilityTypesAsString</li><li>Version Range: $versionRange</li><li>Recommended Version: $updateToVersion</li><li>CVSS Score: $cvssScore</li><li>CVE: $cveContent</li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
         echo $description
                         
         Body='[{
