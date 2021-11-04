@@ -21,6 +21,7 @@ steps:
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" ) 
+        vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
         cveLink='\"'"$cveLink"'\"'
@@ -29,8 +30,10 @@ steps:
         vulnerabilityLink=$( tr -d '"' <<< "$link")
         vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
+        vulnerabilityTypesAsString=$( IFS=$', '; echo "${vulnerabilityLink[*]}" )
+        
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>CVE: <a href=$cveLink>$cveWithoutQuotes</a></li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>Overview: $overview</li><li>$vulnerabilityTypesAsString</li><li>CVE: <a href=$cveLink>$cveWithoutQuotes</a></li><li><a href=$vulnerabilityLink>Veracode Database Link</a></li></ul>" )
         echo $description
                         
         Body='[{
@@ -43,9 +46,11 @@ steps:
           "path": "/fields/System.Description",
           "value": "'"$description"'"
         }]'
+        
         set -x
         curl -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
         set +x
+        
         echo Ticket created.
         echo Title: $title
         echo Description: $description
