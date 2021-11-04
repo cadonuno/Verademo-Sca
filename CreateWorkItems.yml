@@ -25,6 +25,7 @@ steps:
         if [[ $cve == "null" ]]; then 
           cveContent="none"
         else
+          cveWithoutQuotes=$( tr -d '"' <<< $cve ) 
           cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
           cveLink='\"'"$cveLink"'\"'
           cveContent="<a href=$cveLink>$cveWithoutQuotes</a>"
@@ -46,7 +47,8 @@ steps:
         fi
         
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
-        vulnerabilityLink='\"'"$link"'\"'
+        vulnerabilityLink=$( tr -d '"' <<< $link )
+        vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
         
