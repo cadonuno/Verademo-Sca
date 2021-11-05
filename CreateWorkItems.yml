@@ -99,7 +99,7 @@ steps:
         workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
         existingWorkItems=$( jq -c  '.workItems[]' <<< "${workItemQueryResult}" )
         
-        echo ${#existingWorkItems[@]
+        echo ${#existingWorkItems[@]}
         echo ${#existingWorkItems[0]}
         echo ${#existingWorkItems[1]}
         echo ${#existingWorkItems[2]}
