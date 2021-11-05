@@ -32,7 +32,8 @@ steps:
     VULNERABILITIES_AS_JSON:  $(ReadJsonFile.VULNERABILITIES_AS_JSON)
   inputs:
     script: |      
-      ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
+      createApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
+      getWorkItemApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}t/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
       
       sca_json="$VULNERABILITIES_AS_JSON"
@@ -90,9 +91,14 @@ steps:
                 
         
         ticketTitle="Veracode SCA - $title - $coordHash"     
+        
+        getWorkItemQuery="\"query\": "Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'
+        echo $getWorkItemQuery
+        set -x
+        curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl
+        set +x
+        asdasd
         description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Vulnerable_Library_Name }}: $coordHash</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
-        echo $description
-                        
         Body='[{
           "op": "add",
           "path": "/fields/System.Title",
@@ -104,7 +110,7 @@ steps:
           "value": "'"$description"'"
         }]'
 
-        curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
+        curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $createApiUrl
         
         echo Ticket created.
         echo Title: $title
