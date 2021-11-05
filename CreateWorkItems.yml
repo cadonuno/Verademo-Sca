@@ -84,11 +84,10 @@ steps:
         databaseApiLink="https://api.sourceclear.com/artifacts/components/${vulnerabilityLink##*/}"
         vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
-        echo $databaseApiLink
         databaseApiResult=$( curl --silent $databaseApiLink )
         echo $databaseApiResult
-        coordOne=$( jq -c  '.artifactComponents[0].coordHash' <<< "${databaseApiResult}" )
-        coordTwo=$( jq -c  '.artifactComponents[0].coordHash' <<< "${databaseApiResult}" )
+        coordOne=$( jq -c  '.artifactComponents[0].coordOne' <<< "${databaseApiResult}" )
+        coordTwo=$( jq -c  '.artifactComponents[0].coordTwo' <<< "${databaseApiResult}" )
         libraryName=$coordOne.$coordTwo
         librarySource=$( jq -c  '.artifactComponents[0].componentCoordinateType' <<< "${databaseApiResult}" )
         
@@ -98,10 +97,10 @@ steps:
         echo $ticketTitle
         
         getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
-        echo $getWorkItemQuery
         workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
         echo $workItemQueryResult
         existingWorkItems=$( jq -c  '.workItems[]' <<< "${workItemQueryResult}" )
+        echo ${#existingWorkItems[@]}
         if [ ${#existingWorkItems[@]} -eq 0 ]; then
           description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}:$librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
           Body='[{
