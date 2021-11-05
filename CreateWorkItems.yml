@@ -85,7 +85,6 @@ steps:
         vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
         databaseApiResult=$( curl --silent $databaseApiLink )
-        echo $databaseApiResult
         coordOne=$( jq -c  '.artifactComponents[0].coordOne' <<< "${databaseApiResult}" )
         coordTwo=$( jq -c  '.artifactComponents[0].coordTwo' <<< "${databaseApiResult}" )
         libraryName=$coordOne.$coordTwo
@@ -97,7 +96,10 @@ steps:
         echo $ticketTitle
         
         getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
+        echo Query:
+        echo $getWorkItemQuery
         workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
+        echo Result:
         echo $workItemQueryResult
         existingWorkItems=$( jq -c  '.workItems[]' <<< "${workItemQueryResult}" )
         echo ${#existingWorkItems[@]}
