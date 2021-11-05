@@ -22,6 +22,7 @@ steps:
     project_name: 'Test%20Project'
     Overview_Name: 'Descricao'
     Vulnerability_Types_Name: 'Tipos de Vulnerabilidade'
+    Library_Source_Name: 'Origem da Vulnerabilidade'
     Vulnerable_Library_Name: 'Biblioteca Vulneravel'
     Version_Range_Name: 'Versoes Afetadas'
     Recommended_Version_Name: 'Versao Recomendada'
