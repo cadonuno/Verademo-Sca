@@ -42,7 +42,7 @@ steps:
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
         
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
-        overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
+        overview=$( jq -c '.overview' <<< "${vulnerabilityAsJson}" ) 
         overview=$( tr -r '\"' '"' <<< "${overview}" )
         echo $overview
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
