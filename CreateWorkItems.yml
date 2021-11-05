@@ -11,6 +11,7 @@ parameters:
   CVE_Name: 'CVE'
   Veracode_Database_Link_Name: 'Veracode Database Link'
   
+steps:
 - task: PowerShell@2
   name: ReadJsonFile
   inputs:
@@ -22,8 +23,7 @@ parameters:
       $SCA_JSON = $SCA_JSON | ConvertTo-Json -Depth 10 -Compress
       $SCA_JSON = $SCA_JSON.Replace("'", "")
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$SCA_JSON"
-  
-steps:
+      
 - task: CmdLine@2
   name: CreateTickets
   env:
