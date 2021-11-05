@@ -33,7 +33,7 @@ steps:
       ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       Authentication="anything:$API_CREDENTIALS"
       
-      sca_json="$(ReadJsonFile.VULNERABILITIES_AS_JSON)"
+      sca_json="$(VULNERABILITIES_AS_JSON)"
       for encodedVulnerability in $(echo "${sca_json}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
         
@@ -61,8 +61,6 @@ steps:
           done
           vulnerabilityTypesAsString=${vulnerabilityTypesAsString:2}   
         fi
-        
-        
         
         cveWithoutQuotes=$( tr -d '"' <<< "$cve")
         versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
