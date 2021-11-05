@@ -43,6 +43,7 @@ steps:
         
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
+        overview=$( tr '\"' '"' <<< "${overview}" )
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
         
         if [[ $cve == "null" ]]; then 
@@ -110,7 +111,7 @@ steps:
           {
             "op": "add",
             "path": "/fields/System.Description",
-            "value": "'"$description"'"
+            "value": \"$description\""
           }]'
 
           curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $createApiUrl
