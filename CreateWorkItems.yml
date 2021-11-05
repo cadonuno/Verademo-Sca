@@ -97,7 +97,7 @@ steps:
           "value": "'"$description"'"
         }]'
 
-        curl -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
+        curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $ApiUrl
         
         echo Ticket created.
         echo Title: $title
