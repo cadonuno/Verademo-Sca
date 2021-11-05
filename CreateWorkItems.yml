@@ -43,7 +43,7 @@ steps:
         
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r  '.overview' <<< "${vulnerabilityAsJson}" ) 
-        overview=$( tr '\"' '"' <<< "${overview}" )
+        overview=$( tr -d '\"' <<< "${overview}" )
         echo $overview
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
         
