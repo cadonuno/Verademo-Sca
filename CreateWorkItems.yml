@@ -96,13 +96,13 @@ steps:
         ticketTitle="Veracode SCA - $title - $libraryName"     
         
         getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
-        echo Query:
-        echo $getWorkItemQuery
         workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
-        echo Result:
-        echo $workItemQueryResult
         existingWorkItems=$( jq -c  '.workItems[]' <<< "${workItemQueryResult}" )
+        
+        echo ${#existingWorkItems[@]
         echo ${#existingWorkItems[0]}
+        echo ${#existingWorkItems[1]}
+        echo ${#existingWorkItems[2]}
         if [ ${#existingWorkItems[@]} -eq 0 ]; then
           description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}:$librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
           Body='[{
