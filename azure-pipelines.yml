@@ -16,7 +16,7 @@ steps:
 
 - template : CreateWorkItems.yml  
   parameters:
-    vulnerabilities_as_json: 'sca_output.json'
+    json_file: 'sca_output.json'
     issue_type: 'Issue'
     organization: 'rpereira0294'
     project_name: 'Test%20Project'
