@@ -90,6 +90,7 @@ steps:
         libraryName=$coordOne.$coordTwo
         libraryName=$( tr -d '"' <<< $libraryName )
         librarySource=$( jq -c  '.artifactComponents[0].componentCoordinateType' <<< "${databaseApiResult}" )
+        librarySource=$( tr -d '"' <<< $librarySource )
         
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" ) 
        
