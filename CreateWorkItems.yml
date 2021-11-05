@@ -5,6 +5,7 @@ parameters:
   project_name: ''
   Overview_Name: 'Overview'
   Vulnerability_Types_Name: 'Vulnerability Types'
+  Library_Source_Name: 'Library Source'
   Vulnerable_Library_Name: 'Vulnerable Library'
   Version_Range_Name: 'Version Range'
   Recommended_Version_Name: 'Recommended Version'
@@ -86,13 +87,14 @@ steps:
         echo $databaseApiLink
         databaseApiResult=$( curl --silent $databaseApiLink )
         echo $databaseApiResult
-        coordHash=$( jq -c  '.artifactComponents[0].coordHash' <<< "${databaseApiResult}" )
-        coordHash=$( tr -d '"' <<< $coordHash )
+        coordOne=$( jq -c  '.artifactComponents[0].coordHash' <<< "${databaseApiResult}" )
+        coordTwo=$( jq -c  '.artifactComponents[0].coordHash' <<< "${databaseApiResult}" )
+        libraryName=$coordOne.$coordTwo
+        librarySource=$( jq -c  '.artifactComponents[0].componentCoordinateType' <<< "${databaseApiResult}" )
         
-        cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
-                
+        cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" ) 
         
-        ticketTitle="Veracode SCA - $title - $coordHash"     
+        ticketTitle="Veracode SCA - $title - $libraryName"     
         echo $ticketTitle
         
         getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
@@ -101,7 +103,7 @@ steps:
         echo $workItemQueryResult
         existingWorkItems=$( jq -c  '.workItems[]' <<< "${workItemQueryResult}" )
         if [ ${#existingWorkItems[@]} -eq 0 ]; then
-          description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Vulnerable_Library_Name }}: $coordHash</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
+          description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}:$librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
           Body='[{
             "op": "add",
             "path": "/fields/System.Title",
