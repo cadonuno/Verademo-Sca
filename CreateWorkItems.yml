@@ -28,6 +28,7 @@ steps:
   name: CreateTickets
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
+    VULNERABILITIES_AS_JSON:  $(ReadJsonFile.VULNERABILITIES_AS_JSON)
   inputs:
     script: |      
       ApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
