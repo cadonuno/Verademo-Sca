@@ -5,6 +5,7 @@ parameters:
   project_name: ''
   Overview_Name: 'Overview'
   Vulnerability_Types_Name: 'Vulnerability Types'
+  Vulnerable_Library_Name: 'Vulnerable Library'
   Version_Range_Name: 'Version Range'
   Recommended_Version_Name: 'Recommended Version'
   CVSS_Score_Name: 'CVSS Score'
@@ -78,12 +79,18 @@ steps:
         
         link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
         vulnerabilityLink=$( tr -d '"' <<< $link )
+        databaseApiLink="https://api.sourceclear.com/artifacts/components/${vulnerabilityLink##*/}"
         vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
         
+        databaseApiResult=$( curl --silent $databaseApiLink )
+        coordHash=$( jq -c  '.artifactComponents[0]coordHash' <<< "${databaseApiResult}" )
+        coordHash=$( tr -d '"' <<< $coordHash )
+        
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" )
+                
         
         ticketTitle="Veracode SCA - $title"     
-        description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
+        description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li>${{ parameters.Vulnerable_Library_Name }}: $coordHash</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
         echo $description
                         
         Body='[{
