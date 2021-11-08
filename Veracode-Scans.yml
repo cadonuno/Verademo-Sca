@@ -31,8 +31,8 @@ steps:
 - task: Veracode@3
   inputs:
     ConnectionDetailsSelection: 'Credentials'
-    apiId: '$VID'
-    apiKey: '$VKEY'
+    apiId: '$(VID)'
+    apiKey: '$(VKEY)'
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
@@ -41,3 +41,14 @@ steps:
     VID: $(VERACODE_ID)
     VKEY: $(VERACODE_KEY)
 
+- task: Veracode Flaw Importer@3
+  inputs:
+    ConnectionDetailsSelection: 'Credentials'
+    apiId: '$(VID)'
+    apiKey: '$(VKEY)'
+    veracodeAppProfile: '$(system.teamProject)'
+    sandboxName: 
+    importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Issue'
+    area: '$(system.teamProject)'
+    flawImportLimit: '1000'
