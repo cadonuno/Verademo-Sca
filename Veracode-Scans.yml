@@ -30,22 +30,18 @@ steps:
 
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Credentials'
-    apiId: '$(VID)'
-    apiKey: '$(VKEY)'
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
     maximumWaitTime: '360'
-  env:
-    VID: $(VERACODE_ID)
-    VKEY: $(VERACODE_KEY)
+
 
 - task: Veracode Flaw Importer@3
   inputs:
-    ConnectionDetailsSelection: 'Credentials'
-    apiId: '$(VID)'
-    apiKey: '$(VKEY)'
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: '$(system.teamProject)'
     sandboxName: 
     importType: 'All Unmitigated Flaws Violating Policy'
