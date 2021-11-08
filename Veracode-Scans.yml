@@ -42,7 +42,7 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: '$(system.teamProject)'
+    veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
     importType: 'All Unmitigated Flaws Violating Policy'
     workItemType: 'Issue'
