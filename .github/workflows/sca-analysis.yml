@@ -19,8 +19,14 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      # Runs an SCA agent-based scan in the local directory
       - name: Execute Software Composition Analysis
         env:
           SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         run: curl -sSL https://download.sourceclear.com/ci.sh | sh
+        
+      # Runs an SCA agent-based scan in a container
+      - name: Execute Software Composition Analysis
+        env:
+          SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+        run: curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --image cangol/android-gradle:25 --loud
