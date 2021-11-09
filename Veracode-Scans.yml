@@ -45,6 +45,6 @@ steps:
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
     importType: 'All Unmitigated Flaws Violating Policy'
-    workItemType: 'Issue'
+    workItemType: 'Custom Type'
     area: '$(system.teamProject)'
     flawImportLimit: '1000'
