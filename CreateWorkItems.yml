@@ -28,10 +28,10 @@ steps:
       $VULNERABILITIES_JSON = $VULNERABILITIES_JSON | ConvertTo-Json -Depth 10 -Compress
       $VULNERABILITIES_JSON = $VULNERABILITIES_JSON.Replace("'", "")
       Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$VULNERABILITIES_JSON"
-      $VULNERABLE_METHODS_JSON = $SCA_JSON.records.vulnerabilities
+      $VULNERABLE_METHODS_JSON = $SCA_JSON.records.vulnMethods
       $VULNERABLE_METHODS_JSON = $VULNERABLE_METHODS_JSON | ConvertTo-Json -Depth 10 -Compress
       $VULNERABLE_METHODS_JSON = $VULNERABLE_METHODS_JSON.Replace("'", "")
-      Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$VULNERABLE_METHODS_JSON"
+      Write-Host "##vso[task.setvariable variable=VULNERABLE_METHODS_AS_JSON;isOutput=true]$VULNERABLE_METHODS_JSON"
       
 - task: CmdLine@2
   name: CreateTickets
