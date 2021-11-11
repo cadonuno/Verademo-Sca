@@ -49,8 +49,7 @@ steps:
       for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         
-        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}" )
-        echo $vulnerableMethodAsJson
+        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}" 
         calls=[]
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
           echo $callEncoded
@@ -71,9 +70,8 @@ steps:
         vulnerableMethods+=($VulnerableMethod)
         
         echo $ref
-        echo $calls
+        echo $calls[@]
       done
-      echo $vulnerableMethods
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
@@ -145,8 +143,8 @@ steps:
           reference=$( tr -d '"' <<< $reference )
           
           for existingVulnerableMethod in vulnerableMethods; do 
-            if [[ "$existingVulnerableMethod.ref" = "$reference" ]];  then
-              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>$calls</h3></li>"
+            if [[ "$existingVulnerableMethod['ref']" = "$reference" ]];  then
+              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>$existingVulnerableMethod['calls'][@]</h3></li>"
             fi
           done
           
