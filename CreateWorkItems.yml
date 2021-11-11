@@ -45,12 +45,12 @@ steps:
       getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
       
-      vulnerableMethods=[]
+      vulnerableMethods={}
       for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         
         ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}") 
-        calls=[]
+        calls={}
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
           callAsJson=$(echo "$callEncoded" | base64 --decode)
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
@@ -63,12 +63,12 @@ steps:
           call["calledMethod"]=$calledMethod 
           call["methodDescriptor"]=$methodDescriptor 
           call["callChain"]=$callChain
-          calls+=($call)
+          calls+=("${call}")
         done
         declare -A VulnerableMethod
         VulnerableMethod["ref"]=$ref 
         VulnerableMethod["calls"]=$calls
-        vulnerableMethods+=($VulnerableMethod)
+        vulnerableMethods+=("${VulnerableMethod}")
       done
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
