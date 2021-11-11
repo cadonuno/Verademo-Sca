@@ -74,8 +74,8 @@ steps:
         vulnerableMethods[methodIndex]=$VulnerableMethod
         let methodIndex=methodIndex+1
       done
-      for methodFromArray in "${vulnerableMethods[@]}" do
-        echo ${methodFromArray[ref]} 
+      for methodFromArray in "${vulnerableMethods[@]}"; do
+        echo ${methodFromArray[ref]}
         for callFromArray in $VulnerableMethod["calls"]; do
           echo ${callFromArray[calledClass]} 
           echo ${callFromArray[calledMethod]} 
@@ -154,7 +154,7 @@ steps:
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
           
-          for existingVulnerableMethod in "${vulnerableMethods[@]}" do 
+          for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
             echo Checking vulnerable method: ${existingVulnerableMethod[ref]}
             if [[ "${existingVulnerableMethod[ref]}" = "$reference" ]];  then
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>$existingVulnerableMethod['calls'][@]</h3></li>"
