@@ -46,29 +46,26 @@ steps:
       Authentication="anything:$API_CREDENTIALS"
       
       vulnerableMethods=[]
-      echo $VULNERABLE_METHODS_AS_JSON
       for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
-        echo $vulnerableMethodAsJson
         
-        ref=$( jq -r  '._links.ref' <<< "${vulnerableMethodAsJson}" )
+        ref=$( jq -r  '._links[0].ref' <<< "${vulnerableMethodAsJson}" )
         calls=[]
-        for callAsJson in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
-          calledClass=$( jq -r  '.method.className' <<< "${vulnerabilityAsJson}" )
-          calledMethod=$( jq -r  '.method.methodName' <<< "${vulnerabilityAsJson}" ) 
-          methodDescriptor=$( jq -r  '.method.descriptor' <<< "${vulnerabilityAsJson}" ) 
+        for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
+          callAsJson=$(echo "$vulnerableMethod" | base64 --decode)
+          calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
+          calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
+          methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
+          callChain="THIS IS A CALL CHAIN!"
                     
-          call={}
-          call.calledClass=$calledClass
-          call.calledMethod=$calledMethod
-          call.calledClass=$methodDescriptor
-          call.callChain="THIS IS A CALL CHAIN!"
+          declare -A call=( ["calledClass"]=$calledClass ["calledMethod"]=$calledMethod ["methodDescriptor"]=$methodDescriptor ["callChain"]=$callChain)
           echo $calledClass
           echo $calledMethod
           echo $methodDescriptor
           echo $call
           calls+=($call)
         done
+        declare -A VulnerableMethod=( ["ref"]=$ref ["calls"]=$calls )
         VulnerableMethod={}
         VulnerableMethod.ref=$ref
         VulnerableMethod.calls=$calls
