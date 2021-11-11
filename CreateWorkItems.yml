@@ -52,25 +52,23 @@ steps:
         ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}") 
         calls=[]
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
-          echo $callEncoded
           callAsJson=$(echo "$callEncoded" | base64 --decode)
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
           callChain="THIS IS A CALL CHAIN!"
                     
-          declare -A call=( ["calledClass"]=$calledClass ["calledMethod"]=$calledMethod ["methodDescriptor"]=$methodDescriptor ["callChain"]=$callChain)
-          echo $calledClass
-          echo $calledMethod
-          echo $methodDescriptor
-          echo ${!call[@]} - ${call[@]}
+          declare -A call
+          call["calledClass"]=$calledClass 
+          call["calledMethod"]=$calledMethod 
+          call["methodDescriptor"]=$methodDescriptor 
+          call["callChain"]=$callChain
           calls+=($call)
         done
-        declare -A VulnerableMethod=( ["ref"]=$ref ["calls"]=$calls )
+        declare -A VulnerableMethod
+        VulnerableMethod["ref"]=$ref 
+        VulnerableMethod["calls"]=$calls
         vulnerableMethods+=($VulnerableMethod)
-        
-        echo $ref
-        echo $calls[@]
       done
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
