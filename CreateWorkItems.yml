@@ -45,7 +45,7 @@ steps:
       Authentication="anything:$API_CREDENTIALS"
       
       vulnerableMethods=[]
-      for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON} | jq -r '.[] | @base64'); do
+      for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         ref=$( jq -r  '._links.ref' <<< "${vulnerableMethodAsJson}" )
         calls=[]
@@ -59,7 +59,7 @@ steps:
           call.calledClass=$calledClass
           call.calledMethod=$calledMethod
           call.calledClass=$methodDescriptor
-          call.callChain=""
+          call.callChain="THIS IS A CALL CHAIN!"
           calls+=($call)
         done
         VulnerableMethod={}
@@ -133,7 +133,7 @@ steps:
         existingWorkItems=$( jq -c  '.workItems' <<< "${workItemQueryResult}" )
         
         if [[ "$existingWorkItems" = "" ||  "$existingWorkItems" = "[]" ]];  then
-          description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters._Database_Link_Name }}</a></li>" )
+          description="<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters._Database_Link_Name }}</a></li>"
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
           
@@ -143,7 +143,7 @@ steps:
             fi
           done
           
-          description="$description</ul>"
+          description=$( tr '"' '\"' <<<"$description</ul>" )
           Body='[{
             "op": "add",
             "path": "/fields/System.Title",
