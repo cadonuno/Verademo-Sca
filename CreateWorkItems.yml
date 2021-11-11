@@ -3,6 +3,8 @@ parameters:
   issue_type: ''
   organization: ''
   project_name: ''
+  Ticket_Title_Prefix: 'Veracode SCA - '
+  Azure_Base_Directory: 'https://dev.azure.com'
   Overview_Name: 'Overview'
   Vulnerability_Types_Name: 'Vulnerability Types'
   Library_Source_Name: 'Library Source'
@@ -33,8 +35,8 @@ steps:
     VULNERABILITIES_AS_JSON:  $(ReadJsonFile.VULNERABILITIES_AS_JSON)
   inputs:
     script: |      
-      createApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
-      getWorkItemApiUrl="https://dev.azure.com/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
+      createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
+      getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
       
       sca_json="$VULNERABILITIES_AS_JSON"
@@ -96,14 +98,15 @@ steps:
         
         cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" ) 
        
-        ticketTitle="Veracode SCA - $title - $libraryName"     
+        ticketTitle="${{ parameters.Ticket_Title_Prefix }}$title - $libraryName"     
         
         getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
         workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
         existingWorkItems=$( jq -c  '.workItems' <<< "${workItemQueryResult}" )
         
         if [[ "$existingWorkItems" = "" ||  "$existingWorkItems" = "[]" ]];  then
-          description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>" )
+          description=$( tr '"' '\"' <<< "<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.
+          _Database_Link_Name }}</a></li></ul>" )
           Body='[{
             "op": "add",
             "path": "/fields/System.Title",
