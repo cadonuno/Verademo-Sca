@@ -68,6 +68,7 @@ steps:
         VulnerableMethod.calls=$calls
         vulnerableMethods+=($VulnerableMethod)
       done
+      echo $vulnerableMethods
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
