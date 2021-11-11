@@ -49,7 +49,7 @@ steps:
       for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         
-        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}" 
+        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}") 
         calls=[]
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
           echo $callEncoded
