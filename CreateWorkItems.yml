@@ -75,12 +75,12 @@ steps:
         let methodIndex=methodIndex+1
       done
       for methodFromArray in vulnerableMethods; do
-        echo $methodFromArray["ref"]
+        echo ${methodFromArray[ref]} 
         for callFromArray in $VulnerableMethod["calls"]; do
-          echo $callFromArray["calledClass"]
-          echo $callFromArray["calledMethod"]
-          echo $callFromArray["methodDescriptor"]
-          echo $callFromArray["callChain"]
+          echo ${callFromArray[calledClass]} 
+          echo ${callFromArray[calledMethod]} 
+          echo ${callFromArray[methodDescriptor]} 
+          echo ${callFromArray[callChain]} 
         done
       done
       
