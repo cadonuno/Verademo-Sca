@@ -50,7 +50,7 @@ steps:
       for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         
-        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}") 
+        ref="'"$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}")"'"
         calls={}
         callIndex=0
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
@@ -143,10 +143,11 @@ steps:
           description="<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li>"
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
+          reference="'"$reference"'"
           echo Current element: $reference
           
           for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
-            if [[  $(echo "${existingVulnerableMethod[ref]}" = "$reference" ]];  then
+            if [[  "${existingVulnerableMethod[ref]}" = "$reference" ]];  then
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
             fi
           done
