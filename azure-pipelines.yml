@@ -1,4 +1,3 @@
-
 trigger:
 - master
 
@@ -20,6 +19,7 @@ steps:
     issue_type: 'Issue'
     organization: 'rpereira0294'
     project_name: 'Test%20Project'
+    Ticket_Title_Prefix: 'Software Composition Analysis: '
     Overview_Name: 'Descricao'
     Vulnerability_Types_Name: 'Tipos de Vulnerabilidade'
     Library_Source_Name: 'Origem da Vulnerabilidade'
