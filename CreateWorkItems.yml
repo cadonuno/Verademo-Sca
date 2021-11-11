@@ -155,8 +155,8 @@ steps:
           echo Current element: $reference
           
           for existingVulnerableMethod in vulnerableMethods; do 
-            echo Checking vulnerable method: $existingVulnerableMethod["ref"]
-            if [[ "$existingVulnerableMethod["ref"]" = "$reference" ]];  then
+            echo Checking vulnerable method: ${existingVulnerableMethod[ref]}
+            if [[ "${existingVulnerableMethod[ref]}" = "$reference" ]];  then
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>$existingVulnerableMethod['calls'][@]</h3></li>"
             fi
           done
