@@ -53,6 +53,9 @@ steps:
         ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}")
         ref=$( tr -d '"' <<< $ref )
         
+        declare -A VulnerableMethod
+        VulnerableMethod[reference]=$ref 
+        
         declare -a calls
         callIndex=0
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
@@ -69,15 +72,16 @@ steps:
           call[callChain]=$callChain
           calls[callIndex]=$call
           let "callIndex++"
-        done
-        declare -A VulnerableMethod
-        VulnerableMethod[reference]=$ref 
+        done        
         VulnerableMethod[calls]=$calls
         vulnerableMethods[methodIndex]=$VulnerableMethod
         let "methodIndex++"
       done
       
-      printf '%s\n' "${vulnerableMethods[@]}" | jq -R . | jq -s .
+      echo ${vulnerableMethods[@]}
+      echo ${vulnerableMethods[0]}
+      first=${vulnerableMethods[0]}
+      echo ${first[reference]}
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
