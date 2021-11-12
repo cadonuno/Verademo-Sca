@@ -73,8 +73,8 @@ steps:
           calls[callIndex]=$call
           let "callIndex++"
         done        
-        VulnerableMethod[calls]=$calls
-        vulnerableMethods[methodIndex]=$VulnerableMethod
+        VulnerableMethod[calls]=$calls[@]
+        vulnerableMethods[methodIndex]=$VulnerableMethod[@]
         let "methodIndex++"
       done
       
