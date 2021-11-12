@@ -71,7 +71,7 @@ steps:
           call[methodDescriptor]=$methodDescriptor 
           call[callChain]=$callChain
           calls[callIndex]=$call[@]
-          echo "new call: ${call[@]}
+          echo "new call: ${call[@]}"
           let "callIndex++"
         done        
         VulnerableMethod[calls]=$calls[@]
