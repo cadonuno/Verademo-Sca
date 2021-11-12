@@ -68,13 +68,13 @@ steps:
           call[methodDescriptor]=$methodDescriptor 
           call[callChain]=$callChain
           calls[callIndex]=$call
-          ((++callIndex))
+          let "callIndex++"
         done
         declare -A VulnerableMethod
         VulnerableMethod[reference]=$ref 
         VulnerableMethod[calls]=$calls
         vulnerableMethods[methodIndex]=$VulnerableMethod
-        ((++methodIndex))
+        let "methodIndex++"
       done
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
@@ -150,9 +150,9 @@ steps:
           for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
             currentMethodReference="${existingVulnerableMethod[reference]"
             echo "Checking method: $currentMethodReference"
-            #if [[ "$currentMethodReference" = "$reference" ]];  then
-            #  description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
-            #fi
+            if [[ "$currentMethodReference" = "$reference" ]];  then
+              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
+            fi
           done
           set +x
           
