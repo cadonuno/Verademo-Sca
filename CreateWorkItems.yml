@@ -72,10 +72,13 @@ steps:
           call[callChain]=$callChain
           calls[${callIndex}]=$call[@]
           echo "new call: ${call[@]}"
-          currentCall="${calls[${callIndex}]}"
+          echo Call Index before ++ $callIndex
+          echo Calls: "${calls[@]}"
+          currentCall="${calls[$callIndex]}"
           echo "Current Call: ${currentCall[@]}"
           let "callIndex++"
-        done        
+        done      
+        echo Call Index after ++ $callIndex
         VulnerableMethod[calls]=$calls[@]
         
         vulnerableMethods[$methodIndex]=$VulnerableMethod[@]
@@ -156,8 +159,9 @@ steps:
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
           set -x
-          for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
-            echo $existingVulnerableMethod
+          for existingVulnerableMethodKey in ${!vulnerableMethods[@]}"; do 
+            echo $existingVulnerableMethodKey
+            existingVulnerableMethod=${vulnerableMethod[$existingVulnerableMethodKey]}
             echo "${existingVulnerableMethod[@]}"
             currentMethodReference="${existingVulnerableMethod[reference]}"
             echo "Checking method: $currentMethodReference"
