@@ -77,11 +77,10 @@ steps:
         vulnerableMethods[methodIndex]=$VulnerableMethod[@]
         let "methodIndex++"
       done
-      
-      echo ${vulnerableMethods[@]}
-      echo ${vulnerableMethods[0]}
-      first=${vulnerableMethods[0]}
-      echo ${first[reference]}
+      echo "${vulnerableMethods[@]}"
+      echo "${vulnerableMethods[0]}"
+      first="${vulnerableMethods[0]}"
+      echo "${first[reference]}"
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
