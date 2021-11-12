@@ -75,7 +75,7 @@ steps:
           let "callIndex++"
         done        
         VulnerableMethod[calls]=$calls[@]
-        firstCall=calls[0]
+        firstCall=${call[0]}
         echo "Call 0: ${firstCall[@]}"
         vulnerableMethods[methodIndex]=$VulnerableMethod[@]
         let "methodIndex++"
