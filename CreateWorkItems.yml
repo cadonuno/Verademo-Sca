@@ -146,8 +146,7 @@ steps:
           echo Current element: $reference
           set -x
           for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
-            echo ${existingVulnerableMethod[reference]}
-            if [[  "${existingVulnerableMethod[reference]}" = "$reference" ]];  then
+            if (( ${#existingVulnerableMethod[reference]} = $reference )); then
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
             fi
           done
