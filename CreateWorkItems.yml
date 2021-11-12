@@ -70,9 +70,9 @@ steps:
           call[calledMethod]=$calledMethod 
           call[methodDescriptor]=$methodDescriptor 
           call[callChain]=$callChain
-          calls[$CallIndex]=$call[@]
+          calls[${callIndex}]=$call[@]
           echo "new call: ${call[@]}"
-          currentCall="${call[callIndex]}"
+          currentCall="${call[${callIndex}]}"
           echo "Current Call: ${currentCall[@]}"
           let "callIndex++"
         done        
