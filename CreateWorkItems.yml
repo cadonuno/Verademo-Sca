@@ -44,6 +44,13 @@ steps:
       createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
+      referenceIndex=0
+      callsIndex=1
+      
+      calledClassIndex=0
+      calledMethodIndex=1
+      methodDescriptorIndex=2
+      callChainIndex=3
       
       declare -a VulnerableMethods
       methodIndex=0
@@ -53,8 +60,8 @@ steps:
         ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}")
         ref=$( tr -d '"' <<< $ref )
         
-        declare -A VulnerableMethod
-        VulnerableMethod[reference]=$ref 
+        declare -A vulnerableMethod
+        vulnerableMethod[$referenceIndex]=$ref        
         
         declare -a calls
         callIndex=0
@@ -66,26 +73,24 @@ steps:
           callChain="THIS IS A CALL CHAIN!"
                     
           declare -A call
-          call[calledClass]=$calledClass 
-          call[calledMethod]=$calledMethod 
-          call[methodDescriptor]=$methodDescriptor 
-          call[callChain]=$callChain
+          call[$calledClassIndex]=$calledClass 
+          call[$calledMethodIndex]=$calledMethod 
+          call[$methodDescriptorIndex]=$methodDescriptor 
+          call[$callChainIndex]=$callChain
           calls[$callIndex]=${call[@]}
           echo Calls: "${calls[@]}"
           currentCall="${calls[$callIndex]}"
           echo added call: "${currentCall[@]}"
           let "callIndex++"
         done      
-        VulnerableMethod[calls]=${calls[@]}
-        vulnerableMethods[$methodIndex]=${VulnerableMethod}
+        vulnerableMethod[$callsIndex]=${calls[@]}
+        vulnerableMethods[$methodIndex]=${vulnerableMethod[@]}
         let "methodIndex++"
       done
       echo "With @: ${vulnerableMethods[@]}"
-      echo "With !@: ${!vulnerableMethods[@]}"
       first=${vulnerableMethods[0]}
       echo "First With @: ${first[@]}"
-      echo "First With !@: ${!first[@]}"
-      echo First ref: ${first[reference]}
+      echo First ref: ${first[$referenceIndex]}
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
