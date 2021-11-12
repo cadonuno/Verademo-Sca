@@ -51,6 +51,8 @@ steps:
         vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
         
         ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}")
+        ref=$( tr -d '"' <<< $ref )
+        
         calls={}
         callIndex=0
         for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
@@ -146,9 +148,7 @@ steps:
           echo Current element: $reference
           set -x
           for existingVulnerableMethod in "${vulnerableMethods[@]}"; do 
-            currentMethodReference="${existingVulnerableMethod[calls]"
-            currentMethodReference="${currentMethodReference[0]}"
-            currentMethodReference="${currentMethodReference[calledClass]}${currentMethodReference[calledMethod]}"
+            currentMethodReference="${existingVulnerableMethod[reference]"
             echo "Checking method: $currentMethodReference"
             #if [[ "$currentMethodReference" = "$reference" ]];  then
             #  description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
