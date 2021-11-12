@@ -81,8 +81,8 @@ steps:
         VulnerableMethods[$methodIndex]=${VulnerableMethod[@]}
         let "methodIndex++"
       done
-      echo "Content with @: ${vulnerableMethods[@]}"
-      echo "Key with @: ${!vulnerableMethods[@]}"
+      echo Content with @: ${vulnerableMethods[@]}
+      echo Key with @: ${!vulnerableMethods[@]}
       first=${vulnerableMethods[0]}
       echo First ref: ${first[reference]}
       
@@ -156,9 +156,9 @@ steps:
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
           set -x
-          for vulnerableMethods in ${VulnerableMethod[@]}"; do 
-            echo "${existingVulnerableMethod[@]}"
-            currentMethodReference="${existingVulnerableMethod[reference]}"
+          for vulnerableMethods in "${VulnerableMethod[@]}"; do 
+            echo ${existingVulnerableMethod[@]}
+            currentMethodReference=${existingVulnerableMethod[reference]}
             echo "Checking method: $currentMethodReference"
             if [[ "$currentMethodReference" = "$reference" ]];  then
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
