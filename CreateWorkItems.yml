@@ -77,12 +77,14 @@ steps:
           let "callIndex++"
         done      
         VulnerableMethod[calls]=${calls[@]}
-        vulnerableMethods[$methodIndex]=${VulnerableMethod[@]}
+        vulnerableMethods[$methodIndex]=${VulnerableMethod}
         let "methodIndex++"
       done
       echo "With @: ${vulnerableMethods[@]}"
       echo "With !@: ${!vulnerableMethods[@]}"
       first=${vulnerableMethods[0]}
+      echo "First With @: ${first[@]}"
+      echo "First With !@: ${!first[@]}"
       echo First ref: ${first[reference]}
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
