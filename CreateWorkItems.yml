@@ -70,14 +70,15 @@ steps:
           call[calledMethod]=$calledMethod 
           call[methodDescriptor]=$methodDescriptor 
           call[callChain]=$callChain
-          calls[callIndex]=$call[@]
-          echo "new call: ${call[@]}"
+          calls[$CallIndex]=$call[@]
+          echo "new call: ${call[@]}
+          currentCall="${call[callIndex]}"
+          echo "Current Call: ${currentCall[@]}"
           let "callIndex++"
         done        
         VulnerableMethod[calls]=$calls[@]
-        firstCall=${call[0]}
-        echo "Call 0: ${firstCall[@]}"
-        vulnerableMethods[methodIndex]=$VulnerableMethod[@]
+        
+        vulnerableMethods[$methodIndex]=$VulnerableMethod[@]
         let "methodIndex++"
       done
       echo "With @: ${vulnerableMethods[@]}"
