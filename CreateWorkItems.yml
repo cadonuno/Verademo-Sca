@@ -72,7 +72,7 @@ steps:
           call[callChain]=$callChain
           calls[${callIndex}]=$call[@]
           echo "new call: ${call[@]}"
-          currentCall="${call[${callIndex}]}"
+          currentCall="${calls[${callIndex}]}"
           echo "Current Call: ${currentCall[@]}"
           let "callIndex++"
         done        
