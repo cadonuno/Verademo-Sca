@@ -72,19 +72,19 @@ steps:
           call[callChain]=$callChain
           calls[$callIndex]=${call[@]}
           echo Calls: "${calls[@]}"
-          currentCall="${call[$callIndex]}"
+          currentCall="${calls[$callIndex]}"
           echo added call: "${currentCall[@]}"
           let "callIndex++"
         done      
         VulnerableMethod[calls]=${calls[@]}
-        
+
         vulnerableMethods[$methodIndex]=${VulnerableMethod[@]}
         let "methodIndex++"
       done
       echo "With @: ${vulnerableMethods[@]}"
-      echo "With 0: ${vulnerableMethods[0]}"
-      first="${vulnerableMethods[0]}"
-      echo "First ref: ${first[reference]}"
+      echo "With 0: "
+      first=${vulnerableMethods[0]}
+      echo First ref: ${first[reference]}
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
