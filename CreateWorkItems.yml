@@ -174,7 +174,7 @@ steps:
               vulnerableMethodInfo="$vulnerableMethod${splitString[1]}</br>"
             fi
           done
-          if [["$vulnerableMethod" != ""]]; then
+          if [["$vulnerableMethodInfo" != ""]]; then
             description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>$vulnerableMethodInfo"
           fi
           
