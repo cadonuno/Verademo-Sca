@@ -127,10 +127,7 @@ steps:
         updateToVersion=$( jq -c  '.libraries[0].details[0].updateToVersion' <<< "${vulnerabilityAsJson}" )
         updateToVersion=$( tr -d '"' <<< $updateToVersion )
         
-        if [[ $updateToVersion == "" ]]; then 
-          updateToVersion="none"
-        fi
-        if [[ $updateToVersion == "null" ]]; then 
+        if [[ $updateToVersion == "" ||  $updateToVersion == "null" ]]; then 
           updateToVersion="none"
         fi
         
@@ -171,13 +168,14 @@ steps:
             
             currentMethodReference=${splitString[0]}
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              vulnerableMethodInfo="$vulnerableMethod${splitString[1]}</br>"
+              vulnerableMethodInfo="$vulnerableMethodInfo${splitString[1]}</br>"
             fi
           done
-          if [["$vulnerableMethodInfo" != ""]]; then
+          if [[ $vulnerableMethodInfo = ""  ]]; then
+          
+          else
             description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>$vulnerableMethodInfo"
           fi
-          
           
           Body='[{
             "op": "add",
