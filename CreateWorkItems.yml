@@ -63,12 +63,12 @@ steps:
           callChain="THIS IS A CALL CHAIN: "$calledClass.$calledMethod'('$methodDescriptor')'
 
           echo $callChain
-          calls[$callIndex]=callChain
+          calls[$callIndex]=$callChain
           echo "${calls[$callIndex]}"
           let "callIndex++"
         done      
         
-        vulnerableMethods[$methodIndex]="$ref$    $calls[@]"
+        vulnerableMethods[$methodIndex]="$ref    $calls[@]"
         
         let "methodIndex++"
       done
