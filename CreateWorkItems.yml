@@ -44,7 +44,7 @@ steps:
       createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
-      splitter="        "
+      splitter="*"
       
       declare -a VulnerableMethods
       methodIndex=0
@@ -144,8 +144,7 @@ steps:
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
-          set -x
-          for vulnerableMethods in "${VulnerableMethod[@]}"; do 
+          for vulnerableMethod in "${VulnerableMethods[@]}"; do 
             oldIFs=$IFS
             IFS="$splitter" read -r -a splitString <<< "$vulnerableMethods"
             IFS=$oldIFs
@@ -156,7 +155,6 @@ steps:
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${splitString[1]}</h3></li>"
             fi
           done
-          set +x
           
           description=$( tr '"' '\"' <<<"$description</ul>" )
           Body='[{
