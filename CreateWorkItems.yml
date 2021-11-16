@@ -14,6 +14,9 @@ parameters:
   Recommended_Version_Name: 'Recommended Version'
   CVSS_Score_Name: 'CVSS Score'
   CVE_Name: 'CVE'
+  At_Line_Name: 'at line'
+  Call_Name: 'Call'
+  Called_From_Name: 'called from'
   Veracode_Database_Link_Name: 'Veracode Database Link'
   Vulnerable_Methods_Name: 'Vulnerable Methods'
   
@@ -67,12 +70,12 @@ steps:
           callNumber=1
           for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
             callChainLinkListAsJson=$(echo "$callChainLinklistEncoded" | base64 --decode)
-            callChain=$callChain"</br><h6>Call "$callNumber":</h6><ul>"
+            callChain=$callChain"</br><h5>${{ parameters.Call_Name }} "$callNumber":</h5><ul>"
             for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
               callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
               callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
               caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
-              callChain=$callChain"<li>"$caller"->"$callee" at line "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</li>"
+              callChain=$callChain"<li><h6>"$callee"</h6> ${{ parameters.Called_From_Name }} <h6>"$caller"</h6> ${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</li>"
             done
             callChain=$callChain"</ul>"
             let "callNumber++"
@@ -159,6 +162,7 @@ steps:
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
           
+          vulnerableMethodInfo=""
           for vulnerableMethod in "${vulnerableMethods[@]}"
           do
             oldIFs=$IFS
@@ -167,9 +171,12 @@ steps:
             
             currentMethodReference=${splitString[0]}
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>${splitString[1]}"
+              vulnerableMethodInfo="$vulnerableMethod${splitString[1]}</br>"
             fi
           done
+          if [["$vulnerableMethod" != ""]]; then
+            description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>$vulnerableMethodInfo"
+          fi
           
           
           Body='[{
