@@ -62,7 +62,18 @@ steps:
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
-          callChain="<li>${{ parameters.Called_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor"</li>"
+          callChain="<li>${{ parameters.Called_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor"<ul>"
+          
+          for callChainLinkEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
+            callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
+            callee=$( jq -r  'callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'callee.descriptor' <<< "${callChainLinkAsJson}" )
+            caller=$( jq -r  'caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'caller.descriptor' <<< "${callChainLinkAsJson}" )
+            callChain="<li>"$caller"->"$callee"</li>"
+          done
+          
+          
+          
+          callChain=$callChain"</ul></li>"
 
           calls[$callIndex]=$callChain
           let "callIndex++"
