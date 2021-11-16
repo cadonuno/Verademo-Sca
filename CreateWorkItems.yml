@@ -66,13 +66,12 @@ steps:
           
           for callChainLinkEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
             callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
+            echo $callChainLinkAsJson
             callee=$( jq -r  'callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'callee.descriptor' <<< "${callChainLinkAsJson}" )
             caller=$( jq -r  'caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'caller.descriptor' <<< "${callChainLinkAsJson}" )
-            callChain="<li>"$caller"->"$callee"</li>"
+            callChain=$callChain"<li>"$caller"->"$callee"</li>"
           done
-          
-          
-          
+
           callChain=$callChain"</ul></li>"
 
           calls[$callIndex]=$callChain
@@ -162,9 +161,8 @@ steps:
             IFS=$oldIFs
             
             currentMethodReference=${splitString[0]}
-            echo "Checking method: $currentMethodReference"
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              description="$description<li><h3>${{ parameters.Vulnerable_Methods_Name }}</h3><h4>${splitString[1]}</h4></li>"
+              description="$description<h3>${{ parameters.Vulnerable_Methods_Name }}:</h3><h4>${splitString[1]}</h4>"
             fi
           done
           
