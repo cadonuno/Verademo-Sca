@@ -5,6 +5,7 @@ parameters:
   project_name: ''
   Ticket_Title_Prefix: 'Veracode SCA - '
   Azure_Base_Directory: 'https://dev.azure.com'
+  Called_Method_Name: 'Called Method'
   Overview_Name: 'Overview'
   Vulnerability_Types_Name: 'Vulnerability Types'
   Library_Source_Name: 'Library Source'
@@ -61,15 +62,13 @@ steps:
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
-          callChain="THIS IS A CALL CHAIN: "$calledClass.$calledMethod'('$methodDescriptor')'
+          callChain="<li>${{ parameters.Called_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor"</li>"
 
-          echo $callChain
           calls[$callIndex]=$callChain
-          echo "${calls[$callIndex]}"
           let "callIndex++"
         done      
         
-        vulnerableMethods[$methodIndex]="$ref$splitter${calls[@]}"
+        vulnerableMethods[$methodIndex]="$ref$splitter<ul>${calls[@]}</ul>"
         
         let "methodIndex++"
       done
@@ -139,14 +138,14 @@ steps:
         existingWorkItems=$( jq -c  '.workItems' <<< "${workItemQueryResult}" )
         
         if [[ "$existingWorkItems" = "" ||  "$existingWorkItems" = "[]" ]];  then
-          description="<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li>"
+          description="<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>"
+          description=$( tr '"' '\"' <<<"$description</ul>" )
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
           
           for vulnerableMethod in "${vulnerableMethods[@]}"
           do
-            echo checking method: $vulnerableMethod
             oldIFs=$IFS
             IFS="$splitter" read -r -a splitString <<< "$vulnerableMethods"
             IFS=$oldIFs
@@ -154,12 +153,11 @@ steps:
             currentMethodReference=${splitString[0]}
             echo "Checking method: $currentMethodReference"
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${splitString[1]}</h3></li>"
+              description="$description<li><h3>${{ parameters.Vulnerable_Methods_Name }}</h3><h4>${splitString[1]}</h4></li>"
             fi
           done
           
           
-          description=$( tr '"' '\"' <<<"$description</ul>" )
           Body='[{
             "op": "add",
             "path": "/fields/System.Title",
