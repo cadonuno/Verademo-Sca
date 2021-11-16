@@ -60,7 +60,7 @@ steps:
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
-          callChain=THIS IS A CALL CHAIN: $calledClass.$calledMethod($methodDescriptor)
+          callChain=THIS IS A CALL CHAIN: $calledClass.$calledMethod'('$methodDescriptor')'
 
           currentCall="${calls[$callIndex]}"
           let "callIndex++"
