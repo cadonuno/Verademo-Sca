@@ -73,7 +73,6 @@ steps:
         
         let "methodIndex++"
       done
-      echo With @: "${vulnerableMethods[@]}"
       
       for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
         vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
@@ -144,7 +143,10 @@ steps:
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
           echo Current element: $reference
-          for vulnerableMethod in "${VulnerableMethods[@]}"; do 
+          
+          for vulnerableMethod in "${vulnerableMethods[@]}"
+          do
+            echo checking method: $vulnerableMethod
             oldIFs=$IFS
             IFS="$splitter" read -r -a splitString <<< "$vulnerableMethods"
             IFS=$oldIFs
@@ -155,6 +157,7 @@ steps:
               description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${splitString[1]}</h3></li>"
             fi
           done
+          
           
           description=$( tr '"' '\"' <<<"$description</ul>" )
           Body='[{
