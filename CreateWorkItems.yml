@@ -68,7 +68,7 @@ steps:
           let "callIndex++"
         done      
         
-        vulnerableMethods[$methodIndex]="$ref    $calls[@]"
+        vulnerableMethods[$methodIndex]="$ref    ${calls[@]}"
         
         let "methodIndex++"
       done
