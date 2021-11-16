@@ -44,6 +44,7 @@ steps:
       createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
       getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
+      splitter="        "
       
       declare -a VulnerableMethods
       methodIndex=0
@@ -68,7 +69,7 @@ steps:
           let "callIndex++"
         done      
         
-        vulnerableMethods[$methodIndex]="$ref    ${calls[@]}"
+        vulnerableMethods[$methodIndex]="$ref$splitter${calls[@]}"
         
         let "methodIndex++"
       done
@@ -145,11 +146,14 @@ steps:
           echo Current element: $reference
           set -x
           for vulnerableMethods in "${VulnerableMethod[@]}"; do 
-            echo ${existingVulnerableMethod[@]}
-            currentMethodReference=${existingVulnerableMethod[reference]}
+            oldIFs=$IFS
+            IFS="$splitter" read -r -a splitString <<< "$vulnerableMethods"
+            IFS=$oldIFs
+            
+            currentMethodReference=${splitString[0]}
             echo "Checking method: $currentMethodReference"
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${existingVulnerableMethod['calls'][@]}</h3></li>"
+              description="$description<li><h2>${{ parameters.Vulnerable_Methods_Name }}</h2><h3>${splitString[1]}</h3></li>"
             fi
           done
           set +x
