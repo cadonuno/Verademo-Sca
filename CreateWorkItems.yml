@@ -173,7 +173,7 @@ steps:
             fi
           done
           if [[ $vulnerableMethodInfo = ""  ]]; then
-          
+            vulnerableMethodInfo=""
           else
             description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>$vulnerableMethodInfo"
           fi
