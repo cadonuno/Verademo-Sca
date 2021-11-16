@@ -168,6 +168,7 @@ steps:
             
             currentMethodReference=${splitString[0]}
             if [[ "$currentMethodReference" = "$reference" ]];  then
+              echo "found vulnerable method"
               vulnerableMethodInfo="$vulnerableMethodInfo${splitString[1]}</br>"
             fi
           done
