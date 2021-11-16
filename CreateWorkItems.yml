@@ -81,7 +81,6 @@ steps:
           calls[$callIndex]=$callChain
           let "callIndex++"
         done      
-        echo $callChain
         vulnerableMethods[$methodIndex]="$ref$splitter<ul>${calls[@]}</ul>"
         
         let "methodIndex++"
