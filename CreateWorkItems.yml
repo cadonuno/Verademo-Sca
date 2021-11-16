@@ -64,12 +64,16 @@ steps:
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
           callChain="<li>${{ parameters.Called_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor"<ul>"
           
-          for callChainLinkEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
-            callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
-            echo $callChainLinkAsJson
-            callee=$( jq -r  'callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'callee.descriptor' <<< "${callChainLinkAsJson}" )
-            caller=$( jq -r  'caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'caller.descriptor' <<< "${callChainLinkAsJson}" )
-            callChain=$callChain"<li>"$caller"->"$callee"</li>"
+          for callChainLinlistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
+            callChainLinkListAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
+            callChain=$callChain"<li><ul>"
+            for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
+              callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
+              callee=$( jq -r  'callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'callee.descriptor' <<< "${callChainLinkAsJson}" )
+              caller=$( jq -r  'caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  'caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  'caller.descriptor' <<< "${callChainLinkAsJson}" )            
+              callChain=$callChain"<li>"$caller"->"$callee at line " $( jq -r  'lineNumber' <<< "${callChainLinkAsJson}" )"</li>"
+            done
+            callChain=$callChain"</ul></li>"
           done
 
           callChain=$callChain"</ul></li>"
@@ -77,7 +81,7 @@ steps:
           calls[$callIndex]=$callChain
           let "callIndex++"
         done      
-        
+        echo $callChain
         vulnerableMethods[$methodIndex]="$ref$splitter<ul>${calls[@]}</ul>"
         
         let "methodIndex++"
