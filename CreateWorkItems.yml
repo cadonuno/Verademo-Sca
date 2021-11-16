@@ -5,7 +5,7 @@ parameters:
   project_name: ''
   Ticket_Title_Prefix: 'Veracode SCA - '
   Azure_Base_Directory: 'https://dev.azure.com'
-  Called_Method_Name: 'Called Method'
+  Calls_To_Method_Name: 'Calls to Method'
   Overview_Name: 'Overview'
   Vulnerability_Types_Name: 'Vulnerability Types'
   Library_Source_Name: 'Library Source'
@@ -62,26 +62,28 @@ steps:
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
-          callChain="<li>${{ parameters.Called_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor"<ul>"
+          callChain="${{ parameters.Calls_To_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor":"
           
+          callNumber=1
           for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
             callChainLinkListAsJson=$(echo "$callChainLinklistEncoded" | base64 --decode)
-            callChain=$callChain"<li><ul>"
+            callChain=$callChain"</br><h6>Call "$callNumber":</h6><ul>"
             for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
               callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
               callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
               caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
               callChain=$callChain"<li>"$caller"->"$callee" at line "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</li>"
             done
-            callChain=$callChain"</ul></li>"
+            callChain=$callChain"</ul>"
+            let "callNumber++"
           done
 
-          callChain=$callChain"</ul></li>"
+          callChain=$callChain"</ul>"
 
           calls[$callIndex]=$callChain
           let "callIndex++"
         done      
-        vulnerableMethods[$methodIndex]="$ref$splitter<ul>${calls[@]}</ul>"
+        vulnerableMethods[$methodIndex]="$ref$splitter${calls[@]}"
         
         let "methodIndex++"
       done
@@ -165,7 +167,7 @@ steps:
             
             currentMethodReference=${splitString[0]}
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              description="$description<h3>${{ parameters.Vulnerable_Methods_Name }}:</h3><h4>${splitString[1]}</h4>"
+              description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>${splitString[1]}"
             fi
           done
           
