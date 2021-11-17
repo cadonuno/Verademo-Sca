@@ -50,6 +50,7 @@ steps:
       Authentication="anything:$API_CREDENTIALS"
       splitter="*"
       tableBorders="style=\\\"border: 1px solid black\\\""
+      tableContent="stule\\\"bold\\\""
       
       declare -a VulnerableMethods
       methodIndex=0
@@ -76,7 +77,7 @@ steps:
               callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
               callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
               caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
-              callChain=$callChain"<tr $tableBorders><td></td><td>"$callee"</td></tr> <tr $tableBorders><td>${{ parameters.Called_From_Name }}</td> <td>"$caller"</td></tr> <tr $tableBorders><td>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr><tr $tableBorders></tr>"
+              callChain=$callChain"<tr $tableBorders><td></td><td $tableContent>"$caller"</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.Calls_Name }}</td> <td $tableContent>"$callee"</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr><tr $tableBorders></tr>"
             done
             callChain=$callChain"</table>"
             let "callNumber++"
