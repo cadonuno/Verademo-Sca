@@ -68,7 +68,7 @@ steps:
           calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
           calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
           methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
-          callChain="${{ parameters.Calls_To_Method_Name }}: "$calledClass.$calledMethod$methodDescriptor":"
+          callChain="${{ parameters.Calls_To_Method_Name }}: <b>"$calledClass.$calledMethod$methodDescriptor":</b>"
           
           callNumber=1
           for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
