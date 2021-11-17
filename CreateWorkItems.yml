@@ -16,7 +16,7 @@ parameters:
   CVE_Name: 'CVE'
   At_Line_Name: 'at line'
   Call_Name: 'Call'
-  Called_From_Name: 'called from'
+  Calls_Name: 'Calls'
   Veracode_Database_Link_Name: 'Veracode Database Link'
   Vulnerable_Methods_Name: 'Vulnerable Methods'
   
