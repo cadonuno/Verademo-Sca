@@ -16,9 +16,10 @@ parameters:
   CVE_Name: 'CVE'
   At_Line_Name: 'at line'
   Call_Name: 'Call'
-  Calls_Name: 'Calls'
+  Calling_Name: 'Calling'
   Veracode_Database_Link_Name: 'Veracode Database Link'
   Vulnerable_Methods_Name: 'Vulnerable Methods'
+  Starting_At_Name: 'Starting at'
   
 steps:
 - task: PowerShell@2
@@ -73,13 +74,17 @@ steps:
           for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
             callChainLinkListAsJson=$(echo "$callChainLinklistEncoded" | base64 --decode)
             callChain=$callChain"</br><h5>${{ parameters.Call_Name }} "$callNumber":</h5><table>"
+            innerCallChain=""
             for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
               callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
               callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
-              caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
-              callChain=$callChain"<tr $tableBorders><td></td><td $tableContent>"$caller"</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.Calls_Name }}</td> <td $tableContent>"$callee"</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr><tr $tableBorders></tr>"
+              if [[ $innerCallChain == "" ]]; then 
+                caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
+                innerCallChain=<tr $tableBorders><td>${{ parameters.Starting_At_Name }}: </td><td $tableContent>"$caller"</td></tr>
+              fi              
+              innerCallChain=$innerCallChain"<tr $tableBorders><td $tableContent>${{ parameters.Calling_Name }}: </td> <td $tableContent>"$callee"</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr>"
             done
-            callChain=$callChain"</table>"
+            callChain=$callChain$innerCallChain"</table>"
             let "callNumber++"
           done
 
