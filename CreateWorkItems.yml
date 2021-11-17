@@ -49,6 +49,7 @@ steps:
       getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
       Authentication="anything:$API_CREDENTIALS"
       splitter="*"
+      tableBorders="style=\\\"border: 1px solid black\\\""
       
       declare -a VulnerableMethods
       methodIndex=0
@@ -70,12 +71,12 @@ steps:
           callNumber=1
           for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
             callChainLinkListAsJson=$(echo "$callChainLinklistEncoded" | base64 --decode)
-            callChain=$callChain"</br><h5>${{ parameters.Call_Name }} "$callNumber":</h5><table style=\\\"border: 1px solid black\\\">"
+            callChain=$callChain"</br><h5>${{ parameters.Call_Name }} "$callNumber":</h5><table>"
             for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
               callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
               callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
               caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
-              callChain=$callChain"<tr><td></td><td>"$callee"</td></tr> <tr><td>${{ parameters.Called_From_Name }}</td> <td>"$caller"</td></tr> <tr><td>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr><tr></tr>"
+              callChain=$callChain"<tr $tableBorders><td></td><td>"$callee"</td></tr> <tr $tableBorders><td>${{ parameters.Called_From_Name }}</td> <td>"$caller"</td></tr> <tr $tableBorders><td>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr><tr $tableBorders></tr>"
             done
             callChain=$callChain"</table>"
             let "callNumber++"
