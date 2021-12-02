@@ -1,0 +1,54 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+    - develop
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CmdLine@2
+  name: SCAScan
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+  inputs:
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: 'Verademo ADO'
+    version: 'Post-merge Scan: $(build.buildNumber)'
+    filepath: './target/verademo.war'
+    sandboxName: 'Release Candidate'
+    failBuildIfUploadAndScanBuildStepFails: true
+    importResults: true
+    maximumWaitTime: '360'
+
+
+- task: Veracode Flaw Importer@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: 'Verademo ADO'
+    sandboxName: 'Release Candidate'
+    importType: 'All Unmitigated Flaws Violating Policy'
+    area: '$(system.teamProject)'
+    flawImportLimit: '1000'
