@@ -37,7 +37,6 @@ steps:
     organization: 'rpereira0294'
     project_name: 'Test%20Project'
 
-
 - task: CmdLine@2
   name: CleanDirectory
   inputs:
@@ -58,9 +57,22 @@ steps:
   name: CommitBaseline
   inputs:
     script: |
+      echo "Setting up git respository for execution"
+      'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+      eval $(ssh-agent -s)
+      echo "$GITLAB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      echo "$GITLAB_SSH_KEY" >> ~/.ssh/id_rsa.pub
+      '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+      git config user.email "rpereira@veracode.com"
+      git config user.name "Ricardo Pereira"
+
       git add pipeline_baseline.json
       git commit -m "Updating baseline file from Azure"
       git push
+
 
 - task: Veracode@3
   inputs:
