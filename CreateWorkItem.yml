@@ -1,0 +1,14 @@
+parameters:
+  title: ''
+  overview: ''
+  cve: ''
+  link: ''
+  vulnerabilityTypes: []
+steps:
+- task: CreateWorkItem@1
+  inputs:
+    workItemType: 'Issue'
+    title: 'Veracode SCA - ${{ parameters.title }}'
+    fieldMappings: 'Description=<ul><li>Overview: ${{ parameters.overview }}</li><li>CVE: ${{ parameters.cve }}</li><li>Link: ${{ parameters.link }}</li></ul>'
+    associate: true
+    associationType: 'foundInBuild'

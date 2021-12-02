@@ -1,22 +1,23 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
 - master
 
 pool:
   vmImage: ubuntu-latest
 
+
 steps:
-- task: Maven@3
+- task: CmdLine@2
+  name: SCAScan
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
+
+- template : CreateWorkItems.yml  
+  parameters:
+    json_file: 'sca_output.json'
+    issue_type: 'Issue'
+    organization: 'rpereira0294'
+    project_name: 'Test%20Project'
+
+

@@ -1,0 +1,211 @@
+parameters:
+  json_file: ''
+  issue_type: ''
+  organization: ''
+  project_name: ''
+  Ticket_Title_Prefix: 'Veracode SCA - '
+  Azure_Base_Directory: 'https://dev.azure.com'
+  Calls_To_Method_Name: 'Calls to Method'
+  Overview_Name: 'Overview'
+  Vulnerability_Types_Name: 'Vulnerability Types'
+  Library_Source_Name: 'Library Source'
+  Vulnerable_Library_Name: 'Vulnerable Library'
+  Version_Range_Name: 'Version Range'
+  Recommended_Version_Name: 'Recommended Version'
+  CVSS_Score_Name: 'CVSS Score'
+  CVE_Name: 'CVE'
+  At_Line_Name: 'at line'
+  Call_Name: 'Call'
+  Calling_Name: 'Calling'
+  Veracode_Database_Link_Name: 'Veracode Database Link'
+  Vulnerable_Methods_Name: 'Vulnerable Methods'
+  Starting_At_Name: 'Starting at'
+  
+steps:
+- task: PowerShell@2
+  name: ReadJsonFile
+  inputs:
+    targetType: 'inline'
+    script: |
+      $SCA_JSON = Get-Content ${{ parameters.json_file }}
+      $SCA_JSON = $SCA_JSON | ConvertFrom-Json
+      $VULNERABILITIES_JSON = $SCA_JSON.records.vulnerabilities
+      $VULNERABILITIES_JSON = $VULNERABILITIES_JSON | ConvertTo-Json -Depth 10 -Compress
+      $VULNERABILITIES_JSON = $VULNERABILITIES_JSON.Replace("'", "")
+      Write-Host "##vso[task.setvariable variable=VULNERABILITIES_AS_JSON;isOutput=true]$VULNERABILITIES_JSON"
+      $VULNERABLE_METHODS_JSON = $SCA_JSON.records.vulnMethods
+      $VULNERABLE_METHODS_JSON = $VULNERABLE_METHODS_JSON | ConvertTo-Json -Depth 10 -Compress
+      $VULNERABLE_METHODS_JSON = $VULNERABLE_METHODS_JSON.Replace("'", "")
+      Write-Host "##vso[task.setvariable variable=VULNERABLE_METHODS_AS_JSON;isOutput=true]$VULNERABLE_METHODS_JSON"
+      
+- task: CmdLine@2
+  name: CreateTickets
+  env:
+    API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
+    VULNERABILITIES_AS_JSON:  $(ReadJsonFile.VULNERABILITIES_AS_JSON)
+    VULNERABLE_METHODS_AS_JSON:  $(ReadJsonFile.VULNERABLE_METHODS_AS_JSON)
+  inputs:
+    script: |      
+      createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
+      getWorkItemApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/wiql?api-version=6.1-preview.2"
+      Authentication="anything:$API_CREDENTIALS"
+      splitter="*"
+      tableBorders="style=\\\"border: 1px solid black\\\""
+      boldContent="style=\\\"font-weight: bold\\\""
+      
+      declare -a VulnerableMethods
+      methodIndex=0
+      for vulnerableMethod in $(echo "${VULNERABLE_METHODS_AS_JSON}" | jq -r '. | @base64'); do        
+        vulnerableMethodAsJson=$(echo "$vulnerableMethod" | base64 --decode)
+        
+        ref=$( jq -r  '.links[0].ref' <<< "${vulnerableMethodAsJson}")
+        ref=$( tr -d '"' <<< $ref )   
+        
+        declare -a calls
+        callIndex=0
+        for callEncoded in $(echo "${vulnerableMethodAsJson}" | jq -r '.calls[] | @base64'); do
+          callAsJson=$(echo "$callEncoded" | base64 --decode)
+          calledClass=$( jq -r  '.method.className' <<< "${callAsJson}" )
+          calledMethod=$( jq -r  '.method.methodName' <<< "${callAsJson}" ) 
+          methodDescriptor=$( jq -r  '.method.descriptor' <<< "${callAsJson}" ) 
+          callChain="${{ parameters.Calls_To_Method_Name }}: <b>"$calledClass.$calledMethod$methodDescriptor":</b>"
+          
+          callNumber=1
+          for callChainLinklistEncoded in $(echo "${callAsJson}" | jq -r '.callChains[] | @base64'); do
+            callChainLinkListAsJson=$(echo "$callChainLinklistEncoded" | base64 --decode)
+            callChain=$callChain"</br><h5>${{ parameters.Call_Name }} "$callNumber":</h5><table>"
+            innerCallChain=""
+            for callChainLinkEncoded in $(echo "${callChainLinkListAsJson}" | jq -r '.[] | @base64'); do
+              callChainLinkAsJson=$(echo "$callChainLinkEncoded" | base64 --decode)
+              callee=$( jq -r  '.callee.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.callee.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.callee.descriptor' <<< "${callChainLinkAsJson}" )
+              if [[ $innerCallChain == "" ]]; then 
+                caller=$( jq -r  '.caller.className' <<< "${callChainLinkAsJson}" ).$( jq -r  '.caller.methodName' <<< "${callChainLinkAsJson}" )$( jq -r  '.caller.descriptor' <<< "${callChainLinkAsJson}" )            
+                innerCallChain="<tr $tableBorders><td>${{ parameters.Starting_At_Name }}: </td><td $boldContent>$caller</td></tr>"
+              fi              
+              innerCallChain="$innerCallChain<tr $tableBorders><td>${{ parameters.Calling_Name }}: </td> <td $boldContent>$callee</td></tr> <tr $tableBorders><td $tableContent>${{ parameters.At_Line_Name }} "$( jq -r  '.lineNumber' <<< "${callChainLinkAsJson}" )"</td></tr>"
+            done
+            callChain=$callChain$innerCallChain"</table>"
+            let "callNumber++"
+          done
+
+          callChain=$callChain"</ul>"
+
+          calls[$callIndex]=$callChain
+          let "callIndex++"
+        done      
+        vulnerableMethods[$methodIndex]="$ref$splitter${calls[@]}"
+        
+        let "methodIndex++"
+      done
+      
+      for encodedVulnerability in $(echo "${VULNERABILITIES_AS_JSON}" | jq -r '.[] | @base64'); do
+        vulnerabilityAsJson=$(echo "$encodedVulnerability" | base64 --decode)
+        
+        title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
+        overview=$( jq -r '.overview' <<< "${vulnerabilityAsJson}" ) 
+        overview=$( tr "\\\"" "'"<<< "${overview}" )
+        echo $overview
+        cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
+        
+        if [[ $cve == "null" ]]; then 
+          cveContent="none (premium data)"
+        else
+          cveWithoutQuotes=$( tr -d '"' <<< $cve ) 
+          cveLink="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-$cveWithoutQuotes"
+          cveLink='\"'"$cveLink"'\"'
+          cveContent="<a href=$cveLink>$cveWithoutQuotes</a>"
+        fi
+        
+        vulnerabilityTypes=$( jq -c '.vulnerabilityTypes[]' <<< "${vulnerabilityAsJson}" )
+        vulnerabilityTypes=$( tr -d '"' <<< $vulnerabilityTypes ) 
+        vulnerabilityTypesAsString=""
+        if [[ $vulnerabilityTypes == "" ]]; then 
+          vulnerabilityTypesAsString=""
+        else
+          for vulnerabilityType in $vulnerabilityTypes; do
+            vulnerabilityTypesAsString="$vulnerabilityTypesAsString, $vulnerabilityType"
+          done
+          vulnerabilityTypesAsString=${vulnerabilityTypesAsString:2}   
+        fi
+        
+        cveWithoutQuotes=$( tr -d '"' <<< "$cve")
+        versionRange=$( jq -c  '.libraries[0].details[0].versionRange' <<< "${vulnerabilityAsJson}" )
+        versionRange=$( tr -d '"' <<< $versionRange )
+        updateToVersion=$( jq -c  '.libraries[0].details[0].updateToVersion' <<< "${vulnerabilityAsJson}" )
+        updateToVersion=$( tr -d '"' <<< $updateToVersion )
+        
+        if [[ $updateToVersion == "" ||  $updateToVersion == "null" ]]; then 
+          updateToVersion="none"
+        fi
+        
+        link=$( jq -c  '._links.html' <<< "${vulnerabilityAsJson}" )
+        vulnerabilityLink=$( tr -d '"' <<< $link )
+        databaseApiLink="https://api.sourceclear.com/artifacts/components/${vulnerabilityLink##*/}"
+        vulnerabilityLink='\"'"$vulnerabilityLink"'\"'
+        
+        databaseApiResult=$( curl --silent $databaseApiLink )
+        coordOne=$( jq -c  '.artifactComponents[0].coordOne' <<< "${databaseApiResult}" )
+        coordTwo=$( jq -c  '.artifactComponents[0].coordTwo' <<< "${databaseApiResult}" )
+        libraryName=$coordOne.$coordTwo
+        libraryName=$( tr -d '"' <<< $libraryName )
+        librarySource=$( jq -c  '.artifactComponents[0].componentCoordinateType' <<< "${databaseApiResult}" )
+        librarySource=$( tr -d '"' <<< $librarySource )
+        
+        cvssScore=$( jq -c '.cvssScore' <<< "${vulnerabilityAsJson}" ) 
+       
+        ticketTitle="${{ parameters.Ticket_Title_Prefix }}$title - $libraryName"     
+        
+        getWorkItemQuery="{\"query\": \"Select [System.Title] From WorkItems Where [System.WorkItemType] = '${{ parameters.issue_type }}' AND [State] <> 'Closed' AND [State] <> 'Removed' AND [System.Title] = '$ticketTitle'\"}"
+        workItemQueryResult=$(curl --silent -X POST -H 'Content-Type: application/json' -u "$Authentication" -d "$getWorkItemQuery" $getWorkItemApiUrl)
+        existingWorkItems=$( jq -c  '.workItems' <<< "${workItemQueryResult}" )
+        
+        if [[ "$existingWorkItems" = "" ||  "$existingWorkItems" = "[]" ]];  then
+          description="<ul><li>${{ parameters.Overview_Name }}: $overview</li><li>${{ parameters.Library_Source_Name }}: $librarySource</li><li>${{ parameters.Vulnerable_Library_Name }}: $libraryName</li><li>${{ parameters.Version_Range_Name }}: $versionRange</li><li>${{ parameters.Recommended_Version_Name }}: $updateToVersion</li><li>${{ parameters.CVSS_Score_Name }}: $cvssScore</li><li>${{ parameters.CVE_Name }}: $cveContent</li><li>${{ parameters.Vulnerability_Types_Name }}: $vulnerabilityTypesAsString</li><li><a href=$vulnerabilityLink>${{ parameters.Veracode_Database_Link_Name }}</a></li></ul>"
+          description=$( tr '"' '\"' <<<"$description</ul>" )
+          reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
+          reference=$( tr -d '"' <<< $reference )
+          echo Current element: $reference
+          
+          vulnerableMethodInfo=""
+          for vulnerableMethod in "${vulnerableMethods[@]}"
+          do
+            oldIFs=$IFS
+            IFS="$splitter" read -r -a splitString <<< "$vulnerableMethods"
+            IFS=$oldIFs
+            
+            currentMethodReference=${splitString[0]}
+            if [[ "$currentMethodReference" = "$reference" ]];  then
+              echo "found vulnerable method"
+              vulnerableMethodInfo="$vulnerableMethodInfo${splitString[1]}</br>"
+            fi
+          done
+          if [[ $vulnerableMethodInfo = ""  ]]; then
+            vulnerableMethodInfo=""
+          else
+            description="$description<h4>${{ parameters.Vulnerable_Methods_Name }}:</h4>$vulnerableMethodInfo"
+          fi
+          
+          Body='[{
+            "op": "add",
+            "path": "/fields/System.Title",
+            "value": "'"$ticketTitle"'"
+          },
+          {
+            "op": "add",
+            "path": "/fields/System.Description",
+            "value": "'"$description"'"
+          }]'
+
+          curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $createApiUrl
+
+          echo Ticket created.
+          echo Title: $ticketTitle
+          echo Description: $description
+        else
+          echo Duplicate work item found for title $ticketTitle
+        fi
+        
+        
+        echo --------------------------
+        echo ""
+      done

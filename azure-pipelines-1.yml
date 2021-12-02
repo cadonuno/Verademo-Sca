@@ -1,0 +1,18 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- template : CreateWorkItems.yml
+  parameters:
+    detectedIssues: [
+      {"library": "org.keycloak.keycloak-saml-core", "version": "1.8.1.Final"}, 
+      {"library": "org.apache.santuario.xmlsec", "version": "1.5.1"}, 
+      {"library": "commons-fileupload.commons-fileupload", "version": "1.3.2"}]
