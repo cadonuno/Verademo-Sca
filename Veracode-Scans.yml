@@ -35,6 +35,7 @@ steps:
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
     filepath: './target/verademo.war'
+    importResults: true
     maximumWaitTime: '360'
 
 
