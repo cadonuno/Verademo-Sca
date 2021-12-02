@@ -28,31 +28,14 @@ steps:
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
 
-- task: CmdLine@2
-  name: CleanDirectory
-  inputs:
-    script: git stash
-
-- task: CmdLine@2
-  name: PipelineScan
-  env:
-    VID: $(VERACODE_ID)
-    VKEY: $(VERACODE_KEY)
-  inputs:
-    script: |
-      curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-      unzip pipeline-scan-LATEST.zip pipeline-scan.jar
-      java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --json_output_file "pipeline_baseline.json" --fail_on_severity "" --issue_details "true"
-
-- task: CmdLine@2
-  name: CommitBaseline
-  inputs:
-    script: |
-      git add pipeline_baseline.json
-      git commit -m "Updating baseline file from Azure"
-      git push
+- template : CreateWorkItems.yml  
+  parameters:
+    json_file: 'sca_output.json'
+    issue_type: 'Issue'
+    organization: 'rpereira0294'
+    project_name: 'Test%20Project'
 
 - task: Veracode@3
   inputs:
@@ -66,6 +49,7 @@ steps:
     importResults: true
     maximumWaitTime: '360'
 
+
 - task: Veracode Flaw Importer@3
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
@@ -73,6 +57,5 @@ steps:
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 'Release Candidate'
     importType: 'All Unmitigated Flaws Violating Policy'
-    workItemType: 'Task'
     area: '$(system.teamProject)'
     flawImportLimit: '1000'
