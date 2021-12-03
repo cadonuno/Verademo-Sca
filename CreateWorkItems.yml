@@ -104,7 +104,6 @@ steps:
         title=$( jq -r  '.title' <<< "${vulnerabilityAsJson}" ) 
         overview=$( jq -r '.overview' <<< "${vulnerabilityAsJson}" ) 
         overview=$( tr "\\\"" "'"<<< "${overview}" )
-        echo $overview
         cve=$( jq -c  '.cve' <<< "${vulnerabilityAsJson}" )         
         
         if [[ $cve == "null" ]]; then 
@@ -164,7 +163,6 @@ steps:
           description=$( tr '"' '\"' <<<"$description</ul>" )
           reference=$( jq -c  '.libraries[0]._links.ref' <<< "${vulnerabilityAsJson}" )
           reference=$( tr -d '"' <<< $reference )
-          echo Current element: $reference
           
           vulnerableMethodInfo=""
           for vulnerableMethod in "${vulnerableMethods[@]}"
@@ -175,7 +173,6 @@ steps:
             
             currentMethodReference=${splitString[0]}
             if [[ "$currentMethodReference" = "$reference" ]];  then
-              echo "found vulnerable method"
               vulnerableMethodInfo="$vulnerableMethodInfo${splitString[1]}</br>"
             fi
           done
@@ -198,9 +195,9 @@ steps:
 
           curl --silent -X POST -H 'Content-Type: application/json-patch+json' -u "$Authentication" -d "$Body" $createApiUrl
 
-          echo Ticket created.
-          echo Title: $ticketTitle
-          echo Description: $description
+          echo Ticket created:
+          echo  Title: $ticketTitle
+          echo  Description: $description
         else
           echo Duplicate work item found for title $ticketTitle
         fi
