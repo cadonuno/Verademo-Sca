@@ -62,7 +62,7 @@ steps:
       '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
       echo "Cloning repository"
-      git clone git@https://github.com/cadonuno/Verademo-Sca.git
+      git clone git@github.com:cadonuno/Verademo-Sca.git
       mv pipeline_baseline.json ./Verademo-Sca
       cd ./Verademo-Sca
 
