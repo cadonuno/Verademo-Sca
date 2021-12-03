@@ -38,9 +38,10 @@ steps:
     project_name: 'Test%20Project'
     
 - task: CmdLine@2
-  name: Clean
+  name: CleanDirectory
   inputs:
     script: |
+      git status
       git stash
       git checkout develop
 
