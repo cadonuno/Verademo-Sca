@@ -60,6 +60,14 @@ steps:
   name: CommitBaseline
   inputs:
     script: |
+      'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+      eval $(ssh-agent -s)
+      echo "${GITLAB_SSH_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      echo "${GITLAB_SSH_KEY}" >> ~/.ssh/id_rsa.pub
+      '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
       git config user.email "rpereira@veracode.com"
       git config user.name "Ricardo Pereira"
       git add pipeline_baseline.json
