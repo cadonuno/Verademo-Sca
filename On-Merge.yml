@@ -38,11 +38,6 @@ steps:
     project_name: 'Test%20Project'
 
 - task: CmdLine@2
-  name: CleanDirectory
-  inputs:
-    script: git stash
-
-- task: CmdLine@2
   name: PipelineScan
   env:
     VID: $(VERACODE_ID)
@@ -65,6 +60,11 @@ steps:
       chmod 700 ~/.ssh
       echo "$GITLAB_SSH_KEY" >> ~/.ssh/id_rsa.pub
       '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+      echo "Cloning repository"
+      git clone git@https://github.com/cadonuno/Verademo-Sca.git
+      mv pipeline_baseline.json ./Verademo-Sca
+      cd ./Verademo-Sca
 
       git config user.email "rpereira@veracode.com"
       git config user.name "Ricardo Pereira"
