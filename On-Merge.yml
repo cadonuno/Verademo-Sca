@@ -64,6 +64,7 @@ steps:
       git branch
       git config --global user.email "ricardoapjunior@hotmail.com"
       git config --global user.name cadonuno
+      git config --global url."git@github.com:".insteadOf "https://github.com/"
       git add pipeline_baseline.json
       git commit -m "Updating baseline file from Azure"
       git push
