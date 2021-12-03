@@ -60,6 +60,8 @@ steps:
   name: CommitBaseline
   inputs:
     script: |
+      git config user.email "rpereira@veracode.com"
+      git config user.name "Ricardo Pereira"
       git add pipeline_baseline.json
       git commit -m "Updating baseline file from Azure"
       git push
