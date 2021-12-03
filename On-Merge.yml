@@ -46,7 +46,7 @@ steps:
       git checkout develop
 
 - task: CmdLine@2
-  name: PipelineScan
+  name: GenerateBaselineFile
   env:
     VID: $(VERACODE_ID)
     VKEY: $(VERACODE_KEY)
