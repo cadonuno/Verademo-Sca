@@ -36,6 +36,13 @@ steps:
     issue_type: 'Issue'
     organization: 'rpereira0294'
     project_name: 'Test%20Project'
+    
+- task: CmdLine@2
+  name: Clean
+  inputs:
+    script: |
+      git stash
+      git checkout develop
 
 - task: CmdLine@2
   name: PipelineScan
@@ -52,23 +59,6 @@ steps:
   name: CommitBaseline
   inputs:
     script: |
-      echo "Setting up git respository for execution"
-      'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-      eval $(ssh-agent -s)
-      echo "$GITLAB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-      mkdir -p ~/.ssh
-      chmod 700 ~/.ssh
-      echo "$GITLAB_SSH_KEY" >> ~/.ssh/id_rsa.pub
-      '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
-      echo "Cloning repository"
-      git clone git@github.com:cadonuno/Verademo-Sca.git
-      mv pipeline_baseline.json ./Verademo-Sca
-      cd ./Verademo-Sca
-
-      git config user.email "rpereira@veracode.com"
-      git config user.name "Ricardo Pereira"
-
       git add pipeline_baseline.json
       git commit -m "Updating baseline file from Azure"
       git push
