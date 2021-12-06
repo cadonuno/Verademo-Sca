@@ -36,10 +36,10 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO '
+    veracodeAppProfile: 'Verademo ADO 5'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
-    optargs: "-policy 'High for SCA with 30 day Grace'"
+    optargs: "-policy 'Auto-Update PCI (Latest version of OWASP, CWE Top 25, and CERT)'"
     createProfile: true
     maximumWaitTime: '360'
 
