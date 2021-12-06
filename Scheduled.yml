@@ -35,8 +35,8 @@ steps:
 - task: Veracode@3
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
-    AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO 5'
+    AnalysisService: '8662407c-ab3f-4e95-97c7-3f757d6f888b'
+    veracodeAppProfile: 'Verademo ADO 6'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
     optargs: "-policy 'Auto-Update PCI (Latest version of OWASP, CWE Top 25, and CERT)'"
