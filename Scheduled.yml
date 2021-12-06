@@ -36,10 +36,10 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO 6'
+    veracodeAppProfile: 'Verademo ADO 8'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
-    optargs: "-policy 8662407c-ab3f-4e95-97c7-3f757d6f888b"
+    optargs: "-policy High%20for%20SCA%20with%2030%20day%20Grace"
     createProfile: true
     maximumWaitTime: '360'
 
