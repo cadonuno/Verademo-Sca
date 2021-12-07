@@ -24,6 +24,7 @@ parameters:
 steps:
 - task: PowerShell@2
   name: ReadJsonFile
+  continueOnError: true
   inputs:
     targetType: 'inline'
     script: |
@@ -39,6 +40,9 @@ steps:
       Write-Host "##vso[task.setvariable variable=VULNERABLE_METHODS_AS_JSON;isOutput=true]$VULNERABLE_METHODS_JSON"
       
 - task: CmdLine@2
+  continueOnError: true
+  dependsOn: ReadJsonFile
+  condition: eq(dependencies.ReadJsonFile.result,'Succeeded')
   name: CreateTickets
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
