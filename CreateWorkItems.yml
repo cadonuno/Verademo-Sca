@@ -47,9 +47,8 @@ steps:
     VULNERABILITIES_AS_JSON:  $(ReadJsonFile.VULNERABILITIES_AS_JSON)
     VULNERABLE_METHODS_AS_JSON:  $(ReadJsonFile.VULNERABLE_METHODS_AS_JSON)
   inputs:
-    script: |    
-      echo "$API_CREDENTIALS"
-      if [[ $API_CREDENTIALS == '$(AZURE_API_CREDENTIALS)' ]] ; then
+    script: |
+      if [[ $API_CREDENTIALS == "$(AZURE_API_CREDENTIALS)" ]]; then 
         echo "Missing AZURE_API_CREDENTIALS environment variable. AZURE_API_CREDENTIALS must be set to import SCA results into Work Items."
         exit 2
       else 
