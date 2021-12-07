@@ -41,8 +41,6 @@ steps:
       
 - task: CmdLine@2
   continueOnError: true
-  dependsOn: ReadJsonFile
-  condition: eq(dependencies.ReadJsonFile.result,'Succeeded')
   name: CreateTickets
   env:
     API_CREDENTIALS: $(AZURE_API_CREDENTIALS)
