@@ -49,7 +49,6 @@ steps:
   inputs:
     script: |
       expected_blank_credentials='$'"(AZURE_API_CREDENTIALS)"
-      echo $expected_blank_credentials
       if [[ $API_CREDENTIALS == "$expected_blank_credentials" ]]; then 
         echo "Missing AZURE_API_CREDENTIALS environment variable. AZURE_API_CREDENTIALS must be set to import SCA results into Work Items."
         exit 2
