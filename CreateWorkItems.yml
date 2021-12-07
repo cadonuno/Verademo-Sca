@@ -46,8 +46,7 @@ steps:
     VULNERABLE_METHODS_AS_JSON:  $(ReadJsonFile.VULNERABLE_METHODS_AS_JSON)
   inputs:
     script: |      
-      echo $API_CREDENTIALS
-      if [[ $API_CREDENTIALS == "" ]] ; then
+      if [[ $API_CREDENTIALS == '$(AZURE_API_CREDENTIALS)' ]] ; then
         echo "Missing AZURE_API_CREDENTIALS environment variable. AZURE_API_CREDENTIALS must be set to import SCA results into Work Items."
       else 
         createApiUrl="${{ parameters.Azure_Base_Directory }}/${{ parameters.organization }}/${{ parameters.project_name }}/_apis/wit/workitems/"'$'"${{ parameters.issue_type }}?api-version=6.0"
