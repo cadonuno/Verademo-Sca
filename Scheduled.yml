@@ -36,11 +36,10 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Endpoint'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO 8'
+    veracodeAppProfile: 'Verademo ADO'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
-    optargs: "-policy High%20for%20SCA%20with%2030%20day%20Grace"
-    createProfile: true
+    importResults: true
     maximumWaitTime: '360'
 
 
@@ -53,3 +52,4 @@ steps:
     importType: 'All Unmitigated Flaws Violating Policy'
     area: '$(system.teamProject)'
     flawImportLimit: '1000'
+
