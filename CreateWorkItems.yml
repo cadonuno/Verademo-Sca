@@ -213,7 +213,6 @@ steps:
             echo Duplicate work item found for title $ticketTitle
           fi
 
-
           echo --------------------------
           echo ""
         done
