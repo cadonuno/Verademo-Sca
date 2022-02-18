@@ -19,6 +19,6 @@ steps:
     sandboxName: 
     typesOfFindings: 'Sca'
     importType: 'All Flaws'
-    workItemType: 'Issue'
+    workItemType: 'Bug'
     area: '$(system.teamProject)'
     flawImportLimit: '1000'
