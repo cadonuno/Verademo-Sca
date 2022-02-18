@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: Veracode Flaw Importer@3
+- task: RicardoVeracodeTest.veracode-vsts-build-extension-test.veracode-flaw-importer-task.Veracode Flaw Importer@3
   inputs:
     ConnectionDetailsSelection: 'Credentials'
     apiId: '43aebc0732520e69698a32d8a366e480'
