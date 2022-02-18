@@ -15,7 +15,7 @@ steps:
     ConnectionDetailsSelection: 'Credentials'
     apiId: '43aebc0732520e69698a32d8a366e480'
     apiKey: '441a9df3462bfd88f1387698beffc8c1eabbd5071d45d5da7f73942b4f7e319443172fff53614a7a1b0d440d67d19f1377315e9b68c14ab6a04f7c8a354d3263'
-    veracodeAppProfile: '$(system.teamProject)'
+    veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
     typesOfFindings: 'Sca'
     importType: 'All Unmitigated Flaws Violating Policy'
