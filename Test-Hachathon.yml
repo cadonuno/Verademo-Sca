@@ -17,7 +17,7 @@ steps:
     apiKey: '$(VKEY)'
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
-    typesOfFindings: 'Sca'
+    typesOfFindings: 'DastSastSca'
     importType: 'All Unmitigated Flaws Violating Policy'
     workItemType: 'Issue'
     area: '$(system.teamProject)'
