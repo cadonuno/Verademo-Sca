@@ -18,5 +18,5 @@ steps:
   inputs:
     script:  |
       curl https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2-dist.zip -o api-wrapper.zip
-      tar -xf "api-wrapper.zip"
+      unzip "api-wrapper.zip"
       java -jar VeracodeJavaAPI.jar -vid "${VID}" -vkey "${VKEY}" -action uploadandscan -version "$(build.buildNumber)" -outputfilepath "uploadAndScanResult.xml"    
