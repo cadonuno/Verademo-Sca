@@ -15,7 +15,7 @@ steps:
   name: DownloadScanner
   inputs:
     script: |
-      curl https://search.maven.org/remotecontent?filepath=com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/21.9.8.2/vosp-api-wrappers-java-21.9.8.2-dist.zip -o api-wrapper.zip 
+      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/22.1.9.3/vosp-api-wrappers-java-22.1.9.3-dist.zip -o api-wrapper.zip 
       chmod 777 api-wrapper.zip 
   
 
