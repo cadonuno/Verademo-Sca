@@ -41,4 +41,4 @@ steps:
     VID: $(VERACODE_ID)
     VKEY: $(VERACODE_KEY)
   inputs:
-    script: java -jar VeracodeJavaAPI.jar -vid "${VID}" -vkey "${VKEY}" -action uploadandscan -filePath "./target/verademo.war" -version "$(build.buildNumber)" -outputfilepath "uploadAndScanResult.xml"    
+    script: java -jar ./destination/VeracodeJavaAPI.jar -vid "${VID}" -vkey "${VKEY}" -action uploadandscan -filePath "./target/verademo.war" -version "$(build.buildNumber)" -outputfilepath "uploadAndScanResult.xml"    
