@@ -22,7 +22,7 @@ steps:
 - task: ExtractFiles@1
   inputs:
     archiveFilePatterns: '**/*.zip' 
-    destinationFolder: ./
+    destinationFolder: ./destination
 
 - task: Maven@3
   inputs:
