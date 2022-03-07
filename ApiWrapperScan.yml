@@ -42,3 +42,7 @@ steps:
     VKEY: $(VERACODE_KEY)
   inputs:
     script: java -jar ./destination/VeracodeJavaAPI.jar -appname "Verademo ADO" -vid "${VID}" -vkey "${VKEY}" -action uploadandscan -createprofile false -filepath "./target/verademo.war" -version "$(build.buildNumber)" -outputfilepath "uploadAndScanResult.xml"    
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: 'uploadAndScanResult.xml'
+    artifactName: report
