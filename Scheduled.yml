@@ -39,6 +39,7 @@ steps:
     veracodeAppProfile: 'Verademo ADO'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
+    createProfile: true
     importResults: true
     maximumWaitTime: '360'
 
