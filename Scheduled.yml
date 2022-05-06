@@ -39,10 +39,9 @@ steps:
     veracodeAppProfile: 'Verademo ADO'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
-    createProfile: true
+    failBuildIfUploadAndScanBuildStepFails: true
     importResults: true
     maximumWaitTime: '360'
-
 
 - task: Veracode Flaw Importer@3
   inputs:
@@ -53,4 +52,3 @@ steps:
     importType: 'All Unmitigated Flaws Violating Policy'
     area: '$(system.teamProject)'
     flawImportLimit: '1000'
-
