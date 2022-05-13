@@ -31,7 +31,7 @@ steps:
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh || true'
 
 - task: CmdLine@2
   name: PipelineScan
