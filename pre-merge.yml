@@ -27,13 +27,6 @@ steps:
     goals: 'package'
 
 - task: CmdLine@2
-  name: SCAScan
-  env:
-    SRCCLR_API_TOKEN: $(SCA_TOKEN)
-  inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh || true'
-
-- task: CmdLine@2
   name: PipelineScan
   env:
     VID: $(VERACODE_ID)
