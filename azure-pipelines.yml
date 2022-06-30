@@ -4,19 +4,16 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-
 steps:
 - task: CmdLine@2
-  name: SCAScan
+  name: PipelineScan
   env:
-    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    VID: $(VERACODE_ID)
+    VKEY: $(VERACODE_KEY)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json'
-
-- template : CreateWorkItems.yml  
-  parameters:
-    json_file: 'sca_output.json'
-    issue_type: 'Issue'
-    organization: 'rpereira0294'
-    project_name: 'Test%20Project'
+    script: |
+      curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+      unzip pipeline-scan-LATEST.zip pipeline-scan.jar
+      java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --fail_on_severity "Very High, High" --issue_details "true"
+    
 
