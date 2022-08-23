@@ -10,11 +10,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class ListenCommand implements BlabberCommand {
-    @Override
-    public void execute(String blabberUsername) {
-
-    }
-	/*private static final Logger logger = LogManager.getLogger("VeraDemo:ListenCommand");
+    private static final Logger logger = LogManager.getLogger("VeraDemo:ListenCommand");
 
 	private Connection connect;
 
@@ -54,6 +50,6 @@ public class ListenCommand implements BlabberCommand {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 }
