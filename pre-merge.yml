@@ -56,3 +56,11 @@ steps:
     inputs:
       pathToPublish: 'pipeline-report-filtered.html'
       artifactName: drop
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: 'detailed_report.xml'
+      artifactName: drop
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: 'detailed_report_filtered.xml'
+      artifactName: drop
