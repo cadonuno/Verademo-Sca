@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: RicardoVeracodeTest.veracode-vsts-build-extension-test.veracode-flaw-importer-task.Veracode Flaw Importer@3
+  inputs:
+    ConnectionDetailsSelection: 'Credentials'
+    apiId: '$(VID)'
+    apiKey: '$(VKEY)'
+    veracodeAppProfile: 'Verademo ADO'
+    sandboxName: 
+    typesOfFindings: 'DastSastSca'
+    importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Issue'
+    area: '$(system.teamProject)'
+    flawImportLimit: '1000'

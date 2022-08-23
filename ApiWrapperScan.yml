@@ -1,0 +1,48 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: CmdLine@2
+  name: DownloadScanner
+  inputs:
+    script: |
+      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/22.1.9.3/vosp-api-wrappers-java-22.1.9.3-dist.zip -o api-wrapper.zip 
+      chmod 777 api-wrapper.zip 
+  
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '**/*.zip' 
+    destinationFolder: ./destination
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CmdLine@2
+  name: UploadAndScan
+  env:
+    VID: $(VERACODE_ID)
+    VKEY: $(VERACODE_KEY)
+  inputs:
+    script: java -jar ./destination/VeracodeJavaAPI.jar -appname "Verademo ADO" -vid "${VID}" -vkey "${VKEY}" -action uploadandscan -createprofile false -filepath "./target/verademo.war" -version "$(build.buildNumber)" -outputfilepath "uploadAndScanResult.xml"    
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: 'uploadAndScanResult.xml'
+    artifactName: report
