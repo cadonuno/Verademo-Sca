@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="Commenting out ListenCommand issues" />
+    <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="Uncommenting issues on ListenCommand.java">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="develop" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -108,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661278617714</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Uncommenting issues on ListenCommand.java">
+      <created>1661279320743</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1661279320743</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,7 +134,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Adding cleanser to UserController to remove 1 issue" />
     <MESSAGE value="Commenting out ListenCommand issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commenting out ListenCommand issues" />
+    <MESSAGE value="Uncommenting issues on ListenCommand.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Uncommenting issues on ListenCommand.java" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

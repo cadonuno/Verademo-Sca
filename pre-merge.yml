@@ -1,0 +1,46 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+pr:
+  branches:
+    include:
+      - '*'
+    exclude:
+      - master
+      - develop
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      goals: 'package'
+
+  - task: CmdLine@2
+    name: SCAScan
+    env:
+      SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    inputs:
+      script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh || true'
+
+  - task: CmdLine@2
+    name: PipelineScan
+    env:
+      VID: $(VERACODE_ID)
+      VKEY: $(VERACODE_KEY)
+    inputs:
+      script: |
+        curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+        unzip pipeline-scan-LATEST.zip pipeline-scan.jar     
+        java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --fail_on_severity "Very High, High" --issue_details "true" --baseline_file "pipeline_baseline.json"
+    
