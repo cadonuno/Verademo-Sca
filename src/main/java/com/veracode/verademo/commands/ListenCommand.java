@@ -47,7 +47,7 @@ public class ListenCommand implements BlabberCommand {
 			sqlStatement.execute(sqlQuery);
 			//* END BAD CODE *//
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch block test
 			e.printStackTrace();
 		}
 	}

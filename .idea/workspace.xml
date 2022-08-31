@@ -58,7 +58,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.veracode.greenlight.intellij.plugin.ui.dialogs.credentials.SettingDialog&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;tools.credentials&quot;
   }
 }</component>
   <component name="RunManager">
@@ -125,7 +125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661279501724</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixing compilation issue">
+      <created>1661289180481</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1661289180481</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
