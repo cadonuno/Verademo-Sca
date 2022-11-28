@@ -53,6 +53,8 @@ steps:
         python detailedreport.py --html
         python detailedreport.py --html --html_name "pipeline-report-filtered.html" --xml_name "detailed_report_filtered.xml" -f filtered_results.json
         echo Finished saving results
+    condition:
+        succeededOrFailed()
 
   - task: PublishBuildArtifacts@1
     condition:
