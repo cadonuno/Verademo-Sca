@@ -41,7 +41,9 @@ steps:
       scanTarget: './'
       minCVSS: '6'
       failBuild: true
-
+    condition:
+        succeededOrFailed()
+        
   - task: CmdLine@2
     name: PipelineScan
     env:
