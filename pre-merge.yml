@@ -31,7 +31,16 @@ steps:
     env:
       SRCCLR_API_TOKEN: $(SCA_TOKEN)
     inputs:
-      script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh || true'
+      script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+
+  - task: VeracodeCommunityScaAdoExtension@1
+    env:
+      SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    inputs:
+      scanType: 'directory'
+      scanTarget: './'
+      minCVSS: '6'
+      failBuild: true
 
   - task: CmdLine@2
     name: PipelineScan
@@ -43,6 +52,8 @@ steps:
         curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         unzip pipeline-scan-LATEST.zip pipeline-scan.jar
         java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --fail_on_severity "Very High, High" --issue_details "true" --baseline_file "pipeline_baseline.json"
+    condition:
+        succeededOrFailed()
 
   - task: CmdLine@2
     name: SaveResultsAsHtmlAndXml
