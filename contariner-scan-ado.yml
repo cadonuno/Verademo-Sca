@@ -19,6 +19,7 @@ steps:
       script: |
         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
         ./veracode configure
+        ./veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json
 
   - task: CmdLine@2
     name: ScanImage
