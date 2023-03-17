@@ -1,0 +1,42 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: CmdLine@2
+    name: ConfigureScanner
+    env:
+      VERACODE_API_KEY_ID: $(VERACODE_ID)
+      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+    inputs:
+      script: |
+        curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+        ./veracode configure
+
+  - task: CmdLine@2
+    name: ScanImage
+    inputs:
+      script: 'veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json'
+
+  - task: CmdLine@2
+    name: ScanIac
+    inputs:
+      script: 'veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json'    
+
+  - task: CmdLine@2
+    name: ScanDirectory
+    inputs:
+      script: 'veracode scan --source insecure-test --type directory --output directory.json --format json'    
+
+  - task: CmdLine@2
+    name: MakeSbom
+    inputs:
+      script: 'veracode sbom --source https://github.com/veracode/verademo --type repo --output repo-sbom-cyclondx.json --format cyclonedx-json'    
+
