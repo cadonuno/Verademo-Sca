@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="2cede7d1-7d47-4d59-a1ae-09ae1dbfb907" name="Default Changelist" comment="Adding cleanser to UserController to remove 1 issue">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
