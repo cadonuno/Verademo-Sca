@@ -139,13 +139,6 @@
             <version>3.0.8</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.javers/javers-core -->
-        <dependency>
-            <groupId>org.javers</groupId>
-            <artifactId>javers-core</artifactId>
-            <version>6.13.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>
