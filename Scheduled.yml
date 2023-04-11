@@ -30,11 +30,11 @@ steps:
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh || true'
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
 
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: 'ADO Scheduled Scan: $(build.buildNumber)'
@@ -45,10 +45,14 @@ steps:
 
 - task: Veracode Flaw Importer@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
+    failBuildIfFlawImporterFails: true
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
+    scanType: 'Dynamic, Static, and Software Composition Analysis'
     importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Bug'
     area: '$(system.teamProject)'
+    overwriteAreaPathInWorkItemsOnImport: true
     flawImportLimit: '1000'
