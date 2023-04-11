@@ -34,13 +34,6 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | SRCCLR_CI_JSON=1 sh > sca_output.json || true'
 
-- template : CreateWorkItems.yml  
-  parameters:
-    json_file: 'sca_output.json'
-    issue_type: 'Issue'
-    organization: 'rpereira0294'
-    project_name: 'Test%20Project'
-    
 - task: CmdLine@2
   name: CleanDirectory
   inputs:
@@ -71,7 +64,7 @@ steps:
 
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: 'Post-merge Scan: $(build.buildNumber)'
@@ -83,11 +76,13 @@ steps:
 
 - task: Veracode Flaw Importer@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 'Release Candidate'
+    scanType: 'Dynamic and Static Analysis'
     importType: 'All Unmitigated Flaws Violating Policy'
     workItemType: 'Task'
     area: '$(system.teamProject)'
+    overwriteAreaPathInWorkItemsOnImport: true
     flawImportLimit: '1000'
