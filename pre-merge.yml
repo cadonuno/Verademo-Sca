@@ -57,6 +57,14 @@ steps:
     condition:
         succeededOrFailed()
 
+  - task: VeracodePipelineScan@0
+    inputs:
+      VeracodeAPIID: '$(VERACODE_ID)'
+      VeracodeAPIsecret: '$(VERACODE_KEY)'
+      fileToScan: './target/verademo.war'
+    condition:
+        succeededOrFailed()
+
   - task: CmdLine@2
     name: SaveResultsAsHtmlAndXml
     inputs:
