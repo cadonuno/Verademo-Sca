@@ -62,6 +62,8 @@ steps:
       VeracodeAPIID: '$(VERACODE_ID)'
       VeracodeAPIsecret: '$(VERACODE_KEY)'
       fileToScan: './target/verademo.war'
+      breakPipeline: true
+      baselineFile: 'pipeline_baseline.json'
     condition:
         succeededOrFailed()
 
