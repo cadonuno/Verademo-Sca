@@ -71,7 +71,7 @@ steps:
 
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: 'Post-merge Scan: $(build.buildNumber)'
