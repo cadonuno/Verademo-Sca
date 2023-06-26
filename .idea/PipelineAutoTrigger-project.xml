@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="cadonuno.pipelinescanautotrigger.settings.ProjectSettingsState">
+    <option name="baselineFile" value="pipeline_baseline.json" />
+    <option name="buildCommand" value="&quot;C:\apache-maven-3.8.6\bin\mvn.cmd&quot; -f &quot;C:\Users\rpereira\OneDrive - Veracode\Projects\Verademo-Sca\pom.xml&quot; clean install" />
+    <option name="enabled" value="true" />
+    <option name="fileToScan" value="target/verademo.war" />
+  </component>
+</project>
