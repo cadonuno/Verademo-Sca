@@ -22,6 +22,9 @@ steps:
     goals: 'package'
 
 - task: CmdLine@2
+  env:
+    VERACODE_API_KEY_ID: $(vid)
+    VERACODE_API_KEY_SECRET: $(vkey)
   inputs:
     script: |
       git clone https://github.com/tjarrettveracode/veracode-pipeline-mitigation
