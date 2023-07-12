@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- master
+- develop
 
 pool:
   vmImage: ubuntu-latest
@@ -26,7 +26,7 @@ steps:
     script: |
       git clone https://github.com/tjarrettveracode/veracode-pipeline-mitigation
       pip install -r ./veracode-pipeline-mitigation/requirements.txt
-      py ./veracode-pipeline-mitigation/vcpipemit.py -a bd08b486-09b1-485b-bf6a-a7d3105fc8f2 -rf base_results.json
+      python ./veracode-pipeline-mitigation/vcpipemit.py -a bd08b486-09b1-485b-bf6a-a7d3105fc8f2 -rf base_results.json
 
 - task: VeracodePipelineScan@0
   inputs:
