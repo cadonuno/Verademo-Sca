@@ -35,5 +35,8 @@ steps:
   inputs:
     VeracodeAPIID: '$(vid)'
     VeracodeAPIsecret: '$(vkey)'
-    fileToScan: 'verademo.war'
-    baselineFile: 'baseline-bd08b486-09b1-485b-bf6a-a7d3105fc8f2.json' 
+    fileToScan: './target/verademo.war'
+    breakPipeline: true
+    baselineFile: 'baseline-bd08b486-09b1-485b-bf6a-a7d3105fc8f2.json'
+  condition:
+      succeededOrFailed()
