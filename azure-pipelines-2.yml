@@ -3,8 +3,12 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- master
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily Midnight Build
+  branches:
+    include:
+    - master
 
 pool:
   vmImage: ubuntu-latest
@@ -33,6 +37,13 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      git clone https://github.com/tjarrettveracode/veracode-pipeline-mitigation
+      git clone https://github.com/cadonuno/veracode-pipeline-mitigation
       pip install -r ./veracode-pipeline-mitigation/requirements.txt
-      python ./veracode-pipeline-mitigation/vcpipemit.py -an "Verademo ADO" -rf pipeline-baseline-file.json
+      python ./veracode-pipeline-mitigation/vcpipemit.py -an "Verademo ADO" -rf pipeline.json -of "new_baseline.json"
+
+- task: PublishBuildArtifacts@1
+  condition:
+      succeededOrFailed()
+  inputs:
+    pathToPublish: 'new_baseline.json'
+    artifactName: new_baseline
