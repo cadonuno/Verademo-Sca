@@ -39,8 +39,8 @@ steps:
     script: |
       git clone https://github.com/cadonuno/veracode-pipeline-mitigation
       pip install -r ./veracode-pipeline-mitigation/requirements.txt
-      export VERACODE_API_KEY_ID=${vid}
-      export VERACODE_API_KEY_SECRET=${vkey}
+      export VERACODE_API_KEY_ID=$(vid)
+      export VERACODE_API_KEY_SECRET=$(vkey)
       python ./veracode-pipeline-mitigation/vcpipemit.py -an "Verademo ADO" -rf pipeline.json -of "new_baseline.json"
 
 - task: PublishBuildArtifacts@1
