@@ -25,7 +25,7 @@ steps:
   inputs:
     VeracodeAPIID: '$(vid)'
     VeracodeAPIsecret: '$(vkey)'
-    fileToScan: 'verademo.war'
+    fileToScan: '$(System.DefaultWorkingDirectory)/verademo.war'
 
 - task: CmdLine@2
   inputs:
