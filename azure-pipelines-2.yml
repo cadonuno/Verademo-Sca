@@ -10,22 +10,25 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      goals: 'package'
 
-- task: VeracodePipelineScan@0
-  inputs:
-    VeracodeAPIID: '$(vid)'
-    VeracodeAPIsecret: '$(vkey)'
-    fileToScan: '$(System.DefaultWorkingDirectory)/verademo.war'
+  - task: VeracodePipelineScan@0
+    inputs:
+      VeracodeAPIID: '$(vid)'
+      VeracodeAPIsecret: '$(vkey)'
+      fileToScan: './target/verademo.war'
+      breakPipeline: false
+    condition:
+        succeededOrFailed()
 
 - task: CmdLine@2
   inputs:
