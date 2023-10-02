@@ -53,7 +53,8 @@ steps:
       script: |
         curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
         unzip pipeline-scan-LATEST.zip pipeline-scan.jar
-        java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --fail_on_severity "Very High, High" --issue_details "true" --baseline_file "pipeline_baseline.json"
+        java -jar pipeline-scan.jar -vid ${VID} -vkey ${VKEY} --request_policy "Medium+ not allowed with SCA"
+        java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --policy_file "Medium+_not_allowed_with_SCA.json" --issue_details "true" --baseline_file "pipeline_baseline.json"
     condition:
         succeededOrFailed()
 
