@@ -85,12 +85,6 @@ steps:
       testResultsFiles: 'PipelineScanJunit.xml'
     condition:
         succeededOrFailed()
-  - task: PublishBuildArtifacts@1
-    condition:
-        succeededOrFailed()
-    inputs:
-      pathToPublish: 'pipeline-report.html'
-      artifactName: pipeline-result
 
   - task: CmdLine@2
     name: SaveResultsAsHtmlAndXml
