@@ -74,7 +74,7 @@ steps:
     script: |
       echo Saving results as xml and html
       curl -sSO https://raw.githubusercontent.com/cadonuno/Pipeline2JUnitXml/master/pipeline2junitxml.py
-      python pipeline2junitxml.py -f results.json --xml_name PipelineScanJunit.xml
+      python pipeline2junitxml.py -f filtered_pipeline_results.json --xml_name PipelineScanJunit.xml
       echo Finished saving results
   condition:
       succeededOrFailed()
