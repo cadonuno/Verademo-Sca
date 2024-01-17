@@ -50,9 +50,11 @@ steps:
     failBuildIfFlawImporterFails: true
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 
-    scanType: 'Dynamic, Static, and Software Composition Analysis'
+    scanType: 'Dynamic, Static, SCA'
     importType: 'All Unmitigated Flaws Violating Policy'
     workItemType: 'Bug'
     area: '$(system.teamProject)'
     overwriteAreaPathInWorkItemsOnImport: true
+    iterationPath: '$(system.teamProject)'
+    overwriteIterationPath: true
     flawImportLimit: '1000'
