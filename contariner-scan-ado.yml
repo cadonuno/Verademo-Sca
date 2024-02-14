@@ -18,7 +18,6 @@ steps:
     inputs:
       script: |
         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-        ./veracode configure
 
   - task: CmdLine@2
     name: ScanImage
