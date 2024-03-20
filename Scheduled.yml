@@ -30,3 +30,4 @@ steps:
     iterationPath: '$(system.teamProject)'
     overwriteIterationPath: true
     flawImportLimit: '1000'
+    customFields: 'Some Custom Field:Some Value'
