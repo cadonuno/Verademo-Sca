@@ -15,6 +15,34 @@ pool:
 
 steps:
 
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CmdLine@2
+  name: SCAScan
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+  inputs:
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Service Connection'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: 'Verademo ADO'
+    version: 'ADO Scheduled Scan: $(build.buildNumber)'
+    filepath: './target/verademo.war'
+    failBuildIfUploadAndScanBuildStepFails: true
+    importResults: true
+    maximumWaitTime: '360'
 - task: Veracode Flaw Importer@3
   inputs:
     ConnectionDetailsSelection: 'Service Connection'
@@ -31,3 +59,4 @@ steps:
     overwriteIterationPath: true
     flawImportLimit: '1000'
     customFields: 'Some Custom Field:Some Value'
+  
