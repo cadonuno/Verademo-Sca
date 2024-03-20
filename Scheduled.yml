@@ -32,16 +32,6 @@ steps:
   inputs:
     script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
 
-- task: Veracode@3
-  inputs:
-    ConnectionDetailsSelection: 'Service Connection'
-    AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO'
-    version: 'ADO Scheduled Scan: $(build.buildNumber)'
-    filepath: './target/verademo.war'
-    failBuildIfUploadAndScanBuildStepFails: true
-    importResults: true
-    maximumWaitTime: '360'
 
 - task: Veracode Flaw Importer@3
   inputs:
