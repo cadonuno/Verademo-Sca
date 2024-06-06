@@ -17,7 +17,7 @@ steps:
   inputs:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-                		veracode package -das . --output verascan --trust
+                		./veracode package -das . --output verascan --trust
       
                 		# Check if the verascan directory exists
                 		if [ ! -d "verascan" ]; then
@@ -29,6 +29,6 @@ steps:
                 		for file in verascan/*; do
                 			if [ -f "$file" ]; then
                 				echo "Scanning $file ..."
-                				veracode static scan "$file"
+                				./veracode static scan "$file"
                 			fi
                 		done
