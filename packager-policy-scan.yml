@@ -42,4 +42,4 @@ steps:
     VERACODE_API_KEY_ID: $(VERACODE_ID)
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
-    script: 'java -jar ./VeracodeJavaAPI.jar -appname "<APPLICATION NAME>" -vid "${VERACODE_API_KEY_ID}" -vkey "${VERACODE_API_KEY_SECRET}" -action uploadandscan -createprofile false -filepath "./verascan" -version "<UNIQUE SCAN NAME, usually a build number/id>"'
+    script: 'java -jar ./VeracodeJavaAPI.jar -appname "Verademo ADO 2" -vid "${VERACODE_API_KEY_ID}" -vkey "${VERACODE_API_KEY_SECRET}" -action uploadandscan -createprofile false -filepath "./verascan" -version "$(build.buildNumber)"'
