@@ -25,19 +25,10 @@ steps:
         echo "Error: verascan directory not found."
         exit 1
       fi
-                    
-- task: CmdLine@2
-  name: DownloadScanner
-  inputs:
-    script: |
-      sudo apt install libxml2-utils
-      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml -o wrapper-versions.xml
-      version=$(xmllint --xpath "//metadata/versioning/latest/text()" wrapper-versions.xml)
-      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/${version}/vosp-api-wrappers-java-${version}-dist.zip -o veracode-api-wrapper.zip
-      unzip veracode-api-wrapper.zip
+
 
 - task: CmdLine@2
-  name: "VeracodePolicyScan"
+  name: "VeracodePipelineScan"
   env:
     VERACODE_API_KEY_ID: $(VERACODE_ID)
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
