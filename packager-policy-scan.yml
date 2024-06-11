@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: CmdLine@2
+  env:
+        VERACODE_API_KEY_ID: $(VERACODE_ID)
+        VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+  inputs:
+    script: |
+      curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+                		./veracode package -das . --output verascan --trust
+      
+                		# Check if the verascan directory exists
+                		if [ ! -d "verascan" ]; then
+                			echo "Error: verascan directory not found."
+                			exit 1
+                		fi
+      
+                		# Get Veracode Scanner
+                		curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml -o wrapper-versions.xml
+                    version=$(xmllint --xpath "//metadata/versioning/latest/text()" wrapper-versions.xml)
+                    curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/${version}/vosp-api-wrappers-java-${version}-dist.zip -o veracode-api-wrapper.zip
+                    unzip veracode-api-wrapper.zip
+                    java -jar ./VeracodeJavaAPI.jar -appname "<APPLICATION NAME>" -vid "${VERACODE_API_KEY_ID}" -vkey "${VERACODE_API_KEY_SECRET}" -action uploadandscan -createprofile false -filepath "./verascan" -version "<UNIQUE SCAN NAME, usually a build number/id>"
