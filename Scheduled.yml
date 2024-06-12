@@ -1,0 +1,62 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+schedules:
+- cron: "0 0 * * *"
+  displayName: Daily Midnight Build
+  branches:
+    include:
+    - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CmdLine@2
+  name: SCAScan
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+  inputs:
+    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
+
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Service Connection'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: 'Verademo ADO'
+    version: 'ADO Scheduled Scan: $(build.buildNumber)'
+    filepath: './target/verademo.war'
+    failBuildIfUploadAndScanBuildStepFails: true
+    importResults: true
+    maximumWaitTime: '360'
+- task: Veracode Flaw Importer@3
+  inputs:
+    ConnectionDetailsSelection: 'Service Connection'
+    AnalysisService: 'Veracode Analysis Center'
+    failBuildIfFlawImporterFails: true
+    veracodeAppProfile: 'Verademo ADO'
+    sandboxName: 
+    scanType: 'Dynamic, Static, SCA'
+    importType: 'All Unmitigated Flaws Violating Policy'
+    workItemType: 'Bug'
+    area: '$(system.teamProject)'
+    overwriteAreaPathInWorkItemsOnImport: true
+    iterationPath: '$(system.teamProject)'
+    overwriteIterationPath: true
+    flawImportLimit: '1000'
+    customFields: 'Some Custom Field:Some Value'
+  
