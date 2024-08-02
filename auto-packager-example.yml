@@ -19,9 +19,13 @@ steps:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output ./verascan
-
       zip -r verascan.zip ./verascan
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: './verascan.zip'
+    ArtifactName: 'scan-artifact'
+    publishLocation: 'Container'
 
 - task: CmdLine@2
   name: "VeracodePipelineScan"
