@@ -19,15 +19,7 @@ steps:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output ./verascan
-      cd ./verascan
-      zip -r ./../verascan.zip .
-      cd ..
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: './verascan.zip'
-    ArtifactName: 'scan-artifact'
-    publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
   inputs:
