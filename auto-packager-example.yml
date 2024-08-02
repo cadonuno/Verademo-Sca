@@ -20,11 +20,7 @@ steps:
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output ./verascan
 
-      # Check if the verascan directory exists
-      if [ ! -d "verascan" ]; then
-        echo "Error: verascan directory not found."
-        exit 1
-      fi
+      zip -r verascan.zip ./verascan
 
 
 - task: CmdLine@2
@@ -34,5 +30,4 @@ steps:
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     script: |
-     zip -r ./verascan.zip ./verascan
      ./veracode static scan ./verascan.zip
