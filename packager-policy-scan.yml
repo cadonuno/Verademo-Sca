@@ -18,7 +18,7 @@ steps:
   inputs:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-      ./veracode package -das . --output verascan
+      ./veracode package -das . --output ./verascan
 
       # Check if the verascan directory exists
       if [ ! -d "verascan" ]; then
