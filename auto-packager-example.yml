@@ -29,6 +29,13 @@ steps:
     ArtifactName: 'scan-artifact'
     publishLocation: 'Container'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: './verascan/verademo.war'
+    ArtifactName: 'pre-zip'
+    publishLocation: 'Container'
+
+
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
