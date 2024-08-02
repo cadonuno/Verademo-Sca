@@ -20,7 +20,7 @@ steps:
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output ./verascan
       cd ./verascan
-      zip -r verascan.zip .
+      zip -r ./../verascan.zip .
       cd ..
 
 - task: PublishBuildArtifacts@1
