@@ -30,7 +30,7 @@ steps:
   name: DownloadScanner
   inputs:
     script: |
-      sudo apt install libxml2-utils
+      sudo apt-get install libxml2-utils
       curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml -o wrapper-versions.xml
       version=$(xmllint --xpath "//metadata/versioning/latest/text()" wrapper-versions.xml)
       curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/${version}/vosp-api-wrappers-java-${version}-dist.zip -o veracode-api-wrapper.zip
