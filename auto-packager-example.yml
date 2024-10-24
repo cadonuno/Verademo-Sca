@@ -19,9 +19,6 @@ steps:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output verascan
-      cd ./verascan
-      zip -r ./../verascan.zip .
-      cd ..
 
 - task: CmdLine@2
   name: "VeracodePipelineScan"
@@ -30,4 +27,9 @@ steps:
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     script: |
-     ./veracode static scan ./verascan.zip
+      for file in verascan/*; do
+        if [ -f "$file" ]; then
+          echo "Scanning $file ..."
+          ./veracode static scan "$file"
+        fi
+      done
