@@ -25,7 +25,14 @@ steps:
         echo "Error: verascan directory not found."
         exit 1
       fi
-                    
+
+- task: CmdLine@2
+  name: "VeracodeSCA"
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+  inputs:
+    script: curl -sSL https://download.sourceclear.com/ci.sh | sh
+             
 - task: CmdLine@2
   name: DownloadScanner
   inputs:
