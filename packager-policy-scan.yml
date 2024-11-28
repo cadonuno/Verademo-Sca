@@ -32,7 +32,19 @@ steps:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
   inputs:
     script: curl -sSL https://download.sourceclear.com/ci.sh | sh
-             
+
+# Either this or the following 2 steps. Make sure to replace the Application name
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Endpoint'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: 'Verademo ADO'
+    version: '$(build.buildNumber)'
+    filepath: './target/verademo.war'
+    importResults: true
+    maximumWaitTime: '360'
+
+
 - task: CmdLine@2
   name: DownloadScanner
   inputs:
