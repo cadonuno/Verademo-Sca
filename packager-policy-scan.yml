@@ -25,17 +25,18 @@ steps:
         exit 1
       fi
 
+
 # WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'
-- task: CmdLine@2
-  name: "VeracodePackage"
+- task: PowerShell@2
   env:
     VERACODE_API_KEY_ID: $(VERACODE_ID)
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
+    targetType: 'inline'
     script: |
       Set-ExecutionPolicy AllSigned -Scope Process -Force
-      curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-      $ProgressPreference = "silentlyContinue"; iex ((New-Object System.Net.WebClient).DownloadString('https://tools.veracode.com/veracode-cli/install.ps1'))
+            curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+            $ProgressPreference = "silentlyContinue"; iex ((New-Object System.Net.WebClient).DownloadString('https://tools.veracode.com/veracode-cli/install.ps1'))
 
 # LINUX/MAC: This step will call an agent-based SCA scan
 - task: CmdLine@2
@@ -48,7 +49,7 @@ steps:
 # Either this or the following 2 steps. Make sure to replace the Application name
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: '$(build.buildNumber)'
