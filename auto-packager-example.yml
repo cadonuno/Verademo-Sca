@@ -56,7 +56,7 @@ steps:
              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
              iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan <folder to scan>
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan
+# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
@@ -71,7 +71,7 @@ steps:
         fi
       done
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan
+# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
