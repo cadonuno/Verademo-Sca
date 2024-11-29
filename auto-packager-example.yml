@@ -41,6 +41,9 @@ steps:
   name: "VeracodeSCA"
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
+                  # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
+                  # 'https://platform-backend.analysiscenter.veracode.u's - United States Federal Region.'
   inputs:
     script: curl -sSL https://download.sourceclear.com/ci.sh | sh
 
