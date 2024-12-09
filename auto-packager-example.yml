@@ -22,7 +22,7 @@ steps:
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
       ./veracode package -das . --output verascan
 
-# WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'. If you are not building the repository root, replace 
+# WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'
 - task: PowerShell@2
   name: "VeracodePackage"
   env:
@@ -88,7 +88,7 @@ steps:
           veracode static scan "$file"
         fi
       done
-# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline  - uses the veracode CLI installed in lines 34-37
+# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline  - uses the veracode CLI installed in lines 34-36
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
