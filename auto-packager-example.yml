@@ -74,7 +74,7 @@ steps:
         fi
       done
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline
+# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in line 22
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
@@ -88,7 +88,7 @@ steps:
           veracode static scan "$file"
         fi
       done
-# WINDOWS: This step will call a Veracode Pipeline Scan
+# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline  - uses the veracode CLI installed in lines 34-37
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
