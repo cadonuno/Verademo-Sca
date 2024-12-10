@@ -41,7 +41,6 @@ steps:
     targetType: 'inline'
     script: |
       Set-ExecutionPolicy AllSigned -Scope Process -Force
-            curl -fsS https://tools.veracode.com/veracode-cli/install | sh
             $ProgressPreference = "silentlyContinue"; iex ((New-Object System.Net.WebClient).DownloadString('https://tools.veracode.com/veracode-cli/install.ps1'))
             veracode package -das <folder to package> --output ./verascan
 
