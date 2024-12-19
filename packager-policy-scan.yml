@@ -51,7 +51,7 @@ steps:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
     SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
                   # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
-                  # 'https://platform-backend.analysiscenter.veracode.u's - United States Federal Region.'
+                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
   inputs:
     script: curl -sSL https://download.sourceclear.com/ci.sh | sh
 
@@ -59,6 +59,9 @@ steps:
 - task: PowerShell@2
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
+                  # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
+                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
   inputs:
     targetType: 'inline'
     script: |
