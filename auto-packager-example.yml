@@ -43,7 +43,7 @@ steps:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
     SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
                   # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
-                  # 'https://platform-backend.analysiscenter.veracode.u's - United States Federal Region.'
+                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
   inputs:
     script: curl -sSL https://download.sourceclear.com/ci.sh | sh
 
@@ -51,6 +51,9 @@ steps:
 - task: PowerShell@2
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
+                  # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
+                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
   inputs:
     targetType: 'inline'
     script: |
@@ -59,7 +62,7 @@ steps:
              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
              iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan <folder to scan>
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline
+# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in lines 34-36
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
@@ -74,21 +77,7 @@ steps:
         fi
       done
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in line 22
-- task: CmdLine@2
-  name: "VeracodePipelineScan"
-  env:
-    VERACODE_API_KEY_ID: $(VERACODE_ID)
-    VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
-  inputs:
-    script: |
-      for file in verascan/*; do
-        if [ -f "$file" ]; then
-          echo "Scanning $file ..."
-          veracode static scan "$file"
-        fi
-      done
-# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline  - uses the veracode CLI installed in lines 34-36
+# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in lines 34-36
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
