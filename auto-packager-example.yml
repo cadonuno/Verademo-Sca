@@ -79,6 +79,9 @@ steps:
 
 # WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in lines 34-36
 - task: PowerShell@2
+  env:
+    VERACODE_API_KEY_ID: $(VERACODE_ID)
+    VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     targetType: 'inline'
     script: |
