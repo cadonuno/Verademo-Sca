@@ -62,7 +62,7 @@ steps:
              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
              iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan <folder to scan>
 
-# LINUX/MAC: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in lines 34-36
+# LINUX/MAC: This step will call a Veracode Pipeline Scan. This example fetches your security policy from Veracode to filter the scan results, but a different fail criteria can be used if needed - uses the veracode CLI installed in line 22
 - task: CmdLine@2
   name: "VeracodePipelineScan"
   env:
@@ -70,14 +70,15 @@ steps:
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     script: |
+      ./veracode policy get <name of the policy to use> # can be removed if using a different fail criteria
       for file in verascan/*; do
         if [ -f "$file" ]; then
           echo "Scanning $file ..."
-          ./veracode static scan "$file"
+          ./veracode static scan "$file" --policy-file <name of the policy to use (replace any spaces with underscores)>.json
         fi
       done
 
-# WINDOWS: This step will call a Veracode Pipeline Scan. If necessary, more parameters can be added to narrow down when to fail the pipeline - uses the veracode CLI installed in lines 34-36
+# WINDOWS: This step will call a Veracode Pipeline Scan.  This example fetches your security policy from Veracode to filter the scan results, but a different fail criteria can be used if needed - uses the veracode CLI installed in lines 34-36
 - task: PowerShell@2
   env:
     VERACODE_API_KEY_ID: $(VERACODE_ID)
@@ -85,7 +86,8 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      veracode policy get <name of the policy to use> # can be removed if using a different fail criteria
       Get-ChildItem "./verascan" | 
       Foreach-Object {
-          veracode static scan "$_.FullName"
+          veracode static scan "$_.FullName" --policy-file <name of the policy to use (replace any spaces with underscores)>.json
       }
