@@ -89,5 +89,5 @@ steps:
       veracode policy get <name of the policy to use> # can be removed if using a different fail criteria
       Get-ChildItem "./verascan" | 
       Foreach-Object {
-          veracode static scan "$_.FullName" --policy-file "<name of the policy to use (replace any spaces with underscores)>.json"
+          veracode static scan "$_.FullName" --policy-file <name of the policy to use (replace any spaces with underscores)>.json
       }
