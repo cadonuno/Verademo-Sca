@@ -40,26 +40,26 @@ steps:
   name: "VeracodeSCA"
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
-    SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
-                  # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
-                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
+    SRCCLR_REGION: 'COM' # - Commercial Region. The default.
+                 # 'ER' - European Region.
+                 # 'FED' - United States Federal Region.
   inputs:
-    script: curl -sSL https://download.sourceclear.com/ci.sh | sh
+    script: curl -sSL https://sca-downloads.veracode.com/ci.sh | sh
 
 # WINDOWS: This step will call an agent-based SCA scan
 - task: PowerShell@2
   env:
     SRCCLR_API_TOKEN: $(SCA_TOKEN)
-    SRCCLR_API_URL: 'https://sca-api.veracode.com' # - Commercial Region. The default.
-                  # 'https://platform-backend.analysiscenter.veracode.eu' - European Region.
-                  # 'https://platform-backend.analysiscenter.veracode.us' - United States Federal Region.'
+    SRCCLR_REGION: 'COM' # - Commercial Region. The default.
+                 # 'ER' - European Region.
+                 # 'FED' - United States Federal Region.
   inputs:
     targetType: 'inline'
     script: |
       Set-ExecutionPolicy AllSigned -Scope Process -Force
              $ProgressPreference = 'SilentlyContinue'
              [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-             iex ((New-Object System.Net.WebClient).DownloadString('https://download.srcclr.com/ci.ps1')); srcclr scan <folder to scan>
+             iex ((New-Object System.Net.WebClient).DownloadString('https://sca-downloads.veracode.com/ci.ps1')); srcclr scan <folder to scan>
 
 # LINUX/MAC: This step will call a Veracode Pipeline Scan. This example fetches your security policy from Veracode to filter the scan results, but a different fail criteria can be used if needed - uses the veracode CLI installed in line 22
 # depending on your runner configuration, this might need to run within the same task as VeracodePackage (line 22-23)
