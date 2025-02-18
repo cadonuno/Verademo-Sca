@@ -16,9 +16,6 @@ steps:
 # LINUX/MAC: This step will package the application and save the artifacts to a folder called 'verascan'
 - task: CmdLine@2
   name: "VeracodePackage"
-  env:
-    VERACODE_API_KEY_ID: $(VERACODE_ID)
-    VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
@@ -34,9 +31,6 @@ steps:
 # WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'. If you are not building the repository root, replace 
 - task: PowerShell@2
   name: "VeracodePackage"
-  env:
-    VERACODE_API_KEY_ID: $(VERACODE_ID)
-    VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
   inputs:
     targetType: 'inline'
     script: |
