@@ -21,7 +21,7 @@ steps:
 
 # WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'
 - task: PowerShell@2
-  name: "VeracodePackage
+  name: "VeracodePackage"
   inputs:
     targetType: 'inline'
     script: |
