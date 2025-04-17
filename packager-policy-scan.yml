@@ -19,7 +19,7 @@ steps:
   inputs:
     script: |
       curl -fsS https://tools.veracode.com/veracode-cli/install | sh
-      ./veracode package -das <folder to package> --output ./verascan
+      ./veracode package -vas <folder to package> --output ./verascan
 
       # Check if the verascan directory exists
       if [ ! -d "verascan" ]; then
@@ -36,7 +36,7 @@ steps:
     script: |
       Set-ExecutionPolicy AllSigned -Scope Process -Force
             $ProgressPreference = "silentlyContinue"; iex ((New-Object System.Net.WebClient).DownloadString('https://tools.veracode.com/veracode-cli/install.ps1'))
-            veracode package -das <folder to package> --output ./verascan
+            veracode package -vas <folder to package> --output ./verascan
 
 # LINUX/MAC: This step will call an agent-based SCA scan
 - task: CmdLine@2
