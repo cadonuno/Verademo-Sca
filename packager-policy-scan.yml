@@ -1,0 +1,95 @@
+# This is an example YAML for implementing Veracode Agent-Based SCA, Static Policy, and Static Sandbox Scans
+# The examples use VERACODE_ID from a Variable but, for a real-life environment, it is better to keep it on a Secrets Vault.
+# Same goes for VERACODE_SECRET and SCA_TOKEN
+# If using the Veracode plugin (as shown in the Veracode@3 step), you will also need a Veracode Platform service connection which, in this example, is called Veracode Analysis Center
+
+# Your triggers may vary, but will usually be linked to an approved PR or a Release Candidate
+trigger:
+- master
+
+pool:
+  # Below, the package and SCA steps will have 2 versions, one for LINUX/MAC and one for Windows. If using Windows, switch to a Windows image
+  vmImage: ubuntu-latest
+
+steps:
+
+# LINUX/MAC: This step will package the application and save the artifacts to a folder called 'verascan'
+- task: CmdLine@2
+  name: "VeracodePackage"
+  inputs:
+    script: |
+      curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+      ./veracode package -vas <folder to package> --output ./verascan
+
+      # Check if the verascan directory exists
+      if [ ! -d "verascan" ]; then
+        echo "Error: verascan directory not found."
+        exit 1
+      fi
+
+
+# WINDOWS: This step will package the application and save the artifacts to a folder called 'verascan'. If you are not building the repository root, replace 
+- task: PowerShell@2
+  name: "VeracodePackage"
+  inputs:
+    targetType: 'inline'
+    script: |
+      Set-ExecutionPolicy AllSigned -Scope Process -Force
+            $ProgressPreference = "silentlyContinue"; iex ((New-Object System.Net.WebClient).DownloadString('https://tools.veracode.com/veracode-cli/install.ps1'))
+            veracode package -vas <folder to package> --output ./verascan
+
+# LINUX/MAC: This step will call an agent-based SCA scan
+- task: CmdLine@2
+  name: "VeracodeSCA"
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_REGION: 'COM' # - Commercial Region. The default.
+                 # 'ER' - European Region.
+                 # 'FED' - United States Federal Region.
+  inputs:
+    script: curl -sSL https://sca-downloads.veracode.com/ci.sh | sh
+
+# WINDOWS: This step will call an agent-based SCA scan
+- task: PowerShell@2
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_REGION: 'COM' # - Commercial Region. The default.
+                 # 'ER' - European Region.
+                 # 'FED' - United States Federal Region.
+  inputs:
+    targetType: 'inline'
+    script: |
+      Set-ExecutionPolicy AllSigned -Scope Process -Force
+             $ProgressPreference = 'SilentlyContinue'
+             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+             iex ((New-Object System.Net.WebClient).DownloadString('https://sca-downloads.veracode.com/ci.ps1')); srcclr scan <folder to scan>
+
+
+# Either this or the following 2 steps. Make sure to replace the Application name
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Service Connection'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: '<application name>'
+    version: '$(build.buildNumber)'
+    filepath: './verascan'
+    importResults: true
+    maximumWaitTime: '360'
+
+- task: CmdLine@2
+  name: DownloadScanner
+  inputs:
+    script: |
+      sudo apt-get install libxml2-utils
+      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/maven-metadata.xml -o wrapper-versions.xml
+      version=$(xmllint --xpath "//metadata/versioning/latest/text()" wrapper-versions.xml)
+      curl https://repo1.maven.org/maven2/com/veracode/vosp/api/wrappers/vosp-api-wrappers-java/${version}/vosp-api-wrappers-java-${version}-dist.zip -o veracode-api-wrapper.zip
+      unzip veracode-api-wrapper.zip
+
+- task: CmdLine@2
+  name: "VeracodePolicyScan"
+  env:
+    VERACODE_API_KEY_ID: $(VERACODE_ID)
+    VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+  inputs:
+    script: 'java -jar ./VeracodeJavaAPI.jar -appname "<application name>" -vid "${VERACODE_API_KEY_ID}" -vkey "${VERACODE_API_KEY_SECRET}" -action uploadandscan -createprofile false -filepath "./verascan" -version "$(build.buildNumber)"'

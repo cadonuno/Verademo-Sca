@@ -1,0 +1,36 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      git clone https://github.com/tjarrettveracode/veracode-pipeline-mitigation
+      pip install -r ./veracode-pipeline-mitigation/requirements.txt
+      python ./veracode-pipeline-mitigation/vcpipemit.py -a bd08b486-09b1-485b-bf6a-a7d3105fc8f2 -rf base_results.json
+
+- task: VeracodePipelineScan@0
+  inputs:
+    VeracodeAPIID: '$(vid)'
+    VeracodeAPIsecret: '$(vkey)'
+    fileToScan: 'verademo.war'
+    baselineFile: 'baseline-bd08b486-09b1-485b-bf6a-a7d3105fc8f2.json' 
