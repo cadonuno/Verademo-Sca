@@ -19,21 +19,21 @@ steps:
       script: |
         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
 
-  - task: CmdLine@2
-    name: ScanImage
-    env:
-      VERACODE_API_KEY_ID: $(VERACODE_ID)
-      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
-    inputs:
-      script: './veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json || true'
+#  - task: CmdLine@2
+#    name: ScanImage
+#    env:
+#      VERACODE_API_KEY_ID: $(VERACODE_ID)
+#      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+#    inputs:
+#      script: './veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json || true'
 
-  - task: CmdLine@2
-    name: ScanIac
-    env:
-      VERACODE_API_KEY_ID: $(VERACODE_ID)
-      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
-    inputs:
-      script: './veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json || true'    
+#  - task: CmdLine@2
+#    name: ScanIac
+#    env:
+#      VERACODE_API_KEY_ID: $(VERACODE_ID)
+#      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+#    inputs:
+#      script: './veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json || true'    
 
   - task: CmdLine@2
     name: ScanDirectory
@@ -41,7 +41,7 @@ steps:
       VERACODE_API_KEY_ID: $(VERACODE_ID)
       VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
-      script: './veracode scan --source ./ --type directory --output directory.json --format json || true'    
+      script: './veracode scan --source ./../Verademo-Sca --type directory --output directory.json --format json || true'    
 
   - task: CmdLine@2
     name: MakeSbom
