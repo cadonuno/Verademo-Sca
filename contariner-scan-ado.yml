@@ -12,9 +12,6 @@ pool:
 steps:
   - task: CmdLine@2
     name: ConfigureScanner
-    env:
-      VERACODE_API_KEY_ID: $(VERACODE_ID)
-      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
       script: |
         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
