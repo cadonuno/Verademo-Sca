@@ -1,0 +1,80 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: CmdLine@2
+    name: ConfigureScanner
+    inputs:
+      script: |
+        cd ../
+        curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+        cd ./s
+
+  - task: CmdLine@2
+    name: ScanImage
+    env:
+      VERACODE_API_KEY_ID: $(VERACODE_ID)
+      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+    inputs:
+      script: '../veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json || true'
+
+  - task: CmdLine@2
+    name: ScanIac
+    env:
+      VERACODE_API_KEY_ID: $(VERACODE_ID)
+      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+    inputs:
+      script: '../veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json || true'    
+
+  - task: CmdLine@2
+    name: ScanDirectory
+    env:
+      VERACODE_API_KEY_ID: $(VERACODE_ID)
+      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+    inputs:
+      script: '../veracode scan --source ./../${PWD##*/} --type directory --output directory.json --format json || true'    
+
+  - task: CmdLine@2
+    name: MakeSbom
+    env:
+      VERACODE_API_KEY_ID: $(VERACODE_ID)
+      VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
+    inputs:
+      script: '../veracode sbom --source https://github.com/veracode/verademo --type repo --output repo-sbom-cyclondx.json --format cyclonedx-json || true'    
+
+  - task: PublishBuildArtifacts@1
+    condition:
+        succeededOrFailed()
+    inputs:
+      pathToPublish: 'scan-verademo.json'
+      artifactName: container-results
+
+  - task: PublishBuildArtifacts@1
+    condition:
+        succeededOrFailed()
+    inputs:
+      pathToPublish: 'iac.json'
+      artifactName: container-results
+
+  - task: PublishBuildArtifacts@1
+    condition:
+        succeededOrFailed()
+    inputs:
+      pathToPublish: 'directory.json'
+      artifactName: container-results
+
+  - task: PublishBuildArtifacts@1
+    condition:
+        succeededOrFailed()
+    inputs:
+      pathToPublish: 'repo-sbom-cyclondx.json'
+      artifactName: container-results
+
