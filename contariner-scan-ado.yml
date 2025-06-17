@@ -14,7 +14,9 @@ steps:
     name: ConfigureScanner
     inputs:
       script: |
+        cd ../
         curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+        cd ./s
 
   - task: CmdLine@2
     name: ScanImage
@@ -22,7 +24,7 @@ steps:
       VERACODE_API_KEY_ID: $(VERACODE_ID)
       VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
-      script: './veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json || true'
+      script: '../veracode scan --source  juliantotzek/verademo1-tomcat --type image --output scan-verademo.json --format json || true'
 
   - task: CmdLine@2
     name: ScanIac
@@ -30,7 +32,7 @@ steps:
       VERACODE_API_KEY_ID: $(VERACODE_ID)
       VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
-      script: './veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json || true'    
+      script: '../veracode scan --source https://github.com/bridgecrewio/terragoat --type repo --output iac.json --format json || true'    
 
   - task: CmdLine@2
     name: ScanDirectory
@@ -38,7 +40,7 @@ steps:
       VERACODE_API_KEY_ID: $(VERACODE_ID)
       VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
-      script: './veracode scan --source ./../${PWD##*/} --type directory --output directory.json --format json || true'    
+      script: '../veracode scan --source ./../${PWD##*/} --type directory --output directory.json --format json || true'    
 
   - task: CmdLine@2
     name: MakeSbom
@@ -46,7 +48,7 @@ steps:
       VERACODE_API_KEY_ID: $(VERACODE_ID)
       VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
     inputs:
-      script: './veracode sbom --source https://github.com/veracode/verademo --type repo --output repo-sbom-cyclondx.json --format cyclonedx-json || true'    
+      script: '../veracode sbom --source https://github.com/veracode/verademo --type repo --output repo-sbom-cyclondx.json --format cyclonedx-json || true'    
 
   - task: PublishBuildArtifacts@1
     condition:
