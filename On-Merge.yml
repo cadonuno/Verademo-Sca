@@ -28,7 +28,7 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: 'Verademo ADO'
+    veracodeAppProfile: 'Verademo ADO 3'
     version: 'Post-merge Scan: $(build.buildNumber)'
     filepath: './target/verademo.war'
     sandboxName: 'Release Candidate'
