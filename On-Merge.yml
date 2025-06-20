@@ -23,60 +23,9 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-- task: CmdLine@2
-  name: SCAScan
-  env:
-    SRCCLR_API_TOKEN: $(SCA_TOKEN)
-  inputs:
-    script: 'curl -sSL  https://download.sourceclear.com/ci.sh | sh'
-
-- template : CreateWorkItems.yml  
-  parameters:
-    json_file: 'sca_output.json'
-    issue_type: 'Issue'
-    organization: 'rpereira0294'
-    project_name: 'Test%20Project'
-
-- task: CmdLine@2
-  name: PipelineScan
-  env:
-    VID: $(VERACODE_ID)
-    VKEY: $(VERACODE_KEY)
-  inputs:
-    script: |
-      curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
-      unzip pipeline-scan-LATEST.zip pipeline-scan.jar
-      java -jar pipeline-scan.jar --veracode_api_id "${VID}" --veracode_api_key "${VKEY}" --file ./target/verademo.war --project_name "Verademo ADO" --json_output_file "pipeline_baseline.json" --fail_on_severity "" --issue_details "true"
-
-- task: CmdLine@2
-  name: CommitBaseline
-  inputs:
-    script: |
-      echo "Setting up git respository for execution"
-      'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-      eval $(ssh-agent -s)
-      echo "$GITLAB_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-      mkdir -p ~/.ssh
-      chmod 700 ~/.ssh
-      echo "$GITLAB_SSH_KEY" >> ~/.ssh/id_rsa.pub
-      '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
-      echo "Cloning repository"
-      git clone git@https://github.com/cadonuno/Verademo-Sca.git
-      mv pipeline_baseline.json ./Verademo-Sca
-      cd ./Verademo-Sca
-
-      git config user.email "rpereira@veracode.com"
-      git config user.name "Ricardo Pereira"
-
-      git add pipeline_baseline.json
-      git commit -m "Updating baseline file from Azure"
-      git push
-
-
 - task: Veracode@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     version: 'Post-merge Scan: $(build.buildNumber)'
@@ -88,11 +37,15 @@ steps:
 
 - task: Veracode Flaw Importer@3
   inputs:
-    ConnectionDetailsSelection: 'Endpoint'
+    ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
     veracodeAppProfile: 'Verademo ADO'
     sandboxName: 'Release Candidate'
+    scanType: 'Dynamic and Static Analysis'
     importType: 'All Unmitigated Flaws Violating Policy'
     workItemType: 'Task'
     area: '$(system.teamProject)'
+    overwriteAreaPathInWorkItemsOnImport: true
+    iterationPath: '$(system.teamProject)'
+    overwriteIterationPath: true
     flawImportLimit: '1000'
