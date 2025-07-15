@@ -30,8 +30,9 @@ steps:
   inputs:
     ConnectionDetailsSelection: 'Service Connection'
     AnalysisService: 'Veracode Analysis Center'
-    veracodeAppProfile: '<application name>'
+    veracodeAppProfile: 'New App From UI'
     version: '$(build.buildNumber)'
     filepath: './verascan'
+    createProfile: true
     importResults: true
     maximumWaitTime: '360'
