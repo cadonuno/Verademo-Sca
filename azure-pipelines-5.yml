@@ -1,0 +1,37 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: CmdLine@2
+  name: "VeracodePackage"
+  inputs:
+    script: |
+      curl -fsS https://tools.veracode.com/veracode-cli/install | sh
+      ./veracode package -vas . --output verascan
+
+- task: CmdLine@2
+  name: "VeracodeSCA"
+  env:
+    SRCCLR_API_TOKEN: $(SCA_TOKEN)
+    SRCCLR_REGION: 'ER'
+  inputs:
+    script: curl -sSL https://sca-downloads.veracode.com/ci.sh | sh
+
+- task: Veracode@3
+  inputs:
+    ConnectionDetailsSelection: 'Service Connection'
+    AnalysisService: 'Veracode Analysis Center'
+    veracodeAppProfile: '<application name>'
+    version: '$(build.buildNumber)'
+    filepath: './verascan'
+    importResults: true
+    maximumWaitTime: '360'
