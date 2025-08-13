@@ -75,6 +75,7 @@ steps:
 # WINDOWS: This step will call a Veracode Pipeline Scan.  This example fetches your security policy from Veracode to filter the scan results, but a different fail criteria can be used if needed - uses the veracode CLI installed in lines 34-35
 # depending on your runner configuration, this might need to run within the same task as VeracodePackage (line 34-36)
 - task: PowerShell@2
+  name: "VeracodePipelineScan"
   env:
     VERACODE_API_KEY_ID: $(VERACODE_ID)
     VERACODE_API_KEY_SECRET: $(VERACODE_SECRET)
