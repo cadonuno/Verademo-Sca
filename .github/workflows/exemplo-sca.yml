@@ -10,12 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - uses: actions/checkout@v2
+    
     - name: Run Veracode SCA
       env:
         SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
         JAVA_OPTS: -Xms2g -Xmx4g
         SRCCLR_WORKSPACE_SLUG: ${{ vars.SCA_WORKSPACE }}
-      uses: veracode/veracode-sca@v2.1.12
+      uses: veracode/veracode-sca@v2.1.14
       with:
         create-issues: false
         recursive: true
