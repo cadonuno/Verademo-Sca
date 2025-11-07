@@ -1,0 +1,21 @@
+name: Veracode Software Composition Analysis
+
+run-name: Software Composition Analysis - Teste
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  sca:
+    runs-on: ubuntu:latest
+    steps:
+    - name: Run Veracode SCA
+      env:
+        SRCCLR_API_TOKEN: ${{ secrets.SRCCLR_API_TOKEN }}
+        JAVA_OPTS: -Xms2g -Xmx4g
+        SRCCLR_WORKSPACE_SLUG: ${{ variables.SCA_WORKSPACE }}
+      uses: veracode/veracode-sca@v2.1.12
+      with:
+        create-issues: false
+        recursive: true
+        allow-dirty: true
