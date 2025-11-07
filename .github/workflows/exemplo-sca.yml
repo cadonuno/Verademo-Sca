@@ -7,7 +7,8 @@ on:
   
 jobs:
   sca:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
+    
     steps:
     - name: Run Veracode SCA
       env:
